@@ -1,7 +1,7 @@
 MailingListParser
 =================
 Java code to parse mailing lists conforming to Mailman format
-===
+
 This module is capable of parsing out the Mailing List conforming to Mailman Format and scrape the relevant data out of it. For this implementation, the sample mailing list is taken as "http://www.spinics.net/lists/alsa-devel/".
 
 On running the code, four text files are generated. 
@@ -31,13 +31,13 @@ It also calls functions in To_CC_Sum.java to give information about To and CC; s
 
 (5) To_CC_Sum.java
 It calculates the sum of all recipients for a corresponding Message Id and writes it into to_cc_info.txt.
-
-Building
 --------
+Building
+
 javac -classpath ".:jsoup-1.7.3.jar" MainClass.java
 
-Running
 --------
+Running
 
 The parser may be run in two modes, `1. extract_URL ` and `2. extract_URL_info`, covered here. The former parses out all the Message Id's while the latter parse out the information from each of them.
 
