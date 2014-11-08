@@ -16,7 +16,7 @@ public class MainClass {
             @Override
             public void run() {
                 new MessageExtract();
-            }};;
+            }};
 
         public abstract void run();
     }
