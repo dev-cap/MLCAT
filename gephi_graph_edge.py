@@ -8,10 +8,9 @@ def lines_per_n(f, n) :
         yield ''.join(chain([line], islice(f, n-1)))
 
 
-
 with open('clean_data.json', 'r') as fil :
 
-    for chunk in lines_per_n(fil, 8) :
+    for chunk in lines_per_n(fil, 9) :
 
         jfile = json.loads(chunk)
 
