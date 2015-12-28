@@ -1,6 +1,9 @@
 from itertools import islice, chain
 from imap_hdr import get_mail_header
+import imaplib
 import json
+import email
+from imap_conn import open_connection
 
 
 def lines_per_n(f, n):
@@ -20,6 +23,10 @@ missing_uid = []
 # This list stores the list of UIDs of mails that have entries with insufficient entries in the JSON file.
 invalid_uid = []
 
+# This list stores the list of UIDs of mails that are not forwarded from from LKML subscription.
+unwanted_uid = []
+
+last_uid_read = 0
 
 def check_validity():
     """
@@ -28,8 +35,7 @@ def check_validity():
     can then be used to add or remove their entries from the JSON file.
     :return: Last UID that was checked by the function.
     """
-
-    previous_uid = 0;
+    previous_uid = 0
 
     # The "read_uid" set is used to keep track of all the UIDs that have been read from the JSON file.
     # In case a duplicate exists, it would be read twice and hence would fail the set membership test.
@@ -59,6 +65,11 @@ def check_validity():
             if not set(header_attrib) <= json_obj.keys() or json_obj['Time'] is None:
                 invalid_uid.append(json_obj['Message-ID'])
 
+            # Check if it is a mail that is sent directly to "lkml.subscriber@gmail.com", in which caseit has not been
+            # forwarded from the LKML subscription.
+            if json_obj['To'] == "lkml.subscriber@gmail.com":
+                unwanted_uid.append(json_obj['Message-ID'])
+
             previous_uid = json_obj['Message-ID']
 
     # Calculate the missing UIDs by performing a set difference on all the UIDs possible till the highest UID read
@@ -66,10 +77,13 @@ def check_validity():
     if previous_uid != 0:
         global missing_uid
         missing_uid += list(set(range(min(read_uid), max(read_uid)+1)) - read_uid)
+        global last_uid_read
+        last_uid_read = previous_uid
 
     print("Duplicate UIDs: ", duplicate_uid)
     print("Missing UIDs: ", missing_uid)
     print("Invalid UIDs: ", invalid_uid)
+    print("Unwanted UIDs: ", unwanted_uid)
     return previous_uid
 
 
@@ -132,3 +146,51 @@ def replace_invalid_headers(to_replace=invalid_uid):
                 json_file.write("\n")
 
         add_missing_headers(to_replace)
+
+
+def write_uid_map(from_index=1, to_index=last_uid_read):
+    """
+    To ensure that references are correctly recorded in the JSON file such that there are no references to mails that
+    do not exist and to ease the processing of headers, a map with the string in the Message-Id field of the header to
+    the UID of the mail is required. This function fetches the headers from the IMAP server and adds the required
+    pairs of Message_ID and UID to the JSON file.
+    :param from_index: Fetches headers from this UID onwards.
+    :param to_index: Fetches headers till this UID (non inclusive).
+
+    """
+    uid_msg_id_map = {}
+    to_get = list(range(from_index, to_index))
+    imaplib._MAXLINE = 800000
+    conn = open_connection()
+
+    try:
+        conn.select('INBOX')
+
+        for num in to_get:
+            # conn.uid() converts the arguments provided to an IMAP command to fetch the mail using the UID sepcified by num
+            # Uncomment the line below to fetch the entire message rather than just the mail headers.
+            # typ, msg_header = conn.uid('FETCH', num, '(RFC822)')
+            typ, msg_header = conn.uid('FETCH', str(num), '(RFC822.HEADER)')
+
+            for response_part in msg_header:
+                if isinstance(response_part, tuple):
+                    print("Processing mail #", num)
+
+                    # "response_part" contains the required info as a byte stream.
+                    # This has to be converted to a message stream using the email module
+                    original = email.message_from_bytes(response_part[1])
+
+                    # The splicing is done as to remove the '<' and '>' from the message-id string
+                    uid_msg_id_map[original['Message-ID'][1:-1]] = num
+
+    finally:
+        try:
+            conn.close()
+        except:
+            pass
+        conn.logout()
+
+    with open("uid_map.json", mode='a', encoding='utf-8') as f:
+            json.dump(uid_msg_id_map, f, indent=1)
+            f.close()
+

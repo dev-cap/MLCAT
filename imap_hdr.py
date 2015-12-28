@@ -1,11 +1,9 @@
 import imaplib
 import pytz
 import datetime
-import pprint
 import email
 import json
 import traceback
-
 from encoder import NoIndent, MyEncoder
 from imap_conn import open_connection
 
@@ -24,8 +22,10 @@ def date_to_UTC(orig_date):
         trunc_date = trunc_date.strip()
 
         # Generating a datetime object considering multiple formats of the input parameter - with and without weekday
-        if len(trunc_date) < 27:
+        if len(trunc_date) == 25 or len(trunc_date) == 26:
             datetime_obj = datetime.datetime.strptime(trunc_date, "%d %b %Y %H:%M:%S %z")
+        elif len(trunc_date) == 27 or len(trunc_date) == 28:
+            datetime_obj = datetime.datetime.strptime(trunc_date, "%a, %d %b %Y %H:%M %z")
         else:
             datetime_obj = datetime.datetime.strptime(trunc_date, "%a, %d %b %Y %H:%M:%S %z")
 
@@ -38,7 +38,24 @@ def date_to_UTC(orig_date):
         traceback.print_exc()
 
 
-def get_mail_header(to_get=2000, range_=True):
+def init_uid_map():
+    """
+    To ensure that references are correctly recorded in the JSON file such that there are no references to mails that
+    do not exist and to ease the processing of headers, a map with the string in the Message-Id field of the header to
+    the UID of the mail is required. This function reads the header.json file and adds required entries to the map.
+    :return: A map with the string in the Message-Id field of the header to the UID of the mail
+    """
+    uid_msg_id_map = {}
+
+    with open('uid_map.json', 'r') as map_file:
+        # The "jfile" is used to store the json object read from the file.
+        uid_msg_id_map = json.load(map_file)
+        map_file.close()
+
+    return uid_msg_id_map
+
+
+def get_mail_header(to_get, range_=True):
     """
     This function fetches the emails from the IMAP server as per the parameters passed.
     :param to_get: List of UIDs of the mails to get. Default value is 2000.
@@ -47,8 +64,10 @@ def get_mail_header(to_get=2000, range_=True):
     """
     # This is used to map the string in the Message-Id field of the header to the UID of the mail.
     # By doing so we ease the further processing of information.
-    uid_msg_id_map = {}
+    uid_msg_id_map = init_uid_map()
 
+    # To start with an empty UID map, uncomment the following line:
+    # uid_msg_id_map ={}
     """
     The issue lies in with the fact that we are trying to download a whole list of messages in the inbox at once.
     This causes a buffer overflow and hence imaplib raises an error(the max it allows, by default, is 10000 bytes).
@@ -157,3 +176,10 @@ def get_mail_header(to_get=2000, range_=True):
             pass
         conn.logout()
 
+    """
+    It is not an issue to append to an already existing JSON file as in the case that there are duplicate keys, the
+    value of the second key is overwritten into the first. In this case, the values of the keys are the same Message-ID.
+    """
+    with open("uid_map.json", mode='w', encoding='utf-8') as f:
+        json.dump(uid_msg_id_map, f, indent=1)
+        f.close()
