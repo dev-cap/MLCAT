@@ -14,17 +14,20 @@ def lines_per_n(f, n):
     for line in f :
         yield ''.join(chain([line], islice(f, n-1)))
 
-# This list stores the list of UIDs of mails that have duplicate entries in the JSON file.
+# This list stores the UIDs of mails that have duplicate entries in the JSON file.
 duplicate_uid = []
 
-# This list stores the list of UIDs of mails that don't have an entry in the JSON file - UIDs are consecutive numbers.
+# This list stores the UIDs of mails that don't have an entry in the JSON file - UIDs are consecutive numbers.
 missing_uid = []
 
-# This list stores the list of UIDs of mails that have entries with insufficient entries in the JSON file.
+# This list stores the UIDs of mails that have entries with insufficient entries in the JSON file.
 invalid_uid = []
 
-# This list stores the list of UIDs of mails that are not forwarded from from LKML subscription.
+# This list stores the UIDs of mails that are not forwarded from LKML subscription.
 unwanted_uid = []
+
+# This list stores the UIDs for which corresponding mails are not available in the IMAP server
+unavailable_uid = [9, 11, 2700, 6616, 38304, 46944, 7671, 5993, 10, 36649, 36462, 46478, 50606, 58030, 30871, 30872, 18042, 8574]
 
 last_uid_read = 0
 
@@ -87,10 +90,33 @@ def check_validity():
     return previous_uid
 
 
+def remove_unwanted_headers(to_remove=unwanted_uid):
+    """
+    This function removes all the UIDs specified in the to_remove parameter. By default, it removes all the unwanted
+    entries in the JSON file, i.e. the list of UIDs of mails that are not forwarded from LKML subscription.
+    :param to_remove: A list of UIDs that need to be removed. Default value is the list of unwanted mails' UIDs
+    """
+    if len(to_remove) > 0:
+
+        # This list contains a list of JSON objects that need to be written to file
+        write_to_file = []
+
+        with open('headers.json', 'r') as json_file:
+            for chunk in lines_per_n(json_file, 9):
+                json_obj = json.loads(chunk)
+                if not json_obj['Message-ID'] in unwanted_uid:
+                    write_to_file.append(json_obj)
+
+        with open('headers.json', 'w') as json_file:
+            for json_obj in write_to_file:
+                json.dump(json_obj, json_file, indent=1)
+                json_file.write("\n")
+
+
 def remove_duplicate_headers(to_remove=duplicate_uid):
     """
-    This function removes all the UIDs specified in the to_remove parameter. By default, it removes all the duplicate
-    entries in the JSON file.
+    This function removes all the duplicate entries of the UIDs specified in the to_remove parameter. By default,
+    it removes all the duplicate entries in the JSON file.
     :param to_remove: A list of UIDs that need to be removed. Default value is the list of duplicate mails' UIDs.
     """
     # The "read_uid" set is used to keep track of all the UIDs that have been read from the JSON file.
@@ -121,6 +147,10 @@ def add_missing_headers(to_add=missing_uid):
     If a mail that is missing in the JSON file is not available or has been deleted, this function ignores that UID.
     :param to_add: A list of UIDs that need to be added. Default value is the list of missing mails' UIDs.
     """
+    # To prevent replacement of mails that are not forwarded from the LKML subscription:
+    to_add = [x for x in to_add if x not in unwanted_uid]
+    # To prevent attempts to replace mails are known to be not available in the IMAP server:
+    to_add = [x for x in to_add if x not in unavailable_uid]
     if len(to_add) > 0:
         get_mail_header(to_add, False)
 

@@ -17,6 +17,8 @@ def remove_invalid_references():
     # If any mail has any of the element in this list in its list of references, we can eliminate them as well
     unspecified_ref = ['0']
 
+    print("Removing headers associated with invalid references...")
+
     # Clear the "clean_data.json" file if it is not empty
     destn_file = open('clean_data.json', 'w')
     destn_file.close()
