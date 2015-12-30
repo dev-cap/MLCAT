@@ -13,6 +13,6 @@ replace_invalid_headers()
 
 if last_uid == 0:
     last_uid = 1
-get_mail_header(list(range(last_uid + 1, 60001)), False)
+get_mail_header(list(range(last_uid + 1, 80001)), False)
 
 remove_invalid_references()
