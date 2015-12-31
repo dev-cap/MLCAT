@@ -19,70 +19,62 @@ def remove_invalid_references():
 
     print("Removing headers associated with invalid references...")
 
-    # Clear the "clean_data.json" file if it is not empty
-    destn_file = open('clean_data.json', 'w')
-    destn_file.close()
-
     with open('headers.json', 'r') as fil:
+        with open("clean_data.json", mode='w', encoding='utf-8') as fin_file :
 
-        for chunk in lines_per_n(fil, 9):
+            for chunk in lines_per_n(fil, 9):
+                # The "jfile" is used to store the json object read from the file.
+                jfile = json.loads(chunk)
 
-            # The "jfile" is used to store the json object read from the file.
-            jfile = json.loads(chunk)
+                """
+                Mails that have references that are of type None indicate that they maybe the start of threads.
+                Anything else could be mail in a thread or something else.
+                """
+                if not jfile['References'] is None:
 
-            """
-            Mails that have references that are of type None indicate that they maybe the start of threads.
-            Anything else could be mail in a thread or something else.
-            """
-            if not jfile['References'] is None:
+                    # Checking if the references is an empty string
+                    if not jfile['References'] == "":
 
-                # Checking if the references is an empty string
-                if not jfile['References'] == "":
+                        # The references are stored as a comma separated string. We have to split it at the ',' to get a list.
+                        ref_list = jfile['References'].split(',')
 
-                    # The references are stored as a comma separated string. We have to split it at the ',' to get a list.
-                    ref_list = jfile['References'].split(',')
+                        # A '0' in the list indicates that the mail contains references to some other mail which is not available to us
+                        if not('0' in ref_list) :
 
-                    # A '0' in the list indicates that the mail contains references to some other mail which is not available to us
-                    if not('0' in ref_list) :
+                            data = {}
+                            data['Message-ID'] = jfile['Message-ID']
+                            data['From'] = str(jfile['From'])
+                            data['To'] = str(jfile['To'])
+                            data['Cc'] = str(jfile['Cc'])
+                            data['In-Reply-To'] = str(jfile['In-Reply-To'])
+                            data['References'] = str(jfile['References'])
+                            data['Time'] = str(jfile['Time'])
+                            contain_unspec_ref = False
 
-                        data = {}
-                        data['Message-ID'] = jfile['Message-ID']
-                        data['From'] = str(jfile['From'])
-                        data['To'] = str(jfile['To'])
-                        data['Cc'] = str(jfile['Cc'])
-                        data['In-Reply-To'] = str(jfile['In-Reply-To'])
-                        data['References'] = str(jfile['References'])
-                        data['Time'] = str(jfile['Time'])
-                        contain_unspec_ref = False
+                            # This is done to eliminate all those mails whose reference list contains mails that have '0' in their reference list
+                            for ref in ref_list :
+                                if ref in unspecified_ref :
+                                    contain_unspec_ref = True
 
-                        # This is done to eliminate all those mails whose reference list contains mails that have '0' in their reference list
-                        for ref in ref_list :
-                            if ref in unspecified_ref :
-                                contain_unspec_ref = True
+                            if not contain_unspec_ref:
+                                    json.dump(data, fin_file, indent=1)
+                                    fin_file.write('\n')
 
-                        if not contain_unspec_ref:
-                            with open("clean_data.json", mode = 'a', encoding = 'utf-8') as fin_file :
-                                json.dump(data, fin_file, indent=1)
-                                fin_file.write('\n')
-                                fin_file.close()
+                        else:
+                            unspecified_ref.append(str(jfile['Message-ID']))
 
-                    else:
-                        unspecified_ref.append(str(jfile['Message-ID']))
-
-            # Writing all those mails that have None as their References
-            else:
-                data = {}
-                data['Message-ID'] = jfile['Message-ID']
-                data['From'] = str(jfile['From'])
-                data['To'] = str(jfile['To'])
-                data['Cc'] = str(jfile['Cc'])
-                data['In-Reply-To'] = str(jfile['In-Reply-To'])
-                data['References'] = jfile['References']
-                data['Time'] = str(jfile['Time'])
-
-                with open("clean_data.json", mode='a', encoding = 'utf-8') as fin_file :
+                # Writing all those mails that have None as their References
+                else:
+                    data = {}
+                    data['Message-ID'] = jfile['Message-ID']
+                    data['From'] = str(jfile['From'])
+                    data['To'] = str(jfile['To'])
+                    data['Cc'] = str(jfile['Cc'])
+                    data['In-Reply-To'] = str(jfile['In-Reply-To'])
+                    data['References'] = jfile['References']
+                    data['Time'] = str(jfile['Time'])
                     json.dump(data, fin_file, indent=1)
                     fin_file.write('\n')
-                    fin_file.close()
 
-        fil.close()
+        fin_file.close()
+    fil.close()

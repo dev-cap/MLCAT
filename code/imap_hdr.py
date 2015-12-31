@@ -45,10 +45,8 @@ def init_uid_map():
     the UID of the mail is required. This function reads the header.json file and adds required entries to the map.
     :return: A map with the string in the Message-Id field of the header to the UID of the mail
     """
-    uid_msg_id_map = {}
-
+    print("Initializing UID map...")
     with open('uid_map.json', 'r') as map_file:
-        # The "jfile" is used to store the json object read from the file.
         uid_msg_id_map = json.load(map_file)
         map_file.close()
 
@@ -86,20 +84,26 @@ def get_mail_header(to_get, range_=True):
 
         # Variable to keep track of the number of unseen messages in the chosen mailbox
         processed_msgs = 0
-
-        # Searching mailbox for messages with UID from 2000 till the newest mail in inbox
-        if range_:
+        if len(to_get) > 0 and to_get[0] > 0:
             search_str = 'UID ' + str(to_get[0]) + ':*'
             retcode, uids = conn.uid('SEARCH', None, search_str)
+            last_uid = int(uids[0].split()[-1])
+        else:
+            return
+
+        if range_ and (len(to_get) == 1):
             to_get.clear()
             for uid in uids[0].split():
                 to_get.append(int(uid))
+        elif range_ and (len(to_get) == 2):
+            to_get = list(range(to_get[0], to_get[1]))
+            retcode = "OK"
         else:
             retcode = "OK"
 
+        # Remove UIDs that are greater than the last UID available in the inbox
+        to_get = [x for x in to_get if not x > last_uid]
         num_of_messages = len(to_get)
-
-        #print(uids)
         print("Number of messages to fetch:", num_of_messages)
 
         # retcode indicates the success or failure of the imap request
@@ -180,6 +184,7 @@ def get_mail_header(to_get, range_=True):
     It is not an issue to append to an already existing JSON file as in the case that there are duplicate keys, the
     value of the second key is overwritten into the first. In this case, the values of the keys are the same Message-ID.
     """
+    print("Writing UID map to file...")
     with open("uid_map.json", mode='w', encoding='utf-8') as f:
         json.dump(uid_msg_id_map, f, indent=1)
         f.close()

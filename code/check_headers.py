@@ -14,22 +14,47 @@ def lines_per_n(f, n):
     for line in f :
         yield ''.join(chain([line], islice(f, n-1)))
 
-# This list stores the UIDs of mails that have duplicate entries in the JSON file.
-duplicate_uid = []
 
-# This list stores the UIDs of mails that don't have an entry in the JSON file - UIDs are consecutive numbers.
-missing_uid = []
+def get_unavailable_uid():
+    """
+    This function returns a list of UIDs that are not available in the IMAP server
+    :return: List containing the UIDs not available in the IMAP server
+    """
+    imaplib._MAXLINE = 800000
+    conn = open_connection()
+    conn.select('INBOX')
+    search_str = 'UID ' + '1:*'
+    retcode, uids = conn.uid('SEARCH', None, search_str)
+
+    available_uid = []
+    for uid in uids[0].split():
+        available_uid.append(int(uid))
+
+    try:
+        conn.close()
+    except:
+        pass
+    conn.logout()
+
+    return set(range(min(available_uid), max(available_uid)+1)) - set(available_uid)
+
+# This list stores the UIDs of mails that have duplicate entries in the JSON file.
+duplicate_uid = set()
+
+# This set stores the UIDs of mails that don't have an entry in the JSON file - UIDs are consecutive numbers.
+missing_uid = set()
 
 # This list stores the UIDs of mails that have entries with insufficient entries in the JSON file.
-invalid_uid = []
+invalid_uid = set()
 
-# This list stores the UIDs of mails that are not forwarded from LKML subscription.
-unwanted_uid = []
+# This set stores the UIDs of mails that are not forwarded from LKML subscription which is stored in a text file.
+unwanted_uid = set()
 
-# This list stores the UIDs for which corresponding mails are not available in the IMAP server
-unavailable_uid = [9, 11, 2700, 6616, 38304, 46944, 7671, 5993, 10, 36649, 36462, 46478, 50606, 58030, 30871, 30872, 18042, 8574]
+# This set stores the UIDs for which corresponding mails are not available in the IMAP server.
+unavailable_uid = set()
 
 last_uid_read = 0
+
 
 def check_validity():
     """
@@ -49,6 +74,8 @@ def check_validity():
 
     header_attrib = {'Message-ID', 'From', 'To', 'Cc', 'In-Reply-To', 'Time'}
 
+    # Read UIDs of mails that are not forwarded from LKML subscription which is stored in a text file.
+
     with open('headers.json', 'r') as json_file:
 
         for chunk in lines_per_n(json_file, 9):
@@ -62,32 +89,39 @@ def check_validity():
             if not json_obj['Message-ID'] in read_uid:
                 read_uid.add(json_obj['Message-ID'])
             else:
-                duplicate_uid.append(json_obj['Message-ID'])
+                duplicate_uid.add(json_obj['Message-ID'])
 
             # Check if the JSON object has sufficient attributes by checking if "header_attrib" is a subset of its keys
             if not set(header_attrib) <= json_obj.keys() or json_obj['Time'] is None:
-                invalid_uid.append(json_obj['Message-ID'])
+                invalid_uid.add(json_obj['Message-ID'])
 
             # Check if it is a mail that is sent directly to "lkml.subscriber@gmail.com", in which caseit has not been
             # forwarded from the LKML subscription.
             if json_obj['To'] == "lkml.subscriber@gmail.com":
-                unwanted_uid.append(json_obj['Message-ID'])
+                unwanted_uid.add(json_obj['Message-ID'])
 
             previous_uid = json_obj['Message-ID']
 
     # Calculate the missing UIDs by performing a set difference on all the UIDs possible till the highest UID read
     # from the actual UIDs that have been read.
     if previous_uid != 0:
-        global missing_uid
-        missing_uid += list(set(range(min(read_uid), max(read_uid)+1)) - read_uid)
         global last_uid_read
-        last_uid_read = previous_uid
+        last_uid_read = max(read_uid)
+        global missing_uid
+        missing_uid = set(range(min(read_uid), last_uid_read+1)) - read_uid
+        global unavailable_uid
+        unavailable_uid = get_unavailable_uid()
 
-    print("Duplicate UIDs: ", duplicate_uid)
-    print("Missing UIDs: ", missing_uid)
-    print("Invalid UIDs: ", invalid_uid)
-    print("Unwanted UIDs: ", unwanted_uid)
-    return previous_uid
+    with open("unwanted_uid.txt", 'a') as unw_file:
+        for uid in unwanted_uid:
+            unw_file.write(str(uid) + '\n')
+
+    print("Unavailable UIDs: ", unavailable_uid if len(unavailable_uid) > 0 else "None")
+    print("Duplicate UIDs: ", duplicate_uid if len(duplicate_uid) > 0 else "None")
+    print("Missing UIDs: ", missing_uid if len(missing_uid) > 0 else "None")
+    print("Invalid UIDs: ", invalid_uid if len(invalid_uid) > 0 else "None")
+    print("Unwanted UIDs: ", unwanted_uid if len(unwanted_uid) > 0 else "None")
+    return last_uid_read
 
 
 def remove_unwanted_headers(to_remove=unwanted_uid):
@@ -97,7 +131,7 @@ def remove_unwanted_headers(to_remove=unwanted_uid):
     :param to_remove: A list of UIDs that need to be removed. Default value is the list of unwanted mails' UIDs
     """
     if len(to_remove) > 0:
-
+        print("Removing unwanted headers...")
         # This list contains a list of JSON objects that need to be written to file
         write_to_file = []
 
@@ -124,7 +158,7 @@ def remove_duplicate_headers(to_remove=duplicate_uid):
     read_uid = set([])
 
     if len(to_remove) > 0:
-
+        print("Removing duplicate headers...")
         # This list contains a list of JSON objects that need to be written to file
         write_to_file = []
 
@@ -148,10 +182,14 @@ def add_missing_headers(to_add=missing_uid):
     :param to_add: A list of UIDs that need to be added. Default value is the list of missing mails' UIDs.
     """
     # To prevent replacement of mails that are not forwarded from the LKML subscription:
+    with open("unwanted_uid.txt", 'r') as unw_file:
+        for line in unw_file:
+            unwanted_uid.add(int(line.strip()))
     to_add = [x for x in to_add if x not in unwanted_uid]
     # To prevent attempts to replace mails are known to be not available in the IMAP server:
     to_add = [x for x in to_add if x not in unavailable_uid]
     if len(to_add) > 0:
+        print("Fetching missing headers...")
         get_mail_header(to_add, False)
 
 
@@ -162,6 +200,7 @@ def replace_invalid_headers(to_replace=invalid_uid):
     :param to_replace: A list of UIDs that need to be replaced. Default value is the list of invalid mails' UIDs.
     """
     if len(to_replace) > 0:
+        print("Replacing invalid headers...")
         # This list contains a list of JSON objects that need to be written to file
         write_to_file = []
         with open('headers.json', 'r') as json_file:
@@ -188,7 +227,10 @@ def write_uid_map(from_index=1, to_index=last_uid_read):
     :param to_index: Fetches headers till this UID (non inclusive).
 
     """
-    uid_msg_id_map = {}
+    with open('uid_map.json', 'r') as map_file:
+        uid_msg_id_map = json.load(map_file)
+        map_file.close()
+
     to_get = list(range(from_index, to_index))
     imaplib._MAXLINE = 800000
     conn = open_connection()
@@ -220,7 +262,7 @@ def write_uid_map(from_index=1, to_index=last_uid_read):
             pass
         conn.logout()
 
-    with open("uid_map.json", mode='a', encoding='utf-8') as f:
+    with open("uid_map.json", mode='w', encoding='utf-8') as f:
             json.dump(uid_msg_id_map, f, indent=1)
             f.close()
 
