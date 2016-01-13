@@ -2,12 +2,24 @@ import networkx as nx
 import pygraphviz as pgv
 
 discussion_graph = nx.DiGraph()
+color_list = ["#ff0000", "#005555", "#b0b0ff", "#e4e400", "#0000ff", "#ff00ff", "#b000b0", "#870087", "#baba00",
+              "#878700", "#545400", "#00ff00", "#8484ff", "#b00000", "#870000", "#550000", "#00b0b0", "#008787",
+              "#4949ff", "#550055", "#bababa", "#878787", "#00b000", "#008700", "#005500", "#00ffff"]
+
+with open("graph_nodes.csv", "r") as node_file:
+    for pair in node_file:
+        node = pair.split(';', 2)
+        discussion_graph.add_node(node[0], time=node[2].strip(), color="#ffffff", style='bold', sender=node[1].strip())
+    node_file.close()
+print("Nodes added.")
+
+node_list = discussion_graph.nodes()
 with open("graph_edges.csv", "r") as edge_file:
     for pair in edge_file:
         edge = pair.split(';')
-        edge[1] = int(edge[1])
-        edge[0] = int(edge[0])
-        discussion_graph.add_edge(*edge)
+        edge[1] = edge[1].strip()
+        if edge[0] in node_list and edge[1] in node_list:
+            discussion_graph.add_edge(*edge)
     edge_file.close()
 print("Edges added.")
 
@@ -27,7 +39,23 @@ print("No. of Weakly Connected Components: " + str(nx.number_weakly_connected_co
 # conn_components = nx.weakly_connected_component_subgraphs(discussion_graph)
 
 for conn_subgraph in nx.weakly_connected_component_subgraphs(discussion_graph):
-    # conn_subgraph = next(conn_components)
+    sender_color_map = {}
+    # Comment the respective lines below to only save in the required formats
+    nx.write_gexf(conn_subgraph, 'gexf/' + str(min(conn_subgraph.nodes()))+'.gexf')
+
+    for node_uid in conn_subgraph.nodes():
+        try:
+            if conn_subgraph.node[node_uid]['sender'] not in sender_color_map:
+                conn_subgraph.node[node_uid]['color'] = color_list[len(sender_color_map) % 26]
+                #print(conn_subgraph.node[node_uid]['color'])
+                sender_color_map[conn_subgraph.node[node_uid]['sender']] = color_list[len(sender_color_map) % 26]
+            else:
+                conn_subgraph.node[node_uid]['color'] = sender_color_map[conn_subgraph.node[node_uid]['sender']]
+        except:
+            for n1,attr in conn_subgraph.nodes(data=True):
+                print(n1,attr)
+
+
     g1 = nx.to_agraph(conn_subgraph)
     adj_list1 = conn_subgraph.adjacency_list()
     for neighbour in adj_list1:
