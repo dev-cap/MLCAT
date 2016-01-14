@@ -5,7 +5,9 @@ discussion_graph = nx.DiGraph()
 with open("graph_nodes.csv", "r") as node_file:
     for pair in node_file:
         node = pair.split(';', 1)
-        discussion_graph.add_node(node[0], time=node[1].strip(), color="#000000", style='bold')
+        discussion_graph.add_node(node[0], time=node[2].strip(),
+                                  color='#'+(hex(hash(node[1].strip()))[-6:]).upper(),
+                                  style='bold', sender=node[1].strip())
     node_file.close()
 print("Nodes added.")
 

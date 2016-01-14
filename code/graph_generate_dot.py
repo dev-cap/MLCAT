@@ -13,13 +13,17 @@ with open("graph_nodes.csv", "r") as node_file:
     node_file.close()
 print("Nodes added.")
 
-node_list = discussion_graph.nodes()
+# node_list = discussion_graph.nodes()
 with open("graph_edges.csv", "r") as edge_file:
     for pair in edge_file:
         edge = pair.split(';')
         edge[1] = edge[1].strip()
-        if edge[0] in node_list and edge[1] in node_list:
+        try:
+            discussion_graph.node[edge[0]]['sender']
+            discussion_graph.node[edge[1]]['sender']
             discussion_graph.add_edge(*edge)
+        except KeyError:
+            pass
     edge_file.close()
 print("Edges added.")
 
