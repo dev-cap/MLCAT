@@ -27,9 +27,9 @@ with open("graph_edges.csv", "r") as edge_file:
     edge_file.close()
 print("Edges added.")
 
-print("No. of Nodes: " + str(nx.number_of_nodes(discussion_graph)))
-print("No. of Edges: " + str(nx.number_of_edges(discussion_graph)))
-print("No. of Weakly Connected Components: " + str(nx.number_weakly_connected_components(discussion_graph)))
+print("No. of Nodes: ", nx.number_of_nodes(discussion_graph))
+print("No. of Edges: ", nx.number_of_edges(discussion_graph))
+print("No. of Weakly Connected Components: ", nx.number_weakly_connected_components(discussion_graph))
 
 # Uncomment the lines below to save the graph as a GEXF file
 # nx.write_gexf(discussion_graph, "gexf/master_disc_graph.gexf")
@@ -39,13 +39,11 @@ print("No. of Weakly Connected Components: " + str(nx.number_weakly_connected_co
 # discussion_graph = nx.read_gexf("gexf/master_disc_graph.gexf", node_type=int)
 # print("Graph loaded from GEXF file.")
 
-# The "weakly_connected_component_subgraphs" function returns a generator for the maximal connected subgraphs of the parameter.
-# conn_components = nx.weakly_connected_component_subgraphs(discussion_graph)
-
 for conn_subgraph in nx.weakly_connected_component_subgraphs(discussion_graph):
     sender_color_map = {}
+    node_list = [int(x) for x in conn_subgraph.nodes()]
     # Comment the respective lines below to only save in the required formats
-    nx.write_gexf(conn_subgraph, 'gexf/' + str(min(conn_subgraph.nodes()))+'.gexf')
+    nx.write_gexf(conn_subgraph, 'gexf/' + str(min(node_list))+'.gexf')
 
     for node_uid in conn_subgraph.nodes():
         try:
@@ -57,14 +55,13 @@ for conn_subgraph in nx.weakly_connected_component_subgraphs(discussion_graph):
                 conn_subgraph.node[node_uid]['color'] = sender_color_map[conn_subgraph.node[node_uid]['sender']]
         except:
             for n1,attr in conn_subgraph.nodes(data=True):
-                print(n1,attr)
-
+                print(n1, attr)
 
     g1 = nx.to_agraph(conn_subgraph)
     adj_list1 = conn_subgraph.adjacency_list()
     for neighbour in adj_list1:
         if len(neighbour) > 1:
             g1.add_subgraph([neighbour], rank='same')
-    g1.draw('png/' + str(min(conn_subgraph.nodes()))+'.png', prog='dot')
-    g1.draw('dot/' + str(min(conn_subgraph.nodes()))+'.dot', prog='dot')
+    g1.draw('png/' + str(min(node_list))+'.png', prog='dot')
+    g1.draw('dot/' + str(min(node_list))+'.dot', prog='dot')
 
