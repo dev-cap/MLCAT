@@ -34,21 +34,24 @@ def generate_participant_size_table():
     # This list stores the number of authors in all threads of a given size. If no_of_authors[i] = k, there are a total
     # of k authors in all threads of size i.
     no_of_authors = [0 for x in range(max_nodes+1)]
-
+    no_of_threads = [0 for x in range(max_nodes+1)]
+    
     for conn_subgraph in nx.weakly_connected_component_subgraphs(discussion_graph):
         authors = set()
         for node, attributes in conn_subgraph.nodes_iter(data=True):
             authors.add(attributes['sender'])
         no_of_authors[nx.number_of_nodes(conn_subgraph)] += len(authors)
+        no_of_threads[nx.number_of_nodes(conn_subgraph)] += 1
 
     # print(no_of_authors)
     with open('participant_size_table.csv', 'w') as csvfile:
         tablewriter = csv.writer(csvfile)
         nmails = 0
-        tablewriter.writerow(["No. of mails", "No. of authors"])
-        for row in no_of_authors:
-            if row != 0:
-                tablewriter.writerow([nmails] + [row])
+        tablewriter.writerow(["No. of mails", "No. of threads", "Total no. of authors", "Average no. of authors"])
+        for row1 in no_of_authors:
+            if row1 != 0:
+                row2 = no_of_threads[nmails]
+                tablewriter.writerow([nmails, row2, row1, format(round(row1/row2, 3), '.3f')])
             nmails += 1
         csvfile.close()
 
