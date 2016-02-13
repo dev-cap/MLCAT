@@ -66,32 +66,44 @@ def generate_wh_table_authors():
     # for row in new_wh_table:
     #     print(row[:max_width+1])
 
+    irow = 0
+    combined_table = [[0 for x in range(2 * max_width)] for x in range(max_height+1)]
+    for (row1, row2) in zip(wh_table, new_wh_table):
+        icol = 0
+        row1 = row1[1:max_width+1]
+        row2 = row2[1:max_width+1]
+        for i in range(max_width):
+            combined_table[irow][icol] = row1[i]
+            combined_table[irow][icol+1] = row2[i]
+            icol += 2
+        irow += 1
+
     with open('wh_table_authors.csv', 'w') as csvfile:
         tablewriter = csv.writer(csvfile)
-        tablewriter.writerow(["No. of threads with a total of 'i' authors at a height 'h':"])
+        # tablewriter.writerow(["No. of threads with a total of 'i' authors at a height 'h':"])
+        # tablewriter.writerow(["Height(h)", "Number of authors(i)"])
+        # tablewriter.writerow([" "] + list(range(1, max_width + 1)) + ["Subtotal"])
+        # row_height = 0
+        # total = 0
+        # for row in wh_table:
+        #     row = row[1:max_width+1]
+        #     subtotal = 0
+        #     for j in row:
+        #         subtotal += j
+        #     tablewriter.writerow([row_height] + row + [subtotal])
+        #     row_height += 1
+        #     total += subtotal
+        # tablewriter.writerow(["Total:", total])
+        # tablewriter.writerow([" "])
+        # tablewriter.writerow(["No. of threads with a total of 'i' authors at a height 'h':"])
         tablewriter.writerow(["Height(h)", "Number of authors(i)"])
-        tablewriter.writerow([" "] + list(range(1, max_width + 1)) + ["Subtotal"])
+        tablewriter.writerow([" "] + "  ".join([str(x) for x in range(1, max_width + 1)]).split(" ") + [" ", "Subtotal"])
+        tablewriter.writerow([" "] + ("Total New "*max_width).split())
         row_height = 0
         total = 0
-        for row in wh_table:
-            row = row[1:max_width+1]
+        for row in combined_table:
             subtotal = 0
-            for j in row:
-                subtotal += j
-            tablewriter.writerow([row_height] + row + [subtotal])
-            row_height += 1
-            total += subtotal
-        tablewriter.writerow(["Total:", total])
-        tablewriter.writerow([" "])
-        tablewriter.writerow(["No. of threads with a total of 'i' authors at a height 'h':"])
-        tablewriter.writerow(["Height(h)", "Number of authors(i)"])
-        tablewriter.writerow([" "] + list(range(1, max_width + 1)) + ["Subtotal"])
-        row_height = 0
-        total = 0
-        for row in new_wh_table:
-            row = row[1:max_width+1]
-            subtotal = 0
-            for j in row:
+            for j in row[::2]:
                 subtotal += j
             tablewriter.writerow([row_height] + row + [subtotal])
             row_height += 1
