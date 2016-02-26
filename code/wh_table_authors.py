@@ -1,16 +1,20 @@
 import networkx as nx
 import csv
+import re
 
 
 def generate_wh_table_authors():
     # TODO: Generate the table for a given time interval passed as a parameter.
     discussion_graph = nx.DiGraph()
+    email_re = re.compile(r'[\w\.-]+@[\w\.-]+')
 
     # Add nodes into NetworkX graph by reading CSV files
     with open("graph_nodes.csv", "r") as node_file:
         for pair in node_file:
             node = pair.split(';', 2)
-            discussion_graph.add_node(int(node[0]), time=node[2].strip(), color="#ffffff", style='bold', sender=node[1].strip())
+            from_addr = email_re.search(node[1].strip())
+            from_addr = from_addr.group(0) if from_addr is not None else node[1].strip()
+            discussion_graph.add_node(int(node[0]), time=node[2].strip(), color="#ffffff", style='bold', sender=from_addr)
         node_file.close()
     print("Nodes added.")
 
