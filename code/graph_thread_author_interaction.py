@@ -1,18 +1,7 @@
-import networkx as nx
-import pygraphviz as pgv
-from itertools import islice, chain
 import json
 import re
-
-
-def lines_per_n(f, n):
-    """
-    Each json object in the headers.json file occupies a set number of lines.
-    This function is used to read those set number of lines and return them.
-    """
-    for line in f :
-        yield ''.join(chain([line], islice(f, n-1)))
-
+import networkx as nx
+from util.read_json import lines_per_n
 
 def add_to_multigraph(graph_obj, discussion_graph, json_data, nbunch, label_prefix=''):
     i = 0
@@ -38,7 +27,7 @@ def author_interaction_multigraph(discussion_graph, json_data, limit=10):
         add_to_multigraph(interaction_graph, discussion_graph, json_data, [origin])
         # print(json_data[origin])
         g1 = nx.to_agraph(interaction_graph)
-        g1.draw("temp/"+str(origin)+'.png', prog='circo')
+        g1.draw("author_multi/"+str(origin)+'.png', prog='circo')
         niter += 1
         if limit == niter and limit > 0:
             break
@@ -75,7 +64,7 @@ def author_interaction_weighted_graph(discussion_graph, json_data, limit=10):
         add_to_weighted_graph(interaction_graph, discussion_graph, json_data, [origin], [])
         # print(json_data[origin])
         g1 = nx.to_agraph(interaction_graph)
-        g1.draw("temp/"+str(origin)+'.png', prog='circo')
+        g1.draw("author_weighted/"+str(origin)+'.png', prog='circo')
         niter += 1
         if limit == niter and limit > 0:
             break
@@ -117,3 +106,5 @@ with open('headers.json', 'r') as json_file:
         json_data[json_obj['Message-ID']] = json_obj
 print("JSON data loaded.")
 author_interaction_weighted_graph(discussion_graph, json_data, limit=20)
+author_interaction_multigraph(discussion_graph, json_data, limit=20)
+

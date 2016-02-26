@@ -28,7 +28,7 @@ print("No. of Weakly Connected Components: " + str(nx.number_weakly_connected_co
 # print("Master GEXF file written to disk.")
 
 for conn_subgraph in nx.weakly_connected_component_subgraphs(discussion_graph):
-
-    nx.write_gexf(conn_subgraph, 'gexf/' + str(min(conn_subgraph.nodes()))+'.gexf')
+    node_list = [int(x) for x in conn_subgraph.nodes()]
+    nx.write_gexf(conn_subgraph, 'gexf/' + str(min(node_list()))+'.gexf')
 
 print("GEXF files for all threads written to disk.")

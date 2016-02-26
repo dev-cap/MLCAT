@@ -1,17 +1,7 @@
-from itertools import islice, chain
 import json
-import networkx as nx
+from util.read_json import lines_per_n
 import community
-
-
-def lines_per_n(f, n):
-    """
-    Each json object in the headers.json file occupies a set number of lines.
-    This function is used to read those set number of lines and return them.
-    """
-    for line in f:
-        yield ''.join(chain([line], islice(f, n-1)))
-
+import networkx as nx
 
 author_graph = nx.DiGraph()
 with open('clean_data.json', 'r') as jfile:

@@ -1,5 +1,4 @@
 import networkx as nx
-import pygraphviz as pgv
 
 discussion_graph = nx.DiGraph()
 color_list = ["#ff0000", "#005555", "#b0b0ff", "#e4e400", "#0000ff", "#ff00ff", "#b000b0", "#870087", "#baba00",

@@ -1,6 +1,7 @@
-import networkx as nx
 import csv
 import re
+
+import networkx as nx
 
 
 def generate_wh_table_authors():

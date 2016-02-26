@@ -1,6 +1,7 @@
-import re
-import networkx as nx
 import csv
+import re
+
+import networkx as nx
 
 
 def generate_participant_size_table():
