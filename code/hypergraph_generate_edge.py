@@ -56,7 +56,7 @@ with open("graph_edges.csv", "r") as edge_file:
     edge_file.close()
 print("Edges added.")
 
-with open('headers.json', 'r') as json_file:
+with open('clean_data.json', 'r') as json_file:
     for chunk in lines_per_n(json_file, 9):
         json_obj = json.loads(chunk)
         # print("\nFrom", json_obj['From'], "\nTo", json_obj['To'], "\nCc", json_obj['Cc'])
@@ -66,18 +66,24 @@ with open('headers.json', 'r') as json_file:
         json_obj['Cc'] = set(email_re.findall(json_obj['Cc'])) if json_obj['Cc'] is not None else None
         # print("\nFrom", json_obj['From'], "\nTo", json_obj['To'], "\nCc", json_obj['Cc'])
         json_data[json_obj['Message-ID']] = json_obj
+
+with open('author_uid_map.json', 'r') as uid_file:
+    author_uid = json.load(uid_file)
+    uid_file.close()
 print("JSON data loaded.")
 
 for conn_subgraph in nx.weakly_connected_component_subgraphs(discussion_graph):
     origin_node = min(int(x) for x in conn_subgraph.nodes())
+    if origin_node != 5141:
+        continue
     thread_nodes = list()
     thread_authors = set()
     add_thread_nodes(thread_authors, [origin_node], parent_id=None, curr_height=0)
-    thread_authors = sorted(list(thread_authors))
+    thread_authors = list(thread_authors)
     thread_nodes.sort()
 
-    index = 0
-    author_interaction_matrix = [[' ' for x in range(len(thread_authors))] for y in range(len(thread_nodes))]
+    index = 1
+    author_interaction_matrix = [[' ' for x in range(len(thread_authors))] for y in range(1+len(thread_nodes))]
     for message_node in thread_nodes:
         # print(len(thread_authors), len(thread_nodes), thread_authors.index(message_node.from_addr), index)
         for to_addr in message_node.to_addr:
@@ -87,35 +93,50 @@ for conn_subgraph in nx.weakly_connected_component_subgraphs(discussion_graph):
         author_interaction_matrix[index][thread_authors.index(message_node.from_addr)] = 'F'
         index += 1
 
-    author_enumeration = dict()
-    for enumeration, author in enumerate(thread_authors):
-        author_enumeration["author" + str(1 + enumeration)] = author
-    with open("hyperedge/" + str(origin_node) + "_author_map.json", 'w') as enum_file:
-        json.dump(author_enumeration, enum_file, indent=1)
-        enum_file.close()
+    index = 0
+    # author_enumeration = dict()
+    for author in thread_authors:
+        author_interaction_matrix[0][index] = "author-" + str(author_uid[author])
+        index += 1
+        # author_enumeration[author] = "author-" + str(author_uid[author])
 
-    outdegree = [0 for x in range(len(thread_authors))]
     indegree = [0 for x in range(len(thread_authors))]
-    for i in range(len(thread_nodes)):
+    outdegree = [0 for x in range(len(thread_authors))]
+    for i in range(1, len(thread_nodes)+1):
         for j in range(len(thread_authors)):
             if author_interaction_matrix[i][j] in ('T', 'C'):
-                outdegree[j] += 1
-            elif author_interaction_matrix[i][j] == 'F':
                 indegree[j] += 1
+            elif author_interaction_matrix[i][j] == 'F':
+                outdegree[j] += 1
 
-    index = 0
+    thread_authors = [x for (y,x) in sorted(zip(outdegree, thread_authors), key=lambda pair: pair[0], reverse=True)]
+    indegree = [x for (y,x) in sorted(zip(outdegree,indegree), key=lambda pair: pair[0], reverse=True)]
+    author_interaction_matrix = map(list, zip(*author_interaction_matrix))
+    author_interaction_matrix = [x for (y,x) in sorted(zip(outdegree, author_interaction_matrix), key=lambda pair: pair[0], reverse=True)]
+    author_interaction_matrix = list(map(list, zip(*author_interaction_matrix)))
+    outdegree.sort(reverse=True)
+
+    index = 1
     prev_height = -1
+    total_cc = row_cc = 0
+    total_to = row_to = 0
     with open("hyperedge/" + str(origin_node) + ".csv", 'w') as hyperedge_file:
         tablewriter = csv.writer(hyperedge_file)
         tablewriter.writerow(["Height", "Message-ID", "Parent-ID", "Time"]
-                             + [("author" + str(x)) for x in range(1, 1 + len(thread_authors))])
+                             + author_interaction_matrix[0] + ["No. of CCs", "No. of TOs"])
         for message_node in thread_nodes:
             curr_height = " " if message_node.height == prev_height else message_node.height
             parent_id = message_node.parent_id if message_node.parent_id else "None"
+            row_cc = author_interaction_matrix[index].count('C')
+            row_to = author_interaction_matrix[index].count('T')
+            total_cc += row_cc
+            total_to += row_to
             tablewriter.writerow([curr_height, message_node.msg_id, parent_id, message_node.time]
-                             + author_interaction_matrix[index])
+                             + author_interaction_matrix[index] + [row_cc, row_to])
             prev_height = message_node.height
             index += 1
-        tablewriter.writerow([" ", " ", " ", "Indegree"] + indegree)
-        tablewriter.writerow([" ", " ", " ", "Outdegree"] + outdegree)
+        tablewriter.writerow([" ", " ", " ", "Outdegree"] + outdegree + ["Total CCs", "Total TOs"])
+        tablewriter.writerow([" ", " ", " ", "Indegree"] + indegree + [total_cc, total_to])
         hyperedge_file.close()
+    if origin_node == 5141:
+        break
