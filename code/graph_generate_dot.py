@@ -1,4 +1,5 @@
 import networkx as nx
+from networkx.drawing.nx_agraph import *
 
 discussion_graph = nx.DiGraph()
 color_list = ["#ff0000", "#005555", "#b0b0ff", "#e4e400", "#0000ff", "#ff00ff", "#b000b0", "#870087", "#baba00",
@@ -56,11 +57,10 @@ for conn_subgraph in nx.weakly_connected_component_subgraphs(discussion_graph):
             for n1,attr in conn_subgraph.nodes(data=True):
                 print(n1, attr)
 
-    g1 = nx.to_agraph(conn_subgraph)
+    g1 = to_agraph(conn_subgraph)
     adj_list1 = conn_subgraph.adjacency_list()
     for neighbour in adj_list1:
         if len(neighbour) > 1:
             g1.add_subgraph([neighbour], rank='same')
     g1.draw('png/' + str(min(node_list))+'.png', prog='dot')
     g1.draw('dot/' + str(min(node_list))+'.dot', prog='dot')
-
