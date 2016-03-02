@@ -1,5 +1,6 @@
-import networkx as nx
 import matplotlib
+import networkx as nx
+
 matplotlib.use('Agg')
 import matplotlib.pyplot as pyplot
 

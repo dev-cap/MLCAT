@@ -1,4 +1,3 @@
-from imap_hdr import get_mail_header
 from check_headers import *
 from data_cleanup import *
 

@@ -1,9 +1,9 @@
-import imaplib
-import pytz
 import datetime
 import email
+import imaplib
 import json
 import traceback
+import pytz
 from encoder import NoIndent, MyEncoder
 from imap_conn import open_connection
 

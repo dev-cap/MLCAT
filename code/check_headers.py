@@ -1,19 +1,9 @@
-from itertools import islice, chain
-from imap_hdr import get_mail_header
+import email
 import imaplib
 import json
-import email
+from util.read_json import lines_per_n
 from imap_conn import open_connection
-
-
-def lines_per_n(f, n):
-    """
-    Each json object in the headers.json file occupies a set number of lines.
-    This function is used to read those set number of lines and return them.
-    """
-    for line in f :
-        yield ''.join(chain([line], islice(f, n-1)))
-
+from imap_hdr import get_mail_header
 
 def get_unavailable_uid():
     """

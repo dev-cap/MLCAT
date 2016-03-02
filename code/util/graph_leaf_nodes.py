@@ -1,14 +1,8 @@
-from itertools import islice, chain
 import json
+from util.read_json import lines_per_n
 
 leaf_msgs = []  # Keeps track of all those message ids that are leaf nodes
 msg_ref_map = {}  # Map between message id of each mail to its references list
-
-
-# Function to read a json object from the file
-def lines_per_n(f, n):
-    for line in f:
-        yield ''.join(chain([line], islice(f, n - 1)))
 
 
 # Function to eliminate the non-leaf message-ids from the list of leaf message ids.

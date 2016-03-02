@@ -1,5 +1,5 @@
-import imaplib
 import configparser
+import imaplib
 
 """
 Gmail uses OAuth for authentications purposes. This means that a regular SSL connection request
