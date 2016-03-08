@@ -4,6 +4,31 @@ from graph_tool.all import *
 from util.read_json import lines_per_n
 
 
+def detect_motifs(directed_graph, min_size, max_size):
+    """
+    This method detects motifs of a range of sizes in the specified graph.
+    :param directed_graph: The directed graph for which motifs have to be found.
+    :param min_size: Minimum size of the motifs to be detected (inclusive)
+    :param max_size: Maximum size of the motifs to be detected (exclusive)
+    """
+    for motif_size in range(min_size, max_size):
+        print("Detecting network motifs of size %d..." %(motif_size))
+        """
+        Count the occurrence of k-size node-induced subgraphs (motifs). A tuple with two lists is returned: the list of
+        motifs found (grouped according to their isomorphism class and sorted according to in-degree sequence, out-degree
+        sequence, and number of edges) and the list with their respective counts.
+        """
+        motif_list, counts = motifs(directed_graph, motif_size)
+        counts = [(x, None) for x in counts]
+        motif_profile = dict(zip(motifs, counts))
+        motif_list, zscores = motif_significance(directed_graph, motif_size, self_loops = True, motif_list = motif_list)
+        for index in range(len(motif_list)):
+            motif = motif_list[index]
+            motif_profile[motif] = (motif_profile[motif][0], zscores[index])
+        with open("motifs/" + "motif_" + str(motif_size) + ".txt", 'w') as output_file:
+            output_file.write(str(motif_profile))
+            output_file.close()
+
 author_graph = Graph(directed=True)
 author_graph.es["weight"] = 1.0
 json_data = dict()
@@ -59,20 +84,4 @@ for id, node in json_data.items():
             index += 1
         author_graph.add_edge(vertex(node['From']), vertex(to_addr))
 
-for motif_size in range(4, 20):
-    print("Detecting network motifs of size %d..." %(motif_size))
-    """
-    Count the occurrence of k-size node-induced subgraphs (motifs). A tuple with two lists is returned: the list of
-    motifs found (grouped according to their isomorphism class and sorted according to in-degree sequence, out-degree
-    sequence, and number of edges) and the list with their respective counts.
-    """
-    motif_list, counts = motifs(author_graph, motif_size)
-    counts = [(x, None) for x in counts]
-    motif_profile = dict(zip(motifs, counts))
-    motif_list, zscores = motif_significance(author_graph, motif_size, self_loops = True, motif_list = motif_list)
-    for index in range(len(motif_list)):
-        motif = motif_list[index]
-        motif_profile[motif] = (motif_profile[motif][0], zscores[index])
-    with open("motifs/" + "motif_" + str(motif_size) + ".txt", 'w') as output_file:
-        output_file.write(str(motif_profile))
-        output_file.close()
+detect_motifs(author_graph, 4, 21)
