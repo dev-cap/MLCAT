@@ -30,7 +30,7 @@ def detect_motifs(directed_graph, min_size, max_size):
             output_file.close()
 
 author_graph = Graph(directed=True)
-author_graph.es["weight"] = 1.0
+# author_graph.es["weight"] = 1.0
 json_data = dict()
 author_map = dict()
 email_re = re.compile(r'[\w\.-]+@[\w\.-]+')
@@ -73,7 +73,7 @@ for id, node in json_data.items():
             author_map[to_addr] = index
             author_graph.add_vertex()
             index += 1
-        author_graph.add_edge(vertex(node['From']), vertex(to_addr))
+        author_graph.add_edge(author_map[node['From']], author_map[to_addr])
 
     if node['Cc'] is None:
         continue
@@ -82,6 +82,6 @@ for id, node in json_data.items():
             author_map[to_addr] = index
             author_graph.add_vertex()
             index += 1
-        author_graph.add_edge(vertex(node['From']), vertex(to_addr))
+        author_graph.add_edge(author_map[node['From']], author_map[to_addr])
 
 detect_motifs(author_graph, 4, 21)
