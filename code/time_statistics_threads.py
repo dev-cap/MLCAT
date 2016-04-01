@@ -1,4 +1,6 @@
 import networkx as nx
+import json
+from util.read_json import lines_per_n
 from datetime import *
 
 
@@ -7,7 +9,8 @@ def thread_length_distribution(discussion_graph):
     for conn_subgraph in nx.weakly_connected_component_subgraphs(discussion_graph):
         time_list = list()
         for node in conn_subgraph.nodes():
-            time_list = [datetime.strptime(x , "%a, %d %b %Y %H:%M:%S %z") for x in nx.get_node_attributes(conn_subgraph, 'time').values()]
+            time_list = [datetime.strptime(x , "%a, %d %b %Y %H:%M:%S %z")
+                         for x in nx.get_node_attributes(conn_subgraph, 'time').values()]
         current_thread_length = (max(time_list) - min(time_list)).total_seconds()
         thread_lengths.append((min([int(x) for x in conn_subgraph.nodes()]), current_thread_length))
     with open("thread_length_distribution.csv", mode='w') as dist_file:
@@ -17,11 +20,15 @@ def thread_length_distribution(discussion_graph):
     return thread_lengths
 
 
-def message_inter_arrival_times():
-    pass
-
+def message_inter_arrival_times(discussion_graph, json_data):
+    with open("thread_inter_arrival_times.csv", mode='w') as dist_file:
+        for src, dstn in discussion_graph.edges():
+            dist_file.write("{0};{1};{2}\n".format(src, dstn,
+                            abs((json_data[src]['Time'] - json_data[dstn]['Time']).total_seconds())))
+        dist_file.close()
 
 discussion_graph = nx.DiGraph()
+json_data = dict()
 
 with open("graph_nodes.csv", "r") as node_file:
     for pair in node_file:
@@ -40,4 +47,12 @@ with open("graph_edges.csv", "r") as edge_file:
     edge_file.close()
 print("Edges added.")
 
-thread_length_distribution(discussion_graph)
+with open('headers.json', 'r') as json_file:
+    for chunk in lines_per_n(json_file, 9):
+        json_obj = json.loads(chunk)
+        json_obj['Time'] = datetime.strptime(json_obj['Time'], "%a, %d %b %Y %H:%M:%S %z")
+        json_data[str(json_obj['Message-ID'])] = json_obj
+print("JSON data loaded.")
+
+#thread_length_distribution(discussion_graph)
+message_inter_arrival_times(discussion_graph, json_data)
