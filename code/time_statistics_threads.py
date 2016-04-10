@@ -17,6 +17,10 @@ def thread_length_distribution(discussion_graph):
         for node, current_thread_length in thread_lengths:
             dist_file.write("{0};{1}\n".format(node, current_thread_length))
         dist_file.close()
+    thread_lengths = [x for (y, x) in thread_lengths if x > 0]
+    thread_lengths.sort()
+    print("95th Percentile Thread Length:", thread_lengths[95*len(thread_lengths)//100], "secs.")
+    print("99th Percentile Thread Length:", thread_lengths[99*len(thread_lengths)//100], "secs.")
     return thread_lengths
 
 
@@ -54,5 +58,5 @@ with open('headers.json', 'r') as json_file:
         json_data[str(json_obj['Message-ID'])] = json_obj
 print("JSON data loaded.")
 
-#thread_length_distribution(discussion_graph)
+thread_length_distribution(discussion_graph)
 message_inter_arrival_times(discussion_graph, json_data)
