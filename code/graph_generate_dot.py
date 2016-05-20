@@ -64,3 +64,4 @@ for conn_subgraph in nx.weakly_connected_component_subgraphs(discussion_graph):
             g1.add_subgraph([neighbour], rank='same')
     g1.draw('png/' + str(min(node_list))+'.png', prog='dot')
     g1.draw('dot/' + str(min(node_list))+'.dot', prog='dot')
+

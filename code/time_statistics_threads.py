@@ -1,6 +1,6 @@
 import networkx as nx
 import json
-from util.read_json import lines_per_n
+from util.json_utils import lines_per_n
 from datetime import *
 
 

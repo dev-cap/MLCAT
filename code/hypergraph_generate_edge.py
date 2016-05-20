@@ -2,7 +2,7 @@ import networkx as nx
 import json
 import re
 import csv
-from util.read_json import lines_per_n
+from util.json_utils import lines_per_n
 
 
 class MessageNode:

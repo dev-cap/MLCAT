@@ -1,7 +1,7 @@
 import re
 import json
 from graph_tool.all import *
-from util.read_json import lines_per_n
+from util.json_utils import lines_per_n
 
 
 def detect_motifs(directed_graph, min_size, max_size):

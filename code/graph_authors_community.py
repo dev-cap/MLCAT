@@ -1,7 +1,7 @@
 import re
 import json
 import igraph
-from util.read_json import lines_per_n
+from util.json_utils import lines_per_n
 
 
 author_graph = igraph.Graph()
