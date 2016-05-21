@@ -1,8 +1,8 @@
 import json
-from util.json_utils import lines_per_n
+from util.read_utils import lines_per_n
 
 
-def generate_edge_list(ref_toggle=False):
+def generate_edge_list(ref_toggle=True):
     """
     This function generates a list of nodes and edges in the graphs from the JSON file and saves it as a CSV file.
     :param ref_toggle: If True, References attribute is used to make edges and if False, In-Reply-To is used.
@@ -45,5 +45,3 @@ def generate_edge_list(ref_toggle=False):
     with open('graph_nodes.csv', 'w') as node_file:
         for node_str in nodes:
             node_file.write(node_str + "\n")
-
-generate_edge_list(False)

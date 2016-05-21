@@ -1,7 +1,7 @@
 import email
 import imaplib
 import json
-from util.json_utils import lines_per_n
+from util.read_utils import lines_per_n
 from imap_conn import open_connection
 from imap_hdr import get_mail_header
 

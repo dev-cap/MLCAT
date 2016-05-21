@@ -1,5 +1,5 @@
 import json
-from util.json_utils import lines_per_n
+from util.read_utils import lines_per_n
 
 
 def remove_invalid_references(ref_toggle=False):
@@ -21,19 +21,19 @@ def remove_invalid_references(ref_toggle=False):
                 Mails that have references that are of type None indicate that they maybe the start of threads.
                 Anything else could be mail in a thread or something else.
                 """
-                if jfile['References'] is None:
+                if jfile['References'] is not None:
                     # Checking if the references is an empty string
-                    if jfile['References'] == "":
+                    if not jfile['References'] == "":
                         # The references are stored as a comma separated string. We have to split it at the ',' to get a list.
                         if ref_toggle:
                             ref_list = jfile['References'].split(',')
                         else:
-                            if jfile['In-Reply-To']:
+                            if jfile['In-Reply-To'] is not None:
                                 ref_list = [str(jfile['In-Reply-To'])]
                             else:
                                 ref_list = None
                         # A '0' in the list indicates that the mail contains references to some other mail which is not available to us
-                        if not ref_list or '0' in ref_list:
+                        if '0' not in ref_list or ref_list is None:
                             data = {}
                             data['Message-ID'] = jfile['Message-ID']
                             data['From'] = jfile['From']
@@ -48,11 +48,9 @@ def remove_invalid_references(ref_toggle=False):
                             for ref in ref_list :
                                 if ref in unspecified_ref:
                                     contain_unspec_ref = True
-
                             if not contain_unspec_ref:
                                     json.dump(data, fin_file, indent=1)
                                     fin_file.write('\n')
-
                         else:
                             unspecified_ref.append(str(jfile['Message-ID']))
 

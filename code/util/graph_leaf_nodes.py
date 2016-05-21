@@ -1,5 +1,5 @@
 import json
-from util.read_json import lines_per_n
+from util.read_utils import lines_per_n
 
 leaf_msgs = []  # Keeps track of all those message ids that are leaf nodes
 msg_ref_map = {}  # Map between message id of each mail to its references list
