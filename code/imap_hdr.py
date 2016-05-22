@@ -106,7 +106,7 @@ def get_mail_header(to_get, range_=True):
                             data['To'] = original['To']
                             data['Cc'] = original['Cc']
                             data['In-Reply-To'] = original['In-Reply-To']
-                            data['Time'] = date_to_UTC(original['Date'])
+                            data['Time'] = get_utc_time(original['Date'])
 
                             if original['References'] is None:
                                 data['References'] = None
