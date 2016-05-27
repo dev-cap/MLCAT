@@ -1,5 +1,5 @@
 import json
-from util.read_json import lines_per_n
+from util.read_utils import lines_per_n
 import community
 import networkx as nx
 

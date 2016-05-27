@@ -1,42 +1,9 @@
-import datetime
 import email
 import imaplib
 import json
-import traceback
-import pytz
 from encoder import NoIndent, MyEncoder
 from imap_conn import open_connection
-
-
-def date_to_UTC(orig_date):
-    """
-    A function to convert a formatted string containing date and time from a local timezone to UTC, by taking into
-    consideration multiple formats of the input parameter
-    :param orig_date: Formatted string containing a date and time from a local timezone
-    :return: Formatted string containing the date and time in UTC
-    """
-
-    try:
-        # Truncating the string to contain only required values and removing unwanted whitespace
-        trunc_date = orig_date[:31] if len(orig_date) > 31 else orig_date
-        trunc_date = trunc_date.strip()
-
-        # Generating a datetime object considering multiple formats of the input parameter - with and without weekday
-        if len(trunc_date) == 25 or len(trunc_date) == 26:
-            datetime_obj = datetime.datetime.strptime(trunc_date, "%d %b %Y %H:%M:%S %z")
-        elif len(trunc_date) == 27 or len(trunc_date) == 28:
-            datetime_obj = datetime.datetime.strptime(trunc_date, "%a, %d %b %Y %H:%M %z")
-        else:
-            datetime_obj = datetime.datetime.strptime(trunc_date, "%a, %d %b %Y %H:%M:%S %z")
-
-        # Converting the datetime object into a formatted string
-        utc_dt = datetime_obj.astimezone(pytz.utc)
-        return utc_dt.strftime("%a, %d %b %Y %H:%M:%S %z")
-
-    except:
-        print("Unable to process date:", orig_date, trunc_date)
-        traceback.print_exc()
-
+from util.read_utils import *
 
 def init_uid_map():
     """
@@ -46,10 +13,9 @@ def init_uid_map():
     :return: A map with the string in the Message-Id field of the header to the UID of the mail
     """
     print("Initializing UID map...")
-    with open('uid_map.json', 'r') as map_file:
+    with open('thread_uid_map.json', 'r') as map_file:
         uid_msg_id_map = json.load(map_file)
         map_file.close()
-
     return uid_msg_id_map
 
 
@@ -140,7 +106,7 @@ def get_mail_header(to_get, range_=True):
                             data['To'] = original['To']
                             data['Cc'] = original['Cc']
                             data['In-Reply-To'] = original['In-Reply-To']
-                            data['Time'] = date_to_UTC(original['Date'])
+                            data['Time'] = get_utc_time(original['Date'])
 
                             if original['References'] is None:
                                 data['References'] = None
@@ -149,7 +115,7 @@ def get_mail_header(to_get, range_=True):
                                 """
                                 Since all the references are also in string, we have to go through each string in the list of references.
                                 For each references string in the list, we check if we have already encountered it. In such a case, we
-                                associate the the UID of the mail that had the first occurence of this string.
+                                associate the the UID of the mail that had the first occurrence of this string.
                                 If not, we just append the value 0.
                                 Also splicing is done for references to remove '<' and '>'
                                 """
@@ -185,6 +151,6 @@ def get_mail_header(to_get, range_=True):
     value of the second key is overwritten into the first. In this case, the values of the keys are the same Message-ID.
     """
     print("Writing UID map to file...")
-    with open("uid_map.json", mode='w', encoding='utf-8') as f:
+    with open("thread_uid_map.json", mode='w', encoding='utf-8') as f:
         json.dump(uid_msg_id_map, f, indent=1)
         f.close()

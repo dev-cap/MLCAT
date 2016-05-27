@@ -2,7 +2,7 @@ import networkx as nx
 import json
 import re
 import csv
-from util.read_json import lines_per_n
+from util.read_utils import lines_per_n
 
 
 class MessageNode:
@@ -138,5 +138,3 @@ for conn_subgraph in nx.weakly_connected_component_subgraphs(discussion_graph):
         tablewriter.writerow([" ", " ", " ", "Outdegree"] + outdegree + ["Total CCs", "Total TOs"])
         tablewriter.writerow([" ", " ", " ", "Indegree"] + indegree + [total_cc, total_to])
         hyperedge_file.close()
-    if origin_node == 5141:
-        break

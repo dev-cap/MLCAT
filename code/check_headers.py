@@ -1,7 +1,7 @@
 import email
 import imaplib
 import json
-from util.read_json import lines_per_n
+from util.read_utils import lines_per_n
 from imap_conn import open_connection
 from imap_hdr import get_mail_header
 
@@ -46,7 +46,7 @@ unavailable_uid = set()
 last_uid_read = 0
 
 
-def check_validity():
+def check_validity(check_unavailable_uid='False'):
     """
     This function checks for and prints duplicate, missing, and invalid objects in the "headers.json" file.
     This function can be run first to generate a list of duplicate, missing, or invalid objects' UIDs which
@@ -100,17 +100,18 @@ def check_validity():
         global missing_uid
         missing_uid = set(range(min(read_uid), last_uid_read+1)) - read_uid
         global unavailable_uid
+
+    if check_unavailable_uid:
         unavailable_uid = get_unavailable_uid()
+        print("Unavailable UIDs: ", unavailable_uid if len(unavailable_uid) > 0 else "None")
+        with open("unwanted_uid.txt", 'a') as unw_file:
+            for uid in unwanted_uid:
+                unw_file.write(str(uid) + '\n')
+        print("Unwanted UIDs: ", unwanted_uid if len(unwanted_uid) > 0 else "None")
 
-    with open("unwanted_uid.txt", 'a') as unw_file:
-        for uid in unwanted_uid:
-            unw_file.write(str(uid) + '\n')
-
-    print("Unavailable UIDs: ", unavailable_uid if len(unavailable_uid) > 0 else "None")
     print("Duplicate UIDs: ", duplicate_uid if len(duplicate_uid) > 0 else "None")
     print("Missing UIDs: ", missing_uid if len(missing_uid) > 0 else "None")
     print("Invalid UIDs: ", invalid_uid if len(invalid_uid) > 0 else "None")
-    print("Unwanted UIDs: ", unwanted_uid if len(unwanted_uid) > 0 else "None")
     return last_uid_read
 
 
@@ -217,7 +218,7 @@ def write_uid_map(from_index=1, to_index=last_uid_read):
     :param to_index: Fetches headers till this UID (non inclusive).
 
     """
-    with open('uid_map.json', 'r') as map_file:
+    with open('thread_uid_map.json', 'r') as map_file:
         uid_msg_id_map = json.load(map_file)
         map_file.close()
 
@@ -252,7 +253,7 @@ def write_uid_map(from_index=1, to_index=last_uid_read):
             pass
         conn.logout()
 
-    with open("uid_map.json", mode='w', encoding='utf-8') as f:
+    with open("thread_uid_map.json", mode='w', encoding='utf-8') as f:
             json.dump(uid_msg_id_map, f, indent=1)
             f.close()
 

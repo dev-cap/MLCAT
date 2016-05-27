@@ -1,7 +1,8 @@
 import json
 import re
 import networkx as nx
-from util.read_json import lines_per_n
+from util.read_utils import lines_per_n
+
 
 def add_to_multigraph(graph_obj, discussion_graph, json_data, nbunch, label_prefix=''):
     i = 0
