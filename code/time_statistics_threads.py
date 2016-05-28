@@ -13,6 +13,7 @@ def thread_length_distribution(discussion_graph):
     with open("thread_length_distribution.csv", mode='w') as dist_file:
         for node, current_thread_length in thread_lengths:
             dist_file.write("{0};{1}\n".format(node, current_thread_length))
+            # dist_file.write("{0}\n".format(node, current_thread_length))
         dist_file.close()
     thread_lengths = [x for (y, x) in thread_lengths]
     thread_lengths.sort()
@@ -28,6 +29,7 @@ def message_inter_arrival_times(discussion_graph, json_data):
         for src, dstn in discussion_graph.edges():
             dist_file.write("{0};{1};{2}\n".format(src, dstn,
                             abs((json_data[str(src)]['Time'] - json_data[str(dstn)]['Time']).total_seconds())))
+            # dist_file.write("{0}\n".format(abs((json_data[str(src)]['Time'] - json_data[str(dstn)]['Time']).total_seconds())))
         dist_file.close()
 
 

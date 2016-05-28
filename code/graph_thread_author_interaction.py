@@ -1,7 +1,5 @@
 import json
-import re
-import networkx as nx
-from util.read_utils import lines_per_n
+from util.read_utils import *
 
 
 def add_to_multigraph(graph_obj, discussion_graph, json_data, nbunch, label_prefix=''):
@@ -70,7 +68,6 @@ def author_interaction_weighted_graph(discussion_graph, json_data, limit=10):
         if limit == niter and limit > 0:
             break
 
-
 discussion_graph = nx.DiGraph()
 json_data = dict()
 email_re = re.compile(r'[\w\.-]+@[\w\.-]+')
@@ -95,7 +92,7 @@ with open("graph_edges.csv", "r") as edge_file:
     edge_file.close()
 print("Edges added.")
 
-with open('headers.json', 'r') as json_file:
+with open('clean_data.json', 'r') as json_file:
     for chunk in lines_per_n(json_file, 9):
         json_obj = json.loads(chunk)
         # print("\nFrom", json_obj['From'], "\nTo", json_obj['To'], "\nCc", json_obj['Cc'])
@@ -106,6 +103,7 @@ with open('headers.json', 'r') as json_file:
         # print("\nFrom", json_obj['From'], "\nTo", json_obj['To'], "\nCc", json_obj['Cc'])
         json_data[json_obj['Message-ID']] = json_obj
 print("JSON data loaded.")
+
 author_interaction_weighted_graph(discussion_graph, json_data, limit=20)
 author_interaction_multigraph(discussion_graph, json_data, limit=20)
 
