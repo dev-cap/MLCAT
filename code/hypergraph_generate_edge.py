@@ -1,3 +1,10 @@
+"""
+This module is used to model each discussion thread as one hypergraph. All the email header information can be
+represented as one hyperedge of a hypergraph. This concise format for representing a discussion thread as a
+hypergraph is then stored as a table to a CSV file, with the author column headers containing the ids of the authors.
+All the author columns are sorted left to right in the descending order of out degree, followed by in degree. The
+authors identified in this discussion thread are indexed in a separate file using the author_uid_map.py.
+"""
 import networkx as nx
 import json
 import re

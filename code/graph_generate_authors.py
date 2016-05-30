@@ -1,3 +1,8 @@
+"""
+This module is used to  graphs that show the interaction between authors in the mailing list. There is an edge from
+one author to another if the former sent a message to the latter either in To or by marking in CC. These graphs are for
+the entire mailing list.
+"""
 import json
 from util.read_utils import *
 

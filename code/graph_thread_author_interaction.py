@@ -1,3 +1,9 @@
+"""
+This module is used to generate graphs that show the interaction between authors either through multiple edges or
+through edge weights. There is an edge from one author to another if the former sent a message to the latter. These
+graphs depict thread-wise interaction of the authors for the entire mailing list and these interactions are labelled
+in chronological order to help identify the flow of messages across authors.
+"""
 import json
 from util.read_utils import *
 

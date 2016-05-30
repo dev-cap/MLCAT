@@ -4,10 +4,13 @@ from util.read_utils import *
 
 def generate_wh_table_authors(ignore_lat=False, time_limit=None):
     """
-
-    :param ignore_lat:
-    :param time_limit:
-    :return:
+    This module is used to generate the author version of the width height table. The width height table for the
+    authors is a representation of the number of total and new authors in a thread aggregated at a given generation.
+    The table, which itself is temporarily stored in a two dimensional array, is then written into a CSV file. These
+    tables are can be used to decipher the basic conversation structure.
+    :param ignore_lat: If true, then lone author threads are ignored.
+    :param time_limit: All messages until this time are considered and all messages after this time are ignored. Time
+                       is specified as a string in one of the recognized formats.
     """
     if time_limit is None:
         time_limit = time.strftime("%a, %d %b %Y %H:%M:%S %z")

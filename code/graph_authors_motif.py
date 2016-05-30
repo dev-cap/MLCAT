@@ -1,3 +1,9 @@
+"""
+This module uses Graph-Tool.clustering package to count the occurrence of motifs (which are k-size node-induced
+subgraphs) and consequently obtain the motif significance profile, for subgraphs with k vertices. Then tuples with
+three lists are written to a text file: the list of motifs found, the list with their respective counts, and their
+respective z-scores.
+"""
 import re
 import json
 from graph_tool.all import *

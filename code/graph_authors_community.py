@@ -1,3 +1,10 @@
+"""
+This module is used to find the community structure of the network according to the Infomap method of Martin Rosvall
+and Carl T. Bergstrom and returns an appropriate VertexClustering object. This module has been implemented using both
+the iGraph package and the Infomap tool from MapEquation.org. The VertexClustering object represents the clustering of
+the vertex set of a graph and also provides some methods for getting the subgraph corresponding to a cluster and such.
+
+"""
 import re
 import json
 import igraph

@@ -1,3 +1,9 @@
+"""
+This module is used to generate bipartite graph among all the users and messages in the mailing list such that all
+the users are on one side and all the messages will be on another. A directed edge would be drawn from author to the
+message sent by the author. A directed edge would be drawn from message to all the users who are in To and CC fields.
+A projection of this bipartite graph is then generated.
+"""
 import json
 from util.read_utils import *
 

@@ -1,6 +1,11 @@
+"""
+This module is used to generate a thread-wise view of the entire mailing list by saving the a graph representing the
+messages in a thread as a tree using the References and In-Reply-TO fields from the mail headers. The thread graphs are
+then saved to GEXF, DOT and PNG formats. All authors of a thread are identified and each author is given a unique color.
+All messages sent by this author get the same color.
+"""
 import networkx as nx
 from networkx.drawing.nx_agraph import *
-
 discussion_graph = nx.DiGraph()
 color_list = ["#ff0000", "#005555", "#b0b0ff", "#e4e400", "#0000ff", "#ff00ff", "#b000b0", "#870087", "#baba00",
               "#878700", "#545400", "#00ff00", "#8484ff", "#b00000", "#870000", "#550000", "#00b0b0", "#008787",

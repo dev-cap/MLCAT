@@ -1,3 +1,14 @@
+"""
+Using the headers of the messages of the threads, this module is used for generating the following statistics can be
+helpful in understanding the nature of the discussion threads:
+* Distribution of the length (in units of time) of each discussion thread. Since one discussion thread has one
+length, we have a distribution of these lengths.
+* Distribution of inter-arrival times between the consecutive messages in all discussion threads. This information
+would help in determining a possible termination of a discussion thread. If there is no activity on a thread beyond a
+reasonable limit (can be mean + 2*S.D), then we can conclude the discussion thread to be dead.
+Both these distributions can then be plotted as cumulative distribution functions (CDFs) using the CSV files generated
+by this module.
+"""
 import json
 from util.read_utils import *
 
