@@ -5,10 +5,9 @@ the iGraph package and the Infomap tool from MapEquation.org. The VertexClusteri
 the vertex set of a graph and also provides some methods for getting the subgraph corresponding to a cluster and such.
 
 """
-import re
 import json
 import igraph
-from util.read_utils import lines_per_n
+from util.read_utils import *
 
 
 author_graph = igraph.Graph()
@@ -17,18 +16,50 @@ json_data = dict()
 author_map = dict()
 email_re = re.compile(r'[\w\.-]+@[\w\.-]+')
 
-with open('clean_data.json', 'r') as json_file:
-    for chunk in lines_per_n(json_file, 9):
-        json_obj = json.loads(chunk)
-        # print("\nFrom", json_obj['From'], "\nTo", json_obj['To'], "\nCc", json_obj['Cc'])
-        from_addr = email_re.search(json_obj['From'])
-        json_obj['From'] = from_addr.group(0) if from_addr is not None else json_obj['From']
-        json_obj['To'] = set(email_re.findall(json_obj['To']))
-        json_obj['Cc'] = set(email_re.findall(json_obj['Cc'])) if json_obj['Cc'] is not None else None
-        # print("\nFrom", json_obj['From'], "\nTo", json_obj['To'], "\nCc", json_obj['Cc'])
-        json_data[json_obj['Message-ID']] = json_obj
-print("JSON data loaded.")
+# Time limit can be specified here in the form of a timestamp in one of the identifiable formats and all messages
+# that have arrived after this timestamp will be ignored.
+time_limit = None
+# If true, then messages that belong to threads that have only a single author are ignored.
+ignore_lat = True
 
+if time_limit is None:
+    time_limit = time.strftime("%a, %d %b %Y %H:%M:%S %z")
+msgs_before_time = set()
+time_limit = get_datetime_object(time_limit)
+print("All messages before", time_limit, "are being considered.")
+
+if not ignore_lat:
+    with open('clean_data.json', 'r') as json_file:
+        for chunk in lines_per_n(json_file, 9):
+            json_obj = json.loads(chunk)
+            json_obj['Message-ID'] = int(json_obj['Message-ID'])
+            json_obj['Time'] = datetime.datetime.strptime(json_obj['Time'], "%a, %d %b %Y %H:%M:%S %z")
+            if json_obj['Time'] < time_limit:
+                # print("\nFrom", json_obj['From'], "\nTo", json_obj['To'], "\nCc", json_obj['Cc'])
+                from_addr = email_re.search(json_obj['From'])
+                json_obj['From'] = from_addr.group(0) if from_addr is not None else json_obj['From']
+                json_obj['To'] = set(email_re.findall(json_obj['To']))
+                json_obj['Cc'] = set(email_re.findall(json_obj['Cc'])) if json_obj['Cc'] is not None else None
+                # print("\nFrom", json_obj['From'], "\nTo", json_obj['To'], "\nCc", json_obj['Cc'])
+                json_data[json_obj['Message-ID']] = json_obj
+    print("JSON data loaded.")
+else:
+    lone_author_threads = get_lone_author_threads(False)
+    with open('clean_data.json', 'r') as json_file:
+        for chunk in lines_per_n(json_file, 9):
+            json_obj = json.loads(chunk)
+            json_obj['Message-ID'] = int(json_obj['Message-ID'])
+            if json_obj['Message-ID'] not in lone_author_threads:
+                json_obj['Time'] = datetime.datetime.strptime(json_obj['Time'], "%a, %d %b %Y %H:%M:%S %z")
+                if json_obj['Time'] < time_limit:
+                    # print("\nFrom", json_obj['From'], "\nTo", json_obj['To'], "\nCc", json_obj['Cc'])
+                    from_addr = email_re.search(json_obj['From'])
+                    json_obj['From'] = from_addr.group(0) if from_addr is not None else json_obj['From']
+                    json_obj['To'] = set(email_re.findall(json_obj['To']))
+                    json_obj['Cc'] = set(email_re.findall(json_obj['Cc'])) if json_obj['Cc'] is not None else None
+                    # print("\nFrom", json_obj['From'], "\nTo", json_obj['To'], "\nCc", json_obj['Cc'])
+                    json_data[json_obj['Message-ID']] = json_obj
+    print("JSON data loaded.")
 
 """
 Graphs can also be indexed by strings or pairs of vertex indices or vertex names. When a graph is

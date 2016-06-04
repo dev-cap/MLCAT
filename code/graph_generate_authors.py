@@ -6,6 +6,27 @@ the entire mailing list.
 import json
 from util.read_utils import *
 
+
+def write_pajek_file(author_graph):
+    # Write Pajek file compatible with the Infomap Community Detection module
+    nx.write_pajek(author_graph, "author_graph.net")
+    lines_in_file= list()
+    with open("author_graph.net", 'r') as pajek_file:
+        for line in pajek_file:
+            lines_in_file.append(line)
+    num_vertices = int(lines_in_file[0].split()[1])
+
+    for i in range(1, num_vertices+1):
+        line = lines_in_file[i].split()
+        line[1] = "\"" + line[1] + "\""
+        del line[2:]
+        line.append("\n")
+        lines_in_file[i] = " ".join(line)
+
+    with open("author_graph.net", 'w') as pajek_file:
+        for line in lines_in_file:
+            pajek_file.write(line)
+
 # Time limit can be specified here in the form of a timestamp in one of the identifiable formats and all messages
 # that have arrived after this timestamp will be ignored.
 time_limit = None
@@ -59,7 +80,9 @@ for msg_id, message in json_data.items():
     else:
         addr_list = message['To'] | message['Cc']
     for to_address in addr_list:
-        author_graph.add_edge(message['From'], to_address, style='solid')
+        author_graph.add_edge(message['From'], to_address)
+
+write_pajek_file(author_graph)
 
 print("No. of Weakly Connected Components:", nx.number_weakly_connected_components(author_graph))
 print("No. of Strongly Connected Components:", nx.number_strongly_connected_components(author_graph))
