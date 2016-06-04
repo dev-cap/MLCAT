@@ -18,7 +18,7 @@ def add_to_multigraph(graph_obj, discussion_graph, json_data, nbunch, label_pref
             addr_list = node_attr['To'] | node_attr['Cc']
         for to_address in addr_list:
             graph_obj.add_edge(node_attr['From'], to_address, label=label_prefix+str(i))
-        succ_nbunch = [int(x) for x in discussion_graph.successors(str(node))]
+        succ_nbunch = [int(x) for x in discussion_graph.successors(node)]
         if succ_nbunch is not None:
             add_to_multigraph(graph_obj, discussion_graph, json_data, succ_nbunch, label_prefix+str(i)+'.')
         i += 1
@@ -56,7 +56,7 @@ def add_to_weighted_graph(graph_obj, discussion_graph, json_data, nbunch, node_e
                 graph_obj.add_edge(from_node, to_node, label=1)
             else:
                 graph_obj[from_node][to_node]['label'] += 1
-        succ_nbunch = [int(x) for x in discussion_graph.successors(str(node))]
+        succ_nbunch = [int(x) for x in discussion_graph.successors(node)]
         if succ_nbunch is not None:
             add_to_weighted_graph(graph_obj, discussion_graph, json_data, succ_nbunch, node_enum)
 
@@ -74,29 +74,74 @@ def author_interaction_weighted_graph(discussion_graph, json_data, limit=10):
         if limit == niter and limit > 0:
             break
 
+
+# Time limit can be specified here in the form of a timestamp in one of the identifiable formats and all messages
+# that have arrived after this timestamp will be ignored.
+time_limit = None
+# If true, then messages that belong to threads that have only a single author are ignored.
+ignore_lat = True
+
+if time_limit is None:
+    time_limit = time.strftime("%a, %d %b %Y %H:%M:%S %z")
+msgs_before_time = set()
+time_limit = get_datetime_object(time_limit)
+print("All messages before", time_limit, "are being considered.")
+
 discussion_graph = nx.DiGraph()
-json_data = dict()
 email_re = re.compile(r'[\w\.-]+@[\w\.-]+')
+json_data = dict()
 
-with open("graph_nodes.csv", "r") as node_file:
-    for pair in node_file:
-        node = pair.split(';', 2)
-        discussion_graph.add_node(node[0], time=node[2].strip(), sender=node[1].strip())
-    node_file.close()
-print("Nodes added.")
+# Add nodes into NetworkX graph by reading from CSV file
+if not ignore_lat:
+    with open("graph_nodes.csv", "r") as node_file:
+        for pair in node_file:
+            node = pair.split(';', 2)
+            if get_datetime_object(node[2].strip()) < time_limit:
+                node[0] = int(node[0])
+                msgs_before_time.add(node[0])
+                from_addr = email_re.search(node[1].strip())
+                from_addr = from_addr.group(0) if from_addr is not None else node[1].strip()
+                discussion_graph.add_node(node[0], time=node[2].strip(), color="#ffffff", style='bold', sender=from_addr)
+        node_file.close()
+    print("Nodes added.")
 
-with open("graph_edges.csv", "r") as edge_file:
-    for pair in edge_file:
-        edge = pair.split(';')
-        edge[1] = edge[1].strip()
-        try:
-            discussion_graph.node[edge[0]]['sender']
-            discussion_graph.node[edge[1]]['sender']
-            discussion_graph.add_edge(*edge)
-        except KeyError:
-            pass
-    edge_file.close()
-print("Edges added.")
+    # Add edges into NetworkX graph by reading from CSV file
+    with open("graph_edges.csv", "r") as edge_file:
+        for pair in edge_file:
+            edge = pair.split(';')
+            edge[0] = int(edge[0])
+            edge[1] = int(edge[1])
+            if edge[0] in msgs_before_time and edge[1] in msgs_before_time:
+                discussion_graph.add_edge(*edge)
+        edge_file.close()
+    print("Edges added.")
+
+else:
+    lone_author_threads = get_lone_author_threads(False)
+    # Add nodes into NetworkX graph only if they are not a part of a thread that has only a single author
+    with open("graph_nodes.csv", "r") as node_file:
+        for pair in node_file:
+            node = pair.split(';', 2)
+            node[0] = int(node[0])
+            if get_datetime_object(node[2].strip()) < time_limit and node[0] not in lone_author_threads:
+                msgs_before_time.add(node[0])
+                from_addr = email_re.search(node[1].strip())
+                from_addr = from_addr.group(0) if from_addr is not None else node[1].strip()
+                discussion_graph.add_node(node[0], time=node[2].strip(), color="#ffffff", style='bold', sender=from_addr)
+        node_file.close()
+    print("Nodes added.")
+
+# Add edges into NetworkX graph only if they are not a part of a thread that has only a single author
+    with open("graph_edges.csv", "r") as edge_file:
+        for pair in edge_file:
+            edge = pair.split(';')
+            edge[0] = int(edge[0])
+            edge[1] = int(edge[1])
+            if edge[0] not in lone_author_threads and edge[1] not in lone_author_threads:
+                if edge[0] in msgs_before_time and edge[1] in msgs_before_time:
+                    discussion_graph.add_edge(*edge)
+        edge_file.close()
+    print("Edges added.")
 
 with open('clean_data.json', 'r') as json_file:
     for chunk in lines_per_n(json_file, 9):
