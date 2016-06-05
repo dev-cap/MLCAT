@@ -32,6 +32,7 @@ def write_degree_distribution(author_graph):
     in_degree_dict = author_graph.in_degree(nbunch=author_graph.nodes_iter())
     out_degree_dict = author_graph.out_degree(nbunch=author_graph.nodes_iter())
     with open("degree_distribution.csv", 'w') as degree_dist_file:
+        degree_dist_file.write("Author Email ID,Degree Differential\n")
         for author_id, out_degree in out_degree_dict.items():
             degree_dist_file.write(author_id + "," + str(out_degree - in_degree_dict[author_id]) + "\n")
     degree_dist_file.close()
