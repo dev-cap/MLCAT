@@ -53,18 +53,6 @@ msgs_before_time = set()
 time_limit = get_datetime_object(time_limit)
 print("All messages before", time_limit, "are being considered.")
 
-# with open('clean_data.json', 'r') as json_file:
-#     for chunk in lines_per_n(json_file, 9):
-#         json_obj = json.loads(chunk)
-#         # print("\nFrom", json_obj['From'], "\nTo", json_obj['To'], "\nCc", json_obj['Cc'])
-#         from_addr = email_re.search(json_obj['From'])
-#         json_obj['From'] = from_addr.group(0) if from_addr is not None else json_obj['From']
-#         json_obj['To'] = set(email_re.findall(json_obj['To']))
-#         json_obj['Cc'] = set(email_re.findall(json_obj['Cc'])) if json_obj['Cc'] is not None else None
-#         # print("\nFrom", json_obj['From'], "\nTo", json_obj['To'], "\nCc", json_obj['Cc'])
-#         json_data[json_obj['Message-ID']] = json_obj
-# print("JSON data loaded.")
-
 if not ignore_lat:
     with open('clean_data.json', 'r') as json_file:
         for chunk in lines_per_n(json_file, 9):
