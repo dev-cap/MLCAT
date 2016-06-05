@@ -7,7 +7,7 @@ import json
 from util.read_utils import *
 
 
-def write_pajek_file(author_graph):
+def write_to_pajek(author_graph):
     # Write Pajek file compatible with the Infomap Community Detection module
     nx.write_pajek(author_graph, "author_graph.net")
     lines_in_file= list()
@@ -26,6 +26,16 @@ def write_pajek_file(author_graph):
     with open("author_graph.net", 'w') as pajek_file:
         for line in lines_in_file:
             pajek_file.write(line)
+
+
+def write_degree_distribution(author_graph):
+    in_degree_dict = author_graph.in_degree(nbunch=author_graph.nodes_iter())
+    out_degree_dict = author_graph.out_degree(nbunch=author_graph.nodes_iter())
+    with open("degree_distribution.csv", 'w') as degree_dist_file:
+        for author_id, out_degree in out_degree_dict.items():
+            degree_dist_file.write(author_id + "," + str(out_degree - in_degree_dict[author_id]) + "\n")
+    degree_dist_file.close()
+    print("Degree distribution written to file.")
 
 # Time limit can be specified here in the form of a timestamp in one of the identifiable formats. All messages
 # that have arrived after time_ubound and before time_lbound will be ignored.
@@ -47,7 +57,7 @@ if time_lbound is None:
     time_lbound = "Sun, 01 Jan 2001 00:00:00 +0000"
 time_lbound = get_datetime_object(time_lbound)
 
-print("All messages before", time_ubound, "are being considered.")
+print("All messages before", time_ubound, "and after", time_lbound,  "are being considered.")
 
 if not ignore_lat:
     with open('clean_data.json', 'r') as json_file:
@@ -89,11 +99,7 @@ for msg_id, message in json_data.items():
         addr_list = message['To'] | message['Cc']
     for to_address in addr_list:
         author_graph.add_edge(message['From'], to_address)
-
-write_pajek_file(author_graph)
-
-print("No. of Weakly Connected Components:", nx.number_weakly_connected_components(author_graph))
-print("No. of Strongly Connected Components:", nx.number_strongly_connected_components(author_graph))
-print("Nodes:", nx.number_of_nodes(author_graph))
-print("Edges:", nx.number_of_edges(author_graph))
-
+print("Authors graph generated with nodes:", nx.number_of_nodes(author_graph), end=" ")
+print("and edges:", nx.number_of_edges(author_graph))
+# write_to_pajek(author_graph)
+write_degree_distribution(author_graph)
