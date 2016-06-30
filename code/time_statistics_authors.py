@@ -2,10 +2,11 @@ from util.read_utils import *
 import json
 
 
-def conversation_refresh_times(json_data):
+def conversation_refresh_times(json_data, discussion_graph):
     """
 
     :param json_data:
+    :param discussion_graph:
     :return:
     """
     # The list crt stores the conversation refresh times between authors as a list of tuples containing the author
@@ -31,16 +32,17 @@ def conversation_refresh_times(json_data):
                 addr1 = to_address
 
             if last_conv_time.get((addr1, addr2), None) is None:
-                last_conv_time[(addr1, addr2)] = message['Time']
-            else:
+                last_conv_time[(addr1, addr2)] = (message['Message-ID'], message['Time'])
+            elif not nx.has_path(discussion_graph, message['Message-ID'], last_conv_time[(addr1, addr2)][0])\
+                    and not nx.has_path(discussion_graph, last_conv_time[(addr1, addr2)][0], message['Message-ID']):
                 crt.append((message['From'], to_address,
-                            (message['Time']-last_conv_time[((addr1, addr2))]).total_seconds()))
-                last_conv_time[(addr1, addr2)] = message['Time']
+                            (message['Time']-last_conv_time[((addr1, addr2))][1]).total_seconds()))
+                last_conv_time[(addr1, addr2)] = (message['Message-ID'], message['Time'])
 
     with open("conversation_refresh_times.csv", mode='w') as dist_file:
         dist_file.write("From Address;To Address;Conv. Refresh Time\n")
         for from_addr, to_address, crtime in crt:
-            if crtime > 1:
+            if crtime > 0:
                 dist_file.write("{0};{1};{2}\n".format(from_addr, to_address, str(crtime)))
         dist_file.close()
 
@@ -53,8 +55,9 @@ time_lbound = None
 # If ignore_lat is true, then messages that belong to threads that have only a single author are ignored.
 ignore_lat = False
 
-author_graph = nx.DiGraph()
+discussion_graph = nx.DiGraph()
 email_re = re.compile(r'[\w\.-]+@[\w\.-]+')
+msgs_before_time = set()
 json_data = dict()
 
 if time_ubound is None:
@@ -66,6 +69,58 @@ if time_lbound is None:
 time_lbound = get_datetime_object(time_lbound)
 
 print("All messages before", time_ubound, "and after", time_lbound,  "are being considered.")
+
+# Add nodes into NetworkX graph by reading from CSV file
+if not ignore_lat:
+    with open("graph_nodes.csv", "r") as node_file:
+        for pair in node_file:
+            node = pair.split(';', 2)
+            if get_datetime_object(node[2].strip()) < time_ubound:
+                node[0] = int(node[0])
+                msgs_before_time.add(node[0])
+                from_addr = email_re.search(node[1].strip())
+                from_addr = from_addr.group(0) if from_addr is not None else node[1].strip()
+                discussion_graph.add_node(node[0], time=node[2].strip(), color="#ffffff", style='bold', sender=from_addr)
+        node_file.close()
+    print("Nodes added.")
+
+    # Add edges into NetworkX graph by reading from CSV file
+    with open("graph_edges.csv", "r") as edge_file:
+        for pair in edge_file:
+            edge = pair.split(';')
+            edge[0] = int(edge[0])
+            edge[1] = int(edge[1])
+            if edge[0] in msgs_before_time and edge[1] in msgs_before_time:
+                discussion_graph.add_edge(*edge)
+        edge_file.close()
+    print("Edges added.")
+
+else:
+    lone_author_threads = get_lone_author_threads(False)
+    # Add nodes into NetworkX graph only if they are not a part of a thread that has only a single author
+    with open("graph_nodes.csv", "r") as node_file:
+        for pair in node_file:
+            node = pair.split(';', 2)
+            node[0] = int(node[0])
+            if get_datetime_object(node[2].strip()) < time_ubound and node[0] not in lone_author_threads:
+                msgs_before_time.add(node[0])
+                from_addr = email_re.search(node[1].strip())
+                from_addr = from_addr.group(0) if from_addr is not None else node[1].strip()
+                discussion_graph.add_node(node[0], time=node[2].strip(), color="#ffffff", style='bold', sender=from_addr)
+        node_file.close()
+    print("Nodes added.")
+
+    # Add edges into NetworkX graph only if they are not a part of a thread that has only a single author
+    with open("graph_edges.csv", "r") as edge_file:
+        for pair in edge_file:
+            edge = pair.split(';')
+            edge[0] = int(edge[0])
+            edge[1] = int(edge[1])
+            if edge[0] not in lone_author_threads and edge[1] not in lone_author_threads:
+                if edge[0] in msgs_before_time and edge[1] in msgs_before_time:
+                    discussion_graph.add_edge(*edge)
+        edge_file.close()
+    print("Edges added.")
 
 if not ignore_lat:
     with open('clean_data.json', 'r') as json_file:
@@ -99,4 +154,4 @@ else:
                     json_data[json_obj['Message-ID']] = json_obj
 print("JSON data loaded.")
 
-conversation_refresh_times(json_data)
+conversation_refresh_times(json_data, discussion_graph)

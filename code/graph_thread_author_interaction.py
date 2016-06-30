@@ -131,7 +131,7 @@ else:
         node_file.close()
     print("Nodes added.")
 
-# Add edges into NetworkX graph only if they are not a part of a thread that has only a single author
+    # Add edges into NetworkX graph only if they are not a part of a thread that has only a single author
     with open("graph_edges.csv", "r") as edge_file:
         for pair in edge_file:
             edge = pair.split(';')

@@ -113,12 +113,5 @@ else:
         edge_file.close()
     print("Edges added.")
 
-with open('clean_data.json', 'r') as json_file:
-    for chunk in lines_per_n(json_file, 9):
-        json_obj = json.loads(chunk)
-        json_obj['Time'] = datetime.datetime.strptime(json_obj['Time'], "%a, %d %b %Y %H:%M:%S %z")
-        json_data[str(json_obj['Message-ID'])] = json_obj
-print("JSON data loaded.")
-
 thread_length_distribution(discussion_graph)
 message_inter_arrival_times(discussion_graph, json_data)

@@ -93,5 +93,5 @@ else:
                     json_data[json_obj['Message-ID']] = json_obj
 print("JSON data loaded.")
 
-#generate_weekly_message_activity_heatmap(json_data)
+generate_weekly_message_activity_heatmap(json_data)
 generate_monthly_message_activity_heatmap(json_data)
