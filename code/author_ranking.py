@@ -1,6 +1,7 @@
 from util.read_utils import *
 import json
 
+
 def generate_author_ranking(json_data, active_score, passive_score):
     """
 
@@ -40,12 +41,12 @@ def generate_author_ranking(json_data, active_score, passive_score):
     prev_score = -1
     author_rank = 0
     with open("author_rankings.csv", mode='w') as output_file:
-        output_file.write("Email Address; Author's Score; Author's Rank\n")
+        output_file.write("Email Address,Author's Score,Author's Rank\n")
         for email_addr, author_score in sorted(author_scores.items(), key=lambda x1: -x1[1]):
             if author_score != prev_score:
                 author_rank += 1
             prev_score = author_score
-            output_file.write("{0};{1};{2}\n".format(email_addr, str(author_score),str(author_rank)))
+            output_file.write("{0},{1},{2}\n".format(email_addr, str(author_score),str(author_rank)))
         output_file.close()
 
 # Time limit can be specified here in the form of a timestamp in one of the identifiable formats. All messages

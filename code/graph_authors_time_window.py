@@ -4,6 +4,7 @@ one author to another if the former sent a message to the latter either in To or
 the entire mailing list.
 """
 import json
+import networkx as nx
 from util.read_utils import *
 
 
@@ -35,8 +36,20 @@ def write_degree_distribution(author_graph):
         degree_dist_file.write("Author Email ID,In-Degree,Out-Degree,Degree Differential\n")
         for author_id, out_degree in out_degree_dict.items():
             degree_dist_file.write(author_id + "," + str(in_degree_dict[author_id]) + "," + str(out_degree) + "," + str(out_degree - in_degree_dict[author_id]) + "\n")
-    degree_dist_file.close()
+        degree_dist_file.close()
     print("Degree distribution written to file.")
+
+
+def write_clustering_coefficients(author_graph):
+    clustering_coeff = nx.clustering(author_graph)
+    with open("clustering_coefficients.csv", 'w') as cluster_file:
+        cluster_file.write("Author Email ID,Clustering Coeff.\nAverage Clustering,"
+                           + str(nx.average_clustering((author_graph))) + "\n")
+        for author_id, coeff in clustering_coeff.items():
+            cluster_file.write(author_id + "," + str(coeff) + "\n")
+        cluster_file.close()
+    print("Clustering coefficients written to file.")
+
 
 # Time limit can be specified here in the form of a timestamp in one of the identifiable formats. All messages
 # that have arrived after time_ubound and before time_lbound will be ignored.
@@ -99,8 +112,13 @@ for msg_id, message in json_data.items():
     else:
         addr_list = message['To'] | message['Cc']
     for to_address in addr_list:
-        author_graph.add_edge(message['From'], to_address)
+        if author_graph.has_edge(message['From'], to_address):
+            author_graph[message['From']][to_address]['weight'] += 1
+        else:
+            author_graph.add_edge(message['From'], to_address, weight=1)
+
 print("Authors graph generated with nodes:", nx.number_of_nodes(author_graph), end=" ")
 print("and edges:", nx.number_of_edges(author_graph))
 # write_to_pajek(author_graph)
-write_degree_distribution(author_graph)
+# write_degree_distribution(author_graph)
+write_clustering_coefficients(author_graph.to_undirected())
