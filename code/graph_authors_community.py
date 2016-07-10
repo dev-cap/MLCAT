@@ -7,6 +7,7 @@ the vertex set of a graph and also provides some methods for getting the subgrap
 """
 import json
 import igraph
+import cairo
 from util.read_utils import *
 
 
@@ -15,6 +16,13 @@ author_graph.es["weight"] = 1.0
 json_data = dict()
 author_map = dict()
 email_re = re.compile(r'[\w\.-]+@[\w\.-]+')
+
+c_surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, 1600, 900)
+ctx = cairo.Context(c_surface)
+ctx.scale(1900, 900)
+ctx.rectangle(0, 0, 1, 1)
+ctx.set_source_rgba(0,0,0,0)
+ctx.fill()
 
 # Time limit can be specified here in the form of a timestamp in one of the identifiable formats and all messages
 # that have arrived after this timestamp will be ignored.
@@ -71,17 +79,16 @@ adjacency matrix and the corresponding cell of the matrix is returned. Assigning
 from zero or one to the adjacency matrix will be translated to one, unless the graph is weighted,
 in which case the numbers will be treated as weights.
 """
-
 index = 0
 for id, node in json_data.items():
     if node['From'] not in author_map:
         author_map[node['From']] = index
-        author_graph.add_vertex(name=node['From'])
+        author_graph.add_vertex(name=node['From'], label=node['From'])
         index += 1
     for to_addr in node['To']:
         if to_addr not in author_map:
             author_map[to_addr] = index
-            author_graph.add_vertex(name=to_addr)
+            author_graph.add_vertex(name=to_addr, label=to_addr)
             index += 1
         if author_graph[node['From'], to_addr] == 0:
             author_graph.add_edge(node['From'], to_addr, weight=1)
@@ -92,15 +99,22 @@ for id, node in json_data.items():
     for to_addr in node['Cc']:
         if to_addr not in author_map:
             author_map[to_addr] = index
-            author_graph.add_vertex(name=to_addr)
+            author_graph.add_vertex(name=to_addr, label=to_addr)
             index += 1
         if author_graph[node['From'], to_addr] == 0:
             author_graph.add_edge(node['From'], to_addr, weight=1)
         else:
             author_graph[node['From'], to_addr] += 1
-
+    if index == 100:
+        break
 print("Nodes and Edges added to iGraph.")
+
+vertex_dendogram = author_graph.community_edge_betweenness(clusters=8, directed=True, weights="weight")
+igraph.plot(vertex_dendogram, "vd.pdf", vertex_label_size=3, bbox=(1200, 1200))
+
 vertex_clustering_obj = author_graph.community_infomap(edge_weights=author_graph.es["weight"])
+igraph.plot(vertex_clustering_obj, "vc.pdf", vertex_label_size=10, bbox=(1500, 1500))
+
 with open("community_vertex_clustering.txt", 'w') as output_file:
     output_file.write(str(vertex_clustering_obj))
     output_file.close()

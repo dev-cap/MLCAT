@@ -119,6 +119,6 @@ for msg_id, message in json_data.items():
 
 print("Authors graph generated with nodes:", nx.number_of_nodes(author_graph), end=" ")
 print("and edges:", nx.number_of_edges(author_graph))
-# write_to_pajek(author_graph)
-# write_degree_distribution(author_graph)
+write_to_pajek(author_graph)
+write_degree_distribution(author_graph)
 write_clustering_coefficients(author_graph.to_undirected())
