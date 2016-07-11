@@ -7,11 +7,11 @@ import json
 from util.read_utils import *
 
 
-def write_pajek_file(author_graph):
+def write_to_pajek(author_graph, filename="author_graph.net"):
     # Write Pajek file compatible with the Infomap Community Detection module
-    nx.write_pajek(author_graph, "author_graph.net")
+    nx.write_pajek(author_graph, filename)
     lines_in_file= list()
-    with open("author_graph.net", 'r') as pajek_file:
+    with open(filename, 'r') as pajek_file:
         for line in pajek_file:
             lines_in_file.append(line)
     num_vertices = int(lines_in_file[0].split()[1])
@@ -23,7 +23,7 @@ def write_pajek_file(author_graph):
         line.append("\n")
         lines_in_file[i] = " ".join(line)
 
-    with open("author_graph.net", 'w') as pajek_file:
+    with open(filename, 'w') as pajek_file:
         for line in lines_in_file:
             pajek_file.write(line)
 
@@ -82,7 +82,7 @@ for msg_id, message in json_data.items():
     for to_address in addr_list:
         author_graph.add_edge(message['From'], to_address)
 
-write_pajek_file(author_graph)
+write_to_pajek(author_graph)
 
 print("No. of Weakly Connected Components:", nx.number_weakly_connected_components(author_graph))
 print("No. of Strongly Connected Components:", nx.number_strongly_connected_components(author_graph))
