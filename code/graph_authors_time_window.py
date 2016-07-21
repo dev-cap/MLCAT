@@ -28,7 +28,7 @@ def write_to_pajek(author_graph, filename="author_graph.net"):
     print("Written to:", filename)
 
 
-def write_degree_distribution(author_graph):
+def write_degree_distribution():
     in_degree_dict = author_graph.in_degree(nbunch=author_graph.nodes_iter())
     out_degree_dict = author_graph.out_degree(nbunch=author_graph.nodes_iter())
     with open("degree_distribution.csv", 'w') as degree_dist_file:
@@ -39,11 +39,12 @@ def write_degree_distribution(author_graph):
     print("Degree distribution written to file.")
 
 
-def write_clustering_coefficients(author_graph):
-    clustering_coeff = nx.clustering(author_graph)
+def write_clustering_coefficients():
+    author_graph_undirected = author_graph.to_undirected()
+    clustering_coeff = nx.clustering(author_graph_undirected)
     with open("clustering_coefficients.csv", 'w') as cluster_file:
         cluster_file.write("Author Email ID,Clustering Coeff.\nAverage Clustering,"
-                           + str(nx.average_clustering((author_graph))) + "\n")
+                           + str(nx.average_clustering((author_graph_undirected))) + "\n")
         for author_id, coeff in clustering_coeff.items():
             cluster_file.write(author_id + "," + str(coeff) + "\n")
         cluster_file.close()
@@ -119,5 +120,5 @@ for msg_id, message in json_data.items():
 print("Authors graph generated with nodes:", nx.number_of_nodes(author_graph), end=" ")
 print("and edges:", nx.number_of_edges(author_graph))
 write_to_pajek(author_graph)
-write_degree_distribution(author_graph)
-write_clustering_coefficients(author_graph.to_undirected())
+write_degree_distribution()
+write_clustering_coefficients()
