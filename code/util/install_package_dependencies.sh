@@ -10,6 +10,15 @@ pip3 install networkx
 sudo apt-get install -y libxml2-dev
 pip3 install python-igraph
 
+# Install Infomap Community Detection
+sudo apt-get install swig
+wget http://www.mapequation.org/downloads/Infomap.zip
+unzip Infomap.zip
+make
+cd examples/python
+make
+python example-networkx.py
+
 # Install Graph-Tool
 sudo apt-get install -y expat
 sudo apt-get install -y libsparsehash-dev
@@ -40,3 +49,4 @@ wget "http://www.graphviz.org/pub/graphviz/stable/ubuntu/ub13.10/x86_64/libgraph
 
 # Install PyGraphViz
 pip3 install pygraphviz
+

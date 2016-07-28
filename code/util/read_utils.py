@@ -135,9 +135,9 @@ def get_utc_time(orig_time):
 
 def get_messages_before(time_limit):
     """
-
-    :param time_limit:
-    :return:
+    This function returns a set of Message-IDs that have arrived before the time limit passed as parameter.
+    :param time_limit: A string formatted time stamp in one of the recognized formats.
+    :return: A set containing Message-IDs that have arrived before the time limit passed as parameter.
     """
     time_limit = get_datetime_object(time_limit)
     msgs_before_time = set()

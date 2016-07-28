@@ -6,7 +6,12 @@ from util.read_utils import *
 
 def extract_mail_header(filename):
     """
-    This function extracts all mail headers from the specified MBOX file passed as the parameter filename.
+    From the .MBOX file, this function extracts the header information is extracted using two predefined classes
+    available in the Python Standard Library: Mailbox and Message, for accessing and manipulating on-disk mailboxes
+    and the messages they contain respectively. The headers are then saved to a JSOn file. an unique Message-ID is
+    provided to each message in the .MBOX file in the ascending order of their arrival times. The The mapping between
+    the UIDs and Message-IDs are stored in another JSON file
+    :param filename: Contains the absolute or relative address of the file to be opened
     """
     print("Reading messages from MBOX file...")
     mailbox_obj = mailbox.mbox(filename)
