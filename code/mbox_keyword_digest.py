@@ -65,7 +65,7 @@ def get_message_body(message):
     return msg_body
 
 
-def generate_keyword_digest(filename):
+def generate_keyword_digest(filename, console_output=True):
     """
     From the .MBOX file, this function extracts the email content is extracted using two predefined classes
     available in the Python Standard Library: Mailbox and Message. Feature vectors are created for all the authors
@@ -76,6 +76,9 @@ def generate_keyword_digest(filename):
     matrix entry would be zero. The resulting matrix is called term-document matrix. Then tf-idf analysis is performed
     on the term-document matrix. Finally the top-10 words of each author is listed by their weight values.
     :param filename: Contains the absolute or relative address of the MBOX file to be opened
+    :return: Term Document Matrix: The columns of the matrix are the users and the rows of the matrix are the keywords.
+    Each entry corresponds to the tf-idf normalized coefficient of the keyword for a user. If a keyword is not present
+    in the top-10 keywords of a user, then the corresponding matrix entry would be zero. Also returns the feature names.
     """
     english_stopwords = set(stopwords.words('english')) | custom_stopwords.common_words | custom_stopwords.custom_words
     email_re = re.compile(r'[\w\.-]+@[\w\.-]+')
@@ -104,11 +107,10 @@ def generate_keyword_digest(filename):
         msg_tokens = [wnl.lemmatize(x) for x in msg_tokens if not x.isdigit() and x not in from_addr]
         msg_tokens = [x for x in msg_tokens if x not in english_stopwords]
         keywords_list[author_uid_map[from_addr]].extend(msg_tokens)
-
-        # i += 1
-        # if not i % 1000:
-        #     print(i, "of", len(mailbox_obj), "messages processed.")
-        #     break
+        if not console_output:
+            i += 1
+            if not i % 1000:
+                print(i, "of", len(mailbox_obj), "messages processed.")
 
     for num in range(len(keywords_list)):
         keywords_list[num] = " ".join(keywords_list[num])
@@ -117,17 +119,23 @@ def generate_keyword_digest(filename):
     vectorizer = TfidfVectorizer(analyzer='word', stop_words=english_stopwords, min_df=1)
     tfidf_matrix = vectorizer.fit_transform(keywords_list).toarray()
     feature_names = vectorizer.get_feature_names()
+    term_document_matrix = np.zeros((len(feature_names), len(author_uid_map)), dtype=float)
     for author_email, author_uid in author_uid_map.items():
         if max(tfidf_matrix[author_uid]) > 0 and len(keywords_list[num]) > 99:
             try:
+                for i in len(tfidf_matrix[author_uid]):
+                    term_document_matrix[i][author_uid] = tfidf_matrix[author_uid][i]
                 indices = tfidf_matrix[author_uid].argsort()[-10:][::-1]
-                print(author_email)
-                for i in indices:
-                    print(feature_names[i], "(", tfidf_matrix[author_uid][i], ")", end="; ")
+                if console_output:
+                    print(author_email)
+                    for i in indices:
+                        print(feature_names[i], "(", tfidf_matrix[author_uid][i], ")", end="; ")
             except:
                 pass
             finally:
-                print("\n-----\n")
+                if console_output:
+                    print("\n-----\n")
 
+    return term_document_matrix, feature_names
 
-generate_keyword_digest("lkml.mbox")
+# generate_keyword_digest("lkml.mbox")
