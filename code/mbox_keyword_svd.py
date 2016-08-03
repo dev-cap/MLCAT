@@ -7,17 +7,19 @@ from mbox_keyword_digest import generate_keyword_digest
 
 
 def keyword_clusters_svd():
-    term_document_matrix, feature_names = generate_keyword_digest("lkml.mbox", console_output=False)
-    sigma = np.linalg.svd(term_document_matrix, compute_uv=False)
-    for i in sigma:
-        print(i, end  =", ")
+    top_authors_index, term_document_matrix, feature_names = generate_keyword_digest("lkml.mbox", top_n=1000, console_output=False)
+    sigma = np.linalg.svd(term_document_matrix, compute_uv=False, full_matrices=True)
+    np.savetxt("authors_keyword_svd.txt", sigma, delimiter=",", header=str(feature_names)[-1:1])
+    sigma = np.diag(sigma)
+    np.savetxt("authors_keyword_svd.csv", sigma, delimiter=",", header=str(feature_names)[-1:1])
 
 
 def keyword_clusters_lsa():
-    term_document_matrix, feature_names = generate_keyword_digest("lkml.mbox", console_output=False)
+    top_authors_index, term_document_matrix, feature_names = generate_keyword_digest("lkml.mbox", top_n=1000, console_output=False)
     u, sigma, v = randomized_svd(term_document_matrix, n_components=100)
-    for i in sigma:
-        print(i, end  =", ")
+    sigma = np.diag(sigma)
+    np.savetxt("authors_keyword_lsa.csv", sigma, delimiter=",", header=str(feature_names)[-1:1])
 
-# keyword_clusters_lsa()
+
 keyword_clusters_svd()
+keyword_clusters_lsa()

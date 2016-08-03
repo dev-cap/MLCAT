@@ -37,12 +37,12 @@ def generate_author_ranking(active_score, passive_score, write_to_file=True):
             author_scores[json_obj['From']] = active_score * num_to + passive_score * num_cc
         else:
             author_scores[json_obj['From']] += active_score * num_to + passive_score * num_cc
-    print("Writing author ranks to a CSV file...")
     prev_score = -1
     author_rank = 0
     sorted_author_scores = sorted(author_scores.items(), key=lambda x1: -x1[1])
 
     if write_to_file:
+        print("Writing author ranks to a CSV file...")
         with open("author_rankings.csv", mode='w') as output_file:
             output_file.write("Email Address,Author's Score,Author's Rank\n")
             for email_addr, author_score in sorted_author_scores:
