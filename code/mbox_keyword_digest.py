@@ -168,7 +168,7 @@ def generate_keyword_digest(filename, top_n = None, console_output=True):
     else:
         term_document_matrix = np.zeros((len(feature_names), top_n), dtype=float)
         for author_email, author_uid in top_authors_index.items():
-            if max(tfidf_matrix[author_uid]) > 0 and len(keywords_list[num]) > 99:
+            if max(tfidf_matrix[author_uid]) > 0 and len(keywords_list[author_uid]) > 99:
                 try:
                     for i in range(len(tfidf_matrix[author_uid])):
                         term_document_matrix[i][author_uid] = tfidf_matrix[author_uid][i]
