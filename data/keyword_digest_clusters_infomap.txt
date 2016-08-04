@@ -1,25 +1,3 @@
-All messages before 2016-08-04 20:32:12+00:00 and after 2001-01-01 00:00:00+00:00 are being considered.
-JSON data loaded.
-Reading messages from MBOX file...
-Getting cluster data from Infomap...
-10000 of 179154 messages processed.
-20000 of 179154 messages processed.
-30000 of 179154 messages processed.
-40000 of 179154 messages processed.
-50000 of 179154 messages processed.
-60000 of 179154 messages processed.
-70000 of 179154 messages processed.
-80000 of 179154 messages processed.
-90000 of 179154 messages processed.
-100000 of 179154 messages processed.
-110000 of 179154 messages processed.
-120000 of 179154 messages processed.
-130000 of 179154 messages processed.
-140000 of 179154 messages processed.
-150000 of 179154 messages processed.
-160000 of 179154 messages processed.
-170000 of 179154 messages processed.
-Performing tf-idf analysis on the term-document matrix...
 Infomap Cluster: 1
 perf ( 0.506930754159 ); kernel ( 0.335181894688 ); majordomo ( 0.227012919188 ); http ( 0.190037679505 ); x86 ( 0.17290930417 ); tool ( 0.164909182456 ); info ( 0.160252893955 ); vger ( 0.154366179554 ); unsubscribe ( 0.151341946125 ); event ( 0.145790938384 ); 
 -----
@@ -89,7 +67,7 @@ powerpc ( 0.522049296228 ); kernel ( 0.330810661534 ); livepatch ( 0.27998649430
 -----
 
 Infomap Cluster: 19
-scsi ( 0.401266646354 ); driver ( 0.288699209236 ); ufs ( 0.284380244992 ); kernel ( 0.261584394711 ); majordomo ( 0.233221794453 ); ½rnberg ( 0.201819186681 ); http ( 0.158026881062 ); vger ( 0.15725250107 ); info ( 0.157049053486 ); unsubscribe ( 0.155481196302 ); 
+scsi ( 0.401266646354 ); driver ( 0.288699209236 ); ufs ( 0.284380244992 ); kernel ( 0.261584394711 ); majordomo ( 0.233221794453 ); Â½rnberg ( 0.201819186681 ); http ( 0.158026881062 ); vger ( 0.15725250107 ); info ( 0.157049053486 ); unsubscribe ( 0.155481196302 ); 
 -----
 
 Infomap Cluster: 20
@@ -345,7 +323,7 @@ ceph ( 0.732164905857 ); libceph ( 0.29039361907 ); rbd ( 0.207202051337 ); kern
 -----
 
 Infomap Cluster: 91
-nürnberg ( 0.29203008086 ); maxfeldstr ( 0.226891737241 ); geekbox ( 0.21663604663 ); norton ( 0.214155392631 ); smithard ( 0.214155392631 ); jane ( 0.214155392631 ); dts ( 0.206150958062 ); graham ( 0.179423464337 ); meson ( 0.176399452488 ); amlogic ( 0.175650848619 ); 
+nÃ¼rnberg ( 0.29203008086 ); maxfeldstr ( 0.226891737241 ); geekbox ( 0.21663604663 ); norton ( 0.214155392631 ); smithard ( 0.214155392631 ); jane ( 0.214155392631 ); dts ( 0.206150958062 ); graham ( 0.179423464337 ); meson ( 0.176399452488 ); amlogic ( 0.175650848619 ); 
 -----
 
 Infomap Cluster: 92
@@ -477,7 +455,7 @@ devdata ( 0.731927377685 ); priv_lock ( 0.370053916506 ); server_change_state ( 
 -----
 
 Infomap Cluster: 130
-rdb ( 0.410674358824 ); secï ( 0.369035946582 ); mbytesï ( 0.35536794856 ); nagle ( 0.267862337707 ); mbit ( 0.263537737348 ); tcp_rdb ( 0.17768397428 ); tcp ( 0.165266173315 ); sec ( 0.151791972236 ); packet ( 0.141020305721 ); bundling ( 0.133931168853 ); 
+rdb ( 0.410674358824 ); secÃ¯ ( 0.369035946582 ); mbytesÃ¯ ( 0.35536794856 ); nagle ( 0.267862337707 ); mbit ( 0.263537737348 ); tcp_rdb ( 0.17768397428 ); tcp ( 0.165266173315 ); sec ( 0.151791972236 ); packet ( 0.141020305721 ); bundling ( 0.133931168853 ); 
 -----
 
 Infomap Cluster: 131
@@ -717,6 +695,6 @@ kernel ( 0.399346939493 ); acpi ( 0.309099465106 ); _osi ( 0.173711143726 ); pre
 -----
 
 Infomap Cluster: 202
-region_devres ( 0.387305875697 ); devres_alloc ( 0.339620881345 ); majordomo ( 0.258828262885 ); kernel ( 0.245022315319 ); engendré ( 0.193652937848 ); __devm_request_region ( 0.193652937848 ); problème ( 0.193652937848 ); avec ( 0.193652937848 ); qui ( 0.193652937848 ); pensée ( 0.193652937848 ); 
+region_devres ( 0.387305875697 ); devres_alloc ( 0.339620881345 ); majordomo ( 0.258828262885 ); kernel ( 0.245022315319 ); engendrÃ© ( 0.193652937848 ); __devm_request_region ( 0.193652937848 ); problÃ¨me ( 0.193652937848 ); avec ( 0.193652937848 ); qui ( 0.193652937848 ); pensÃ©e ( 0.193652937848 ); 
 -----
 
