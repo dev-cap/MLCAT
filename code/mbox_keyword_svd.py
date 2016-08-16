@@ -21,5 +21,19 @@ def keyword_clusters_lsa():
     np.savetxt("authors_keyword_lsa.csv", sigma, delimiter=",", header=str(feature_names)[-1:1])
 
 
-keyword_clusters_svd()
-keyword_clusters_lsa()
+def calculate_percentile(filename="authors_keyword_svd.txt", percentile=0.95):
+    diag_elements = list()
+    with open(filename, 'r') as input_file:
+        for line in input_file:
+            diag_elements.append(float(line))
+    denominator = sum([x**2 for x in diag_elements])
+    numerator = 0
+    for index in range(len(diag_elements)):
+        numerator += diag_elements[index]**2
+        if numerator/denominator>=percentile**2:
+            break
+    print("95th Percentile:", index)
+
+# keyword_clusters_svd()
+# keyword_clusters_lsa()
+calculate_percentile()

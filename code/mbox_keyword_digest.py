@@ -149,12 +149,9 @@ def generate_keyword_digest(filename, top_n = None, console_output=True):
     tfidf_matrix = vectorizer.fit_transform(keywords_list).toarray()
     feature_names = vectorizer.get_feature_names()
     if top_n is None:
-        term_document_matrix = np.zeros((len(feature_names), len(author_uid_map)), dtype=float)
         for author_email, author_uid in author_uid_map.items():
             if max(tfidf_matrix[author_uid]) > 0 and len(keywords_list[num]) > 99:
                 try:
-                    for i in range(len(tfidf_matrix[author_uid])):
-                        term_document_matrix[i][author_uid] = tfidf_matrix[author_uid][i]
                     indices = tfidf_matrix[author_uid].argsort()[-10:][::-1]
                     if console_output:
                         print(author_email)
@@ -188,4 +185,4 @@ def generate_keyword_digest(filename, top_n = None, console_output=True):
 
     return top_authors_index, term_document_matrix, feature_names
 
-# generate_keyword_digest("lkml.mbox")
+generate_keyword_digest("lkml.mbox")
