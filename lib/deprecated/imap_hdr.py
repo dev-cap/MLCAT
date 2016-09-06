@@ -1,9 +1,11 @@
 import email
 import imaplib
 import json
-from encoder import NoIndent, MyEncoder
+
 from imap_conn import open_connection
+from util.json_encoder import NoIndent, MyEncoder
 from util.read_utils import *
+
 
 def init_uid_map():
     """

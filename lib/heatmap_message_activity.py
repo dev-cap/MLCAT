@@ -4,7 +4,7 @@ from util.read_utils import *
 import json
 
 
-def generate_weekly_message_activity_heatmap(json_data):
+def generate_weekly_message_activity_heatmap(json_data, filename):
     """
 
     :param json_data:
@@ -19,10 +19,10 @@ def generate_weekly_message_activity_heatmap(json_data):
         z=heatmap_data,
         x=list(range(48)),
         y=['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'])]
-    ply.offline.plot(heatmap, filename='weekly-message-activity-heatmap.html')
+    ply.offline.plot(heatmap, filename=filename)
 
 
-def generate_monthly_message_activity_heatmap(json_data):
+def generate_monthly_message_activity_heatmap(json_data, filename):
     """
 
     :param json_data:
@@ -37,51 +37,37 @@ def generate_monthly_message_activity_heatmap(json_data):
         z=heatmap_data,
         x=list(range(48)),
         y=list(range(1,12)))]
-    ply.offline.plot(heatmap, filename='monthly-message-activity-heatmap.html')
+    ply.offline.plot(heatmap, filename=filename)
 
-# Time limit can be specified here in the form of a timestamp in one of the identifiable formats. All messages
-# that have arrived after time_ubound and before time_lbound will be ignored.
-time_ubound = None
-time_lbound = None
 
-# If ignore_lat is true, then messages that belong to threads that have only a single author are ignored.
-ignore_lat = False
+def generate_message_activity_heatmaps(clean_headers_filename, foldername):
+    # Time limit can be specified here in the form of a timestamp in one of the identifiable formats. All messages
+    # that have arrived after time_ubound and before time_lbound will be ignored.
+    time_ubound = None
+    time_lbound = None
 
-author_graph = nx.DiGraph()
-email_re = re.compile(r'[\w\.-]+@[\w\.-]+')
-json_data = dict()
+    # If ignore_lat is true, then messages that belong to threads that have only a single author are ignored.
+    ignore_lat = False
 
-if time_ubound is None:
-    time_ubound = time.strftime("%a, %d %b %Y %H:%M:%S %z")
-time_ubound = get_datetime_object(time_ubound)
+    author_graph = nx.DiGraph()
+    email_re = re.compile(r'[\w\.-]+@[\w\.-]+')
+    json_data = dict()
 
-if time_lbound is None:
-    time_lbound = "Sun, 01 Jan 2001 00:00:00 +0000"
-time_lbound = get_datetime_object(time_lbound)
+    if time_ubound is None:
+        time_ubound = time.strftime("%a, %d %b %Y %H:%M:%S %z")
+    time_ubound = get_datetime_object(time_ubound)
 
-print("All messages before", time_ubound, "and after", time_lbound,  "are being considered.")
+    if time_lbound is None:
+        time_lbound = "Sun, 01 Jan 2001 00:00:00 +0000"
+    time_lbound = get_datetime_object(time_lbound)
 
-if not ignore_lat:
-    with open('clean_data.json', 'r') as json_file:
-        for chunk in lines_per_n(json_file, 9):
-            json_obj = json.loads(chunk)
-            json_obj['Message-ID'] = int(json_obj['Message-ID'])
-            json_obj['Time'] = datetime.datetime.strptime(json_obj['Time'], "%a, %d %b %Y %H:%M:%S %z")
-            if time_lbound <= json_obj['Time'] < time_ubound:
-                # print("\nFrom", json_obj['From'], "\nTo", json_obj['To'], "\nCc", json_obj['Cc'])
-                from_addr = email_re.search(json_obj['From'])
-                json_obj['From'] = from_addr.group(0) if from_addr is not None else json_obj['From']
-                json_obj['To'] = set(email_re.findall(json_obj['To']))
-                json_obj['Cc'] = set(email_re.findall(json_obj['Cc'])) if json_obj['Cc'] is not None else None
-                # print("\nFrom", json_obj['From'], "\nTo", json_obj['To'], "\nCc", json_obj['Cc'])
-                json_data[json_obj['Message-ID']] = json_obj
-else:
-    lone_author_threads = get_lone_author_threads(False)
-    with open('clean_data.json', 'r') as json_file:
-        for chunk in lines_per_n(json_file, 9):
-            json_obj = json.loads(chunk)
-            json_obj['Message-ID'] = int(json_obj['Message-ID'])
-            if json_obj['Message-ID'] not in lone_author_threads:
+    print("All messages before", time_ubound, "and after", time_lbound,  "are being considered.")
+
+    if not ignore_lat:
+        with open(clean_headers_filename, 'r') as json_file:
+            for chunk in lines_per_n(json_file, 9):
+                json_obj = json.loads(chunk)
+                json_obj['Message-ID'] = int(json_obj['Message-ID'])
                 json_obj['Time'] = datetime.datetime.strptime(json_obj['Time'], "%a, %d %b %Y %H:%M:%S %z")
                 if time_lbound <= json_obj['Time'] < time_ubound:
                     # print("\nFrom", json_obj['From'], "\nTo", json_obj['To'], "\nCc", json_obj['Cc'])
@@ -91,7 +77,23 @@ else:
                     json_obj['Cc'] = set(email_re.findall(json_obj['Cc'])) if json_obj['Cc'] is not None else None
                     # print("\nFrom", json_obj['From'], "\nTo", json_obj['To'], "\nCc", json_obj['Cc'])
                     json_data[json_obj['Message-ID']] = json_obj
-print("JSON data loaded.")
+    else:
+        lone_author_threads = get_lone_author_threads(save_file=None, nodelist_filename=foldername+"/tables/graph_nodes.csv", edgelist_filename=foldername+"/tables/graph_edges.csv")
+        with open(clean_headers_filename, 'r') as json_file:
+            for chunk in lines_per_n(json_file, 9):
+                json_obj = json.loads(chunk)
+                json_obj['Message-ID'] = int(json_obj['Message-ID'])
+                if json_obj['Message-ID'] not in lone_author_threads:
+                    json_obj['Time'] = datetime.datetime.strptime(json_obj['Time'], "%a, %d %b %Y %H:%M:%S %z")
+                    if time_lbound <= json_obj['Time'] < time_ubound:
+                        # print("\nFrom", json_obj['From'], "\nTo", json_obj['To'], "\nCc", json_obj['Cc'])
+                        from_addr = email_re.search(json_obj['From'])
+                        json_obj['From'] = from_addr.group(0) if from_addr is not None else json_obj['From']
+                        json_obj['To'] = set(email_re.findall(json_obj['To']))
+                        json_obj['Cc'] = set(email_re.findall(json_obj['Cc'])) if json_obj['Cc'] is not None else None
+                        # print("\nFrom", json_obj['From'], "\nTo", json_obj['To'], "\nCc", json_obj['Cc'])
+                        json_data[json_obj['Message-ID']] = json_obj
+    print("JSON data loaded.")
 
-generate_weekly_message_activity_heatmap(json_data)
-generate_monthly_message_activity_heatmap(json_data)
+    generate_weekly_message_activity_heatmap(json_data, foldername+'/heatmaps/weekly-message-activity-heatmap.html')
+    generate_monthly_message_activity_heatmap(json_data, foldername+'/heatmaps/monthly-message-activity-heatmap.html')

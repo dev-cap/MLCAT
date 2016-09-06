@@ -15,7 +15,7 @@ do
 			fi
 			wget http://mail-archives.apache.org/mod_mbox/$i/$j$k1.mbox
 		done
+		for f in *.mbox; do (cat "${f}"; echo; echo; echo) >> $i-$j.mbox; done
 	done
-	for f in *.mbox; do (cat "${f}"; echo; echo; echo) >> $i.mbox; done
 done
 

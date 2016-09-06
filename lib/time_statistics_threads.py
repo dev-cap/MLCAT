@@ -113,5 +113,3 @@ else:
         edge_file.close()
     print("Edges added.")
 
-thread_length_distribution(discussion_graph)
-message_inter_arrival_times(discussion_graph, json_data)

@@ -40,7 +40,7 @@ def calculate_percentile(filename="authors_keyword_svd.txt", percentile=0.95):
 
 def calculate_chi2():
     top_authors_index, term_document_matrix, feature_names = generate_keyword_digest("lkml.mbox", top_n=1000, console_output=False)
-    
+
     # Remove features that are empty: All TF-IDF values are zero
     for term_no in range(len(term_document_matrix)):
         term = term_document_matrix[term_no]

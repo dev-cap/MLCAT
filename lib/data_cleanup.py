@@ -2,7 +2,7 @@ import json
 from util.read_utils import lines_per_n
 
 
-def remove_invalid_references(ref_toggle=False):
+def remove_invalid_references(input_json_filename, output_json_filename, ref_toggle=False):
 
     # The "unspecified_ref" list is used to keep track of all those mails that have '0' in their reference list.
     # If any mail has any of the element in this list in its list of references, we can eliminate them as well
@@ -10,8 +10,8 @@ def remove_invalid_references(ref_toggle=False):
 
     print("Removing headers associated with invalid references...")
 
-    with open('headers.json', 'r') as fil:
-        with open("clean_data.json", mode='w', encoding='utf-8') as fin_file :
+    with open(input_json_filename, 'r') as fil:
+        with open(output_json_filename, mode='w', encoding='utf-8') as fin_file :
 
             for chunk in lines_per_n(fil, 9):
                 # The "jfile" is used to store the json object read from the file.

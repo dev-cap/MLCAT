@@ -46,7 +46,7 @@ unavailable_uid = set()
 last_uid_read = 0
 
 
-def check_validity(check_unavailable_uid='False'):
+def check_validity(check_unavailable_uid='False', json_header_filename='headers.json'):
     """
     This function checks for and prints duplicate, missing, and invalid objects in the "headers.json" file.
     This function can be run first to generate a list of duplicate, missing, or invalid objects' UIDs which
@@ -66,7 +66,7 @@ def check_validity(check_unavailable_uid='False'):
 
     # Read UIDs of mails that are not forwarded from LKML subscription which is stored in a text file.
 
-    with open('headers.json', 'r') as json_file:
+    with open(json_header_filename, 'r') as json_file:
 
         for chunk in lines_per_n(json_file, 9):
             try:
@@ -115,7 +115,7 @@ def check_validity(check_unavailable_uid='False'):
     return last_uid_read
 
 
-def remove_unwanted_headers(to_remove=unwanted_uid):
+def remove_unwanted_headers(to_remove=unwanted_uid, json_header_filename='headers.json'):
     """
     This function removes all the UIDs specified in the to_remove parameter. By default, it removes all the unwanted
     entries in the JSON file, i.e. the list of UIDs of mails that are not forwarded from LKML subscription.
@@ -126,19 +126,19 @@ def remove_unwanted_headers(to_remove=unwanted_uid):
         # This list contains a list of JSON objects that need to be written to file
         write_to_file = []
 
-        with open('headers.json', 'r') as json_file:
+        with open(json_header_filename, 'r') as json_file:
             for chunk in lines_per_n(json_file, 9):
                 json_obj = json.loads(chunk)
                 if not json_obj['Message-ID'] in unwanted_uid:
                     write_to_file.append(json_obj)
 
-        with open('headers.json', 'w') as json_file:
+        with open(json_header_filename, 'w') as json_file:
             for json_obj in write_to_file:
                 json.dump(json_obj, json_file, indent=1)
                 json_file.write("\n")
 
 
-def remove_duplicate_headers(to_remove=duplicate_uid):
+def remove_duplicate_headers(to_remove=duplicate_uid, json_header_filename='headers.json'):
     """
     This function removes all the duplicate entries of the UIDs specified in the to_remove parameter. By default,
     it removes all the duplicate entries in the JSON file.
@@ -153,27 +153,27 @@ def remove_duplicate_headers(to_remove=duplicate_uid):
         # This list contains a list of JSON objects that need to be written to file
         write_to_file = []
 
-        with open('headers.json', 'r') as json_file:
+        with open(json_header_filename, 'r') as json_file:
             for chunk in lines_per_n(json_file, 9):
                 json_obj = json.loads(chunk)
                 if not json_obj['Message-ID'] in read_uid:
                     write_to_file.append(json_obj)
                 read_uid.add(json_obj['Message-ID'])
 
-        with open('headers.json', 'w') as json_file:
+        with open(json_header_filename, 'w') as json_file:
             for json_obj in write_to_file:
                 json.dump(json_obj, json_file, indent=1)
                 json_file.write("\n")
 
 
-def add_missing_headers(to_add=missing_uid):
+def add_missing_headers(to_add=missing_uid, unwanted_uid_filename="unwanted_uid.txt"):
     """
     This function adds the mails that have been missed out, considering the fact that UIDs are consecutive.
     If a mail that is missing in the JSON file is not available or has been deleted, this function ignores that UID.
     :param to_add: A list of UIDs that need to be added. Default value is the list of missing mails' UIDs.
     """
     # To prevent replacement of mails that are not forwarded from the LKML subscription:
-    with open("unwanted_uid.txt", 'r') as unw_file:
+    with open(unwanted_uid_filename, 'r') as unw_file:
         for line in unw_file:
             unwanted_uid.add(int(line.strip()))
     to_add = [x for x in to_add if x not in unwanted_uid]
@@ -184,7 +184,7 @@ def add_missing_headers(to_add=missing_uid):
         get_mail_header(to_add, False)
 
 
-def replace_invalid_headers(to_replace=invalid_uid):
+def replace_invalid_headers(to_replace=invalid_uid, json_header_filename="headers.json"):
     """
     This function removes the mail headers that have insufficient attributes and fetches those headers again.
     If an attribute is missing in the original mail header or if the mail has been deleted, this function ignores that UID.
@@ -194,13 +194,13 @@ def replace_invalid_headers(to_replace=invalid_uid):
         print("Replacing invalid headers...")
         # This list contains a list of JSON objects that need to be written to file
         write_to_file = []
-        with open('headers.json', 'r') as json_file:
+        with open(json_header_filename, 'r') as json_file:
             for chunk in lines_per_n(json_file, 9):
                 json_obj = json.loads(chunk)
                 if not json_obj['Message-ID'] in invalid_uid:
                     write_to_file.append(json_obj)
 
-        with open('headers.json', 'w') as json_file:
+        with open(json_header_filename, 'w') as json_file:
             for json_obj in write_to_file:
                 json.dump(json_obj, json_file, indent=1)
                 json_file.write("\n")
@@ -208,7 +208,7 @@ def replace_invalid_headers(to_replace=invalid_uid):
         add_missing_headers(to_replace)
 
 
-def write_uid_map(from_index=1, to_index=last_uid_read):
+def write_uid_map(from_index=1, to_index=last_uid_read, uid_map_filename="thread_uid_map.json"):
     """
     To ensure that references are correctly recorded in the JSON file such that there are no references to mails that
     do not exist and to ease the processing of headers, a map with the string in the Message-Id field of the header to
@@ -218,7 +218,7 @@ def write_uid_map(from_index=1, to_index=last_uid_read):
     :param to_index: Fetches headers till this UID (non inclusive).
 
     """
-    with open('thread_uid_map.json', 'r') as map_file:
+    with open(uid_map_filename, 'r') as map_file:
         uid_msg_id_map = json.load(map_file)
         map_file.close()
 
@@ -253,7 +253,7 @@ def write_uid_map(from_index=1, to_index=last_uid_read):
             pass
         conn.logout()
 
-    with open("thread_uid_map.json", mode='w', encoding='utf-8') as f:
+    with open(uid_map_filename, mode='w', encoding='utf-8') as f:
             json.dump(uid_msg_id_map, f, indent=1)
             f.close()
 

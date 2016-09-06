@@ -125,4 +125,3 @@ def generate_hyperedge_distribution(time_limit=None, ignore_lat=True):
             author_participation_file.write(author_id + "," + str(num_threads) + "\n")
     print("Author-Thread Participation statistic written to file.")
 
-generate_hyperedge_distribution()

@@ -1,6 +1,6 @@
 from check_headers import *
 from data_cleanup import *
-from graph_edges import generate_edge_list
+from graph_threads_edge_list import generate_edge_list
 
 # Uncomment the following line to update "uid_map.json"
 # write_uid_map(1, 57635)

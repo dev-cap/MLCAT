@@ -34,5 +34,3 @@ def write_author_uid_map():
         json.dump(author_uid_map, map_file, indent=1)
         map_file.close()
     print("UID map written to author_uid_map.json.")
-
-write_author_uid_map()

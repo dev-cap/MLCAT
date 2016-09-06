@@ -16,7 +16,7 @@ def lines_per_n(f, n):
         yield ''.join(chain([line], islice(f, n-1)))
 
 
-def get_lone_author_threads(save_file=False):
+def get_lone_author_threads(save_file=None, nodelist_filename='graph_nodes.csv', edgelist_filename='graph_edges.csv'):
     """
     This function returns the UID of all the nodes that belong to a thread that has only one author
     :param save_file: If True, the list of UIDs of nodes are saved to a text file
@@ -27,18 +27,18 @@ def get_lone_author_threads(save_file=False):
     lone_author_threads = set()
 
     # Add nodes into NetworkX graph by reading CSV file
-    with open("graph_nodes.csv", "r") as node_file:
+    with open(nodelist_filename, "r") as node_file:
         for pair in node_file:
-            node = pair.split(';', 2)
+            node = pair.split(',', 2)
             from_addr = email_re.search(node[1].strip())
             from_addr = from_addr.group(0) if from_addr is not None else node[1].strip()
             discussion_graph.add_node(int(node[0]), time=node[2].strip(), sender=from_addr)
         node_file.close()
 
     # Add edges into NetworkX graph by reading CSV file
-    with open("graph_edges.csv", "r") as edge_file:
+    with open(edgelist_filename, "r") as edge_file:
         for pair in edge_file:
-            edge = pair.split(';')
+            edge = pair.split(',')
             edge[0] = int(edge[0])
             edge[1] = int(edge[1])
             try:
@@ -56,7 +56,7 @@ def get_lone_author_threads(save_file=False):
         if len(thread_authors) <= 1:
             lone_author_threads.update(int(x) for x in conn_subgraph.nodes())
 
-    if save_file:
+    if save_file is not None:
         print("Saving to lone_author_threads.txt...")
         with open("lone_author_threads.txt", 'w') as txt_file:
             for uid in sorted(lone_author_threads):
@@ -75,23 +75,29 @@ def get_datetime_object(orig_time):
         # Truncating the string to contain only required values and removing unwanted whitespace
         trunc_date = orig_time[:31] if len(orig_time) > 31 else orig_time
         trunc_date = trunc_date.strip()
-
+        if "GMT" in trunc_date:
+            trunc_date = trunc_date.replace("GMT", "+0000")
+        elif "CET 2016" in trunc_date:
+            trunc_date = trunc_date.replace("CET 2016", "2016 +0100")
+        elif "CET" in trunc_date:
+            trunc_date = trunc_date.replace("CET", "+0100")
         # Generating a datetime object considering multiple formats of the input parameter - with and without weekday
         if len(trunc_date) > 30 and trunc_date[14] == ':':
             datetime_obj = datetime.datetime.strptime(trunc_date, "%a, %b %d %H:%M:%S %Y %z")
         elif len(trunc_date) == 25 or len(trunc_date) == 26:
             datetime_obj = datetime.datetime.strptime(trunc_date, "%d %b %Y %H:%M:%S %z")
+        elif trunc_date[3] == ',' and (len(trunc_date) == 28 or len(trunc_date) == 29) and '+' not in trunc_date and '-' not in trunc_date:
+            datetime_obj = datetime.datetime.strptime(trunc_date, "%a, %d %b %Y %H:%M:%S %Z")
         elif len(trunc_date) == 27 or len(trunc_date) == 28:
             datetime_obj = datetime.datetime.strptime(trunc_date, "%a, %d %b %Y %H:%M %z")
         elif str.isalpha(trunc_date[5]) and str.isdigit(trunc_date[-1]):
-            if "CET" in trunc_date:
-                trunc_date = trunc_date.replace("CET", "+0100")
             datetime_obj = datetime.datetime.strptime(trunc_date, "%a, %b %d %H:%M:%S %z %Y")
         else:
             datetime_obj = datetime.datetime.strptime(trunc_date, "%a, %d %b %Y %H:%M:%S %z")
 
         # Converting the datetime object into a formatted string
-        return datetime_obj.astimezone(pytz.utc)
+        utc_dt = datetime_obj.astimezone(pytz.utc)
+        return utc_dt
 
     except:
         print("Unable to process date:", orig_time, trunc_date)
@@ -109,17 +115,22 @@ def get_utc_time(orig_time):
         # Truncating the string to contain only required values and removing unwanted whitespace
         trunc_date = orig_time[:31] if len(orig_time) > 31 else orig_time
         trunc_date = trunc_date.strip()
-
+        if "GMT" in trunc_date:
+            trunc_date = trunc_date.replace("GMT", "+0000")
+        elif "CET 2016" in trunc_date:
+            trunc_date = trunc_date.replace("CET 2016", "2016 +0100")
+        elif "CET" in trunc_date:
+            trunc_date = trunc_date.replace("CET", "+0100")
         # Generating a datetime object considering multiple formats of the input parameter - with and without weekday
         if len(trunc_date) > 30 and trunc_date[14] == ':':
             datetime_obj = datetime.datetime.strptime(trunc_date, "%a, %b %d %H:%M:%S %Y %z")
         elif len(trunc_date) == 25 or len(trunc_date) == 26:
             datetime_obj = datetime.datetime.strptime(trunc_date, "%d %b %Y %H:%M:%S %z")
+        elif trunc_date[3] == ',' and (len(trunc_date) == 28 or len(trunc_date) == 29) and '+' not in trunc_date and '-' not in trunc_date:
+            datetime_obj = datetime.datetime.strptime(trunc_date, "%a, %d %b %Y %H:%M:%S %Z")
         elif len(trunc_date) == 27 or len(trunc_date) == 28:
             datetime_obj = datetime.datetime.strptime(trunc_date, "%a, %d %b %Y %H:%M %z")
         elif str.isalpha(trunc_date[5]) and str.isdigit(trunc_date[-1]):
-            if "CET" in trunc_date:
-                trunc_date = trunc_date.replace("CET", "+0100")
             datetime_obj = datetime.datetime.strptime(trunc_date, "%a, %b %d %H:%M:%S %z %Y")
         else:
             datetime_obj = datetime.datetime.strptime(trunc_date, "%a, %d %b %Y %H:%M:%S %z")
@@ -133,7 +144,7 @@ def get_utc_time(orig_time):
         traceback.print_exc()
 
 
-def get_messages_before(time_limit):
+def get_messages_before(time_limit, nodelist_filename):
     """
     This function returns a set of Message-IDs that have arrived before the time limit passed as parameter.
     :param time_limit: A string formatted time stamp in one of the recognized formats.
@@ -141,7 +152,7 @@ def get_messages_before(time_limit):
     """
     time_limit = get_datetime_object(time_limit)
     msgs_before_time = set()
-    with open("graph_nodes.csv", "r") as node_file:
+    with open(nodelist_filename, "r") as node_file:
         for pair in node_file:
             node = pair.split(';', 2)
             sent_time = node[2].strip()
