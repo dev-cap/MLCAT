@@ -2,8 +2,8 @@ import email
 import imaplib
 import json
 from util.read_utils import lines_per_n
-from imap_conn import open_connection
-from imap_hdr import get_mail_header
+from deprecated.imap_conn import open_connection
+from deprecated.imap_hdr import get_mail_header
 
 def get_unavailable_uid():
     """

@@ -16,7 +16,7 @@ def generate_edge_list(nodelist_filename='graph_nodes.csv', edgelist_filename='g
             msg_id = jfile['Message-ID']
             msg_time = jfile['Time']
             msg_from = "".join(jfile['From'].split())
-            nodes.add(str(msg_id) + "," + msg_from + "," + msg_time)
+            nodes.add(str(msg_id) + ";" + msg_from + ";" + msg_time)
             if jfile['References']:
                 ref_list = str(jfile['References']).split(',')
                 # Message Id of the parent mail is appended to the end of the list of references.
@@ -32,7 +32,7 @@ def generate_edge_list(nodelist_filename='graph_nodes.csv', edgelist_filename='g
             node_file.write(node_str + "\n")
     with open(edgelist_filename, 'w') as edge_file:
         for parent_id, msg_id in edges:
-            edge_file.write(str(parent_id) + ',' + str(msg_id) + "\n")
+            edge_file.write(str(parent_id) + ';' + str(msg_id) + "\n")
 
 
 def generate_node_labels(nodelist_filename='graph_nodes.txt', edgelist_filename='graph_edges.txt', json_filename='clean_data.json'):

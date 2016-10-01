@@ -21,20 +21,24 @@ def extract_mail_header(mbox_filename, json_filename='headers.json', thread_uid_
     email_re = re.compile(r'[\w\.-]+@[\w\.-]+')
     for msg_obj in mailbox_obj:
         msg_data = dict()
+        if msg_obj.get('Message-ID') is None:
+            continue
         msg_data['Message-ID'] = None
         msg_data['From'] = str(msg_obj.get('From'))
         msg_data['To'] = str(msg_obj.get('To'))
         if msg_data['To'] == 'None' or msg_data['From'] == 'None':
             continue
-        msg_data['Cc'] = msg_obj.get('Cc')
+        msg_data['Cc'] = str(msg_obj.get('Cc'))
         from_addr = email_re.search(msg_data['From'])
         msg_data['From_iter'] = from_addr.group(0) if from_addr is not None else msg_data['From']
         msg_data['To_iter'] = set(email_re.findall(msg_data['To']))
         msg_data['Cc_iter'] = set(email_re.findall(msg_data['Cc'])) if msg_data['Cc'] is not None else None
         msg_data['Time'] = get_utc_time(msg_obj.get('Date'))
-        msg_data['In-Reply-To'] = msg_obj.get('In-Reply-To')
+        if msg_data['Time'] == 'Error':
+            continue
+        msg_data['In-Reply-To'] = str(msg_obj.get('In-Reply-To'))
         msg_data['References'] = str(msg_obj.get('References'))
-        msg_hdr_list.append((msg_data, msg_obj.get('Message-ID')[1:-1]))
+        msg_hdr_list.append((msg_data, str(msg_obj.get('Message-ID'))[1:-1]))
 
     msg_count = 1
     author_count = 1
@@ -59,10 +63,12 @@ def extract_mail_header(mbox_filename, json_filename='headers.json', thread_uid_
             msg_data.pop('To_iter')
             msg_data.pop('From_iter')
             msg_data.pop('Cc_iter')
-            if msg_data['In-Reply-To']:
+            if not msg_data['In-Reply-To'] == 'None':
                 msg_data['In-Reply-To'] = uid_msg_id_map.get(msg_data['In-Reply-To'][1:-1], 0)
                 if msg_data['In-Reply-To'] > msg_data['Message-ID']:
                     msg_data['In-Reply-To'] = 0
+            else:
+                msg_data['In-Reply-To'] = 0
             if msg_data['References']:
                 ref_list = list()
                 for reference in msg_data['References'].split(','):

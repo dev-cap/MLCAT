@@ -40,7 +40,69 @@ def generate_monthly_message_activity_heatmap(json_data, filename):
     ply.offline.plot(heatmap, filename=filename)
 
 
-def generate_message_activity_heatmaps(clean_headers_filename, foldername):
+def generate_daily_message_activity_timeline(json_data, filename):
+    """
+
+    :param json_data:
+    :return:
+    """
+    timeline_data = [0 for x in range(48)]
+    for msg_uid, json_obj in json_data.items():
+        bin_number = 2*json_obj['Time'].hour if json_obj['Time'].minute < 30 else 2*json_obj['Time'].hour+1
+        timeline_data[bin_number] += 1
+    trace = plygo.Scatter(
+        x=list(range(48)),
+        y=timeline_data
+    )
+    timeline = [trace]
+    ply.offline.plot(timeline, filename=filename)
+
+
+def generate_weekly_message_activity_timeline(json_data, filename):
+    """
+
+    :param json_data:
+    :return:
+    """
+    timeline_data = [0 for x in range(7*24)]
+    for msg_uid, json_obj in json_data.items():
+        bin_number = json_obj['Time'].hour + 24 * json_obj['Time'].weekday()
+        timeline_data[bin_number] += 1
+    trace = plygo.Scatter(
+        x=list(range(7*24)),
+        y=timeline_data
+    )
+    timeline = [trace]
+    ply.offline.plot(timeline, filename=filename)
+
+
+def generate_monthly_message_activity_timeline(json_data, filename):
+    timeline_data = [0 for x in range(31*24)]
+    for msg_uid, json_obj in json_data.items():
+        bin_number = json_obj['Time'].hour + 24 * (json_obj['Time'].day - 1)
+        timeline_data[bin_number] += 1
+    trace = plygo.Scatter(
+        x=list(range(31*24)),
+        y=timeline_data
+    )
+    timeline = [trace]
+    ply.offline.plot(timeline, filename=filename)
+
+
+def generate_yearly_message_activity_timeline(json_data, filename):
+    timeline_data = [0 for x in range(366*24)]
+    for msg_uid, json_obj in json_data.items():
+        bin_number = json_obj['Time'].hour + 24 * (json_obj['Time'].timetuple().tm_yday - 1)
+        timeline_data[bin_number] += 1
+    trace = plygo.Scatter(
+        x=list(range(365*24)),
+        y=timeline_data
+    )
+    timeline = [trace]
+    ply.offline.plot(timeline, filename=filename)
+
+
+def generate_message_activity_heatmaps(clean_headers_filename, foldername, timeline=True):
     # Time limit can be specified here in the form of a timestamp in one of the identifiable formats. All messages
     # that have arrived after time_ubound and before time_lbound will be ignored.
     time_ubound = None
@@ -95,5 +157,11 @@ def generate_message_activity_heatmaps(clean_headers_filename, foldername):
                         json_data[json_obj['Message-ID']] = json_obj
     print("JSON data loaded.")
 
-    generate_weekly_message_activity_heatmap(json_data, foldername+'/heatmaps/weekly-message-activity-heatmap.html')
-    generate_monthly_message_activity_heatmap(json_data, foldername+'/heatmaps/monthly-message-activity-heatmap.html')
+    if not timeline:
+        generate_weekly_message_activity_heatmap(json_data, foldername+'/heatmaps/weekly-message-activity-heatmap.html')
+        generate_monthly_message_activity_heatmap(json_data, foldername+'/heatmaps/monthly-message-activity-heatmap.html')
+    else:
+        generate_daily_message_activity_timeline(json_data, foldername + '/plots/daily-message-activity-timeline.html')
+        generate_weekly_message_activity_timeline(json_data, foldername + '/plots/weekly-message-activity-timeline.html')
+        generate_monthly_message_activity_timeline(json_data, foldername + '/plots/monthly-message-activity-timeline.html')
+        generate_yearly_message_activity_timeline(json_data, foldername + '/plots/yearly-message-activity-timeline.html')

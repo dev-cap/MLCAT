@@ -2,7 +2,7 @@ import csv
 from util.read_utils import *
 
 
-def generate_wh_table_threads(ignore_lat=False, time_limit=None):
+def generate_wh_table_threads(nodelist_filename, edgelist_filename, output_filename, ignore_lat=False, time_limit=None):
     """
     Generate the thread width height table, which is a representation of the number of nodes in the graph that have a
     given height and a given number of children in a tabular form. This table provides an aggregate statistical view of
@@ -22,7 +22,7 @@ def generate_wh_table_threads(ignore_lat=False, time_limit=None):
 
     # Add nodes into NetworkX graph by reading from CSV file
     if not ignore_lat:
-        with open("graph_nodes.csv", "r") as node_file:
+        with open(nodelist_filename, "r") as node_file:
             for pair in node_file:
                 node = pair.split(';', 2)
                 if get_datetime_object(node[2].strip()) < time_limit:
@@ -35,7 +35,7 @@ def generate_wh_table_threads(ignore_lat=False, time_limit=None):
         print("Nodes added.")
 
         # Add edges into NetworkX graph by reading from CSV file
-        with open("graph_edges.csv", "r") as edge_file:
+        with open(edgelist_filename, "r") as edge_file:
             for pair in edge_file:
                 edge = pair.split(';')
                 edge[0] = int(edge[0])
@@ -48,7 +48,7 @@ def generate_wh_table_threads(ignore_lat=False, time_limit=None):
     else:
         lone_author_threads = get_lone_author_threads(False)
         # Add nodes into NetworkX graph only if they are not a part of a thread that has only a single author
-        with open("graph_nodes.csv", "r") as node_file:
+        with open(nodelist_filename, "r") as node_file:
             for pair in node_file:
                 node = pair.split(';', 2)
                 node[0] = int(node[0])
@@ -61,7 +61,7 @@ def generate_wh_table_threads(ignore_lat=False, time_limit=None):
         print("Nodes added.")
 
     # Add edges into NetworkX graph only if they are not a part of a thread that has only a single author
-        with open("graph_edges.csv", "r") as edge_file:
+        with open(edgelist_filename, "r") as edge_file:
             for pair in edge_file:
                 edge = pair.split(';')
                 edge[0] = int(edge[0])
@@ -88,11 +88,14 @@ def generate_wh_table_threads(ignore_lat=False, time_limit=None):
         source_node = min(conn_subgraph.nodes())
         for node in conn_subgraph.nodes():
             node_width = len(conn_subgraph.successors(node))
-            node_height = nx.shortest_path_length(conn_subgraph, source_node, node)
+            try:
+                node_height = nx.shortest_path_length(conn_subgraph, source_node, node)
+            except:
+                node_height = 1
             wh_table[node_height][node_width] += 1
             # print("Node:", node, "Height:",node_height, "Width:",node_width)
 
-    with open('wh_table_threads.csv', 'w') as csvfile:
+    with open(output_filename, 'w') as csvfile:
         tablewriter = csv.writer(csvfile)
         tablewriter.writerow(["Height", "Number of children"])
         tablewriter.writerow([" "] + list(range(max_width + 1)) + ["Subtotal"])
@@ -107,7 +110,3 @@ def generate_wh_table_threads(ignore_lat=False, time_limit=None):
             total += subtotal
         tablewriter.writerow(["Total:", total])
         csvfile.close()
-        # The line below is a quick test of whether all nodes are accounted for in the table
-        assert total == len(discussion_graph.nodes())
-
-generate_wh_table_threads(False)

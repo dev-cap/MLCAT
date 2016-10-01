@@ -1,8 +1,9 @@
-import json
+import json, numpy as np
 from util.read_utils import *
+import matplotlib.pyplot as plt
 
 
-def generate_hyperedge_distribution(time_limit=None, ignore_lat=True):
+def generate_hyperedge_distribution(nodelist_filename, edgelist_filename, clean_headers_filename, foldername, time_limit=None, ignore_lat=False):
     """
 
     :param ignore_lat: If true, then messages that belong to threads that have only a single author are ignored.
@@ -18,16 +19,15 @@ def generate_hyperedge_distribution(time_limit=None, ignore_lat=True):
     discussion_graph = nx.DiGraph()
     email_re = re.compile(r'[\w\.-]+@[\w\.-]+')
     json_data = dict()
-
     # Author participation denotes the the number of threads an author is active in. This is a dictionary keyed
     # by the author's email id with the value equalling the number of threads in which the author has sent a mail.
     author_participation = dict()
 
     # Add nodes into NetworkX graph by reading from CSV file
     if not ignore_lat:
-        with open("graph_nodes.csv", "r") as node_file:
+        with open(nodelist_filename, "r") as node_file:
             for pair in node_file:
-                node = pair.split(';', 2)
+                node = pair.split(';')
                 if get_datetime_object(node[2].strip()) < time_limit:
                     node[0] = int(node[0])
                     msgs_before_time.add(node[0])
@@ -38,7 +38,7 @@ def generate_hyperedge_distribution(time_limit=None, ignore_lat=True):
         print("Nodes added.")
 
         # Add edges into NetworkX graph by reading from CSV file
-        with open("graph_edges.csv", "r") as edge_file:
+        with open(edgelist_filename, "r") as edge_file:
             for pair in edge_file:
                 edge = pair.split(';')
                 edge[0] = int(edge[0])
@@ -49,11 +49,11 @@ def generate_hyperedge_distribution(time_limit=None, ignore_lat=True):
         print("Edges added.")
 
     else:
-        lone_author_threads = get_lone_author_threads(False)
+        lone_author_threads = get_lone_author_threads(save_file=None, nodelist_filename=nodelist_filename, edgelist_filename=edgelist_filename)
         # Add nodes into NetworkX graph only if they are not a part of a thread that has only a single author
-        with open("graph_nodes.csv", "r") as node_file:
+        with open(nodelist_filename, "r") as node_file:
             for pair in node_file:
-                node = pair.split(';', 2)
+                node = pair.split(';')
                 node[0] = int(node[0])
                 if get_datetime_object(node[2].strip()) < time_limit and node[0] not in lone_author_threads:
                     msgs_before_time.add(node[0])
@@ -64,7 +64,7 @@ def generate_hyperedge_distribution(time_limit=None, ignore_lat=True):
         print("Nodes added.")
 
     # Add edges into NetworkX graph only if they are not a part of a thread that has only a single author
-        with open("graph_edges.csv", "r") as edge_file:
+        with open(edgelist_filename, "r") as edge_file:
             for pair in edge_file:
                 edge = pair.split(';')
                 edge[0] = int(edge[0])
@@ -75,7 +75,7 @@ def generate_hyperedge_distribution(time_limit=None, ignore_lat=True):
             edge_file.close()
         print("Edges added.")
 
-    with open('clean_data.json', 'r') as json_file:
+    with open(clean_headers_filename, 'r') as json_file:
         for chunk in lines_per_n(json_file, 9):
             json_obj = json.loads(chunk)
             # print("\nFrom", json_obj['From'], "\nTo", json_obj['To'], "\nCc", json_obj['Cc'])
@@ -110,7 +110,7 @@ def generate_hyperedge_distribution(time_limit=None, ignore_lat=True):
             if curr_len > max_len:
                 max_len = curr_len
 
-    with open("hyperedge_distribution.csv", 'w') as hyperedge_dist_file:
+    with open(foldername+"/tables/hyperedge_distribution.csv", 'w') as hyperedge_dist_file:
         hyperedge_dist_file.write("No. of Vertices Receiving Hyperedge,Frequency\n")
         for index in range(1, 1000):
             hyperedge_dist_file.write(str(index) + "," + str(hyperedge_dist[index]) + "\n")
@@ -119,9 +119,18 @@ def generate_hyperedge_distribution(time_limit=None, ignore_lat=True):
     hyperedge_dist_file.close()
     print("Hyperedge distribution statistic written to file.")
 
-    with open("author_thread_participation.csv", 'w') as author_participation_file:
+    plt.clf()
+    plt.plot(range(1, max_len+1), hyperedge_dist[1:max_len+1])
+    plt.savefig(foldername+"/plots/hyperedge_distribution.png")
+
+    with open(foldername+"/tables/author_thread_participation.csv", 'w') as author_participation_file:
         author_participation_file.write("Author Email ID,Number of Active Threads\n")
         for author_id, num_threads in author_participation.items():
             author_participation_file.write(author_id + "," + str(num_threads) + "\n")
     print("Author-Thread Participation statistic written to file.")
+
+    plt.clf()
+    data = [num_threads for author_id, num_threads in author_participation.items()]
+    plt.hist(data)
+    plt.savefig(foldername+"/plots/author_thread_participation.png")
 

@@ -2,14 +2,14 @@ import csv
 from util.read_utils import *
 
 
-def generate_wh_table_authors(ignore_lat=False, time_limit=None):
+def generate_wh_table_authors(nodelist_filename, edgelist_filename, output_filename, ignore_lat=False, time_limit=None):
     """
     This module is used to generate the author version of the width height table. The width height table for the
     authors is a representation of the number of total and new authors in a thread aggregated at a given generation.
     The table, which itself is temporarily stored in a two dimensional array, is then written into a CSV file. These
     tables are can be used to decipher the basic conversation structure.
     :param ignore_lat: If true, then lone author threads are ignored.
-    :param time_limit: All messages until this time are considered and all messages after this time are ignored. Time
+    :param time_limit: All messages until this timne are considered and all messages after this time are ignored. Time
                        is specified as a string in one of the recognized formats.
     """
     if time_limit is None:
@@ -23,7 +23,7 @@ def generate_wh_table_authors(ignore_lat=False, time_limit=None):
 
     # Add nodes into NetworkX graph by reading from CSV file
     if not ignore_lat:
-        with open("graph_nodes.csv", "r") as node_file:
+        with open(nodelist_filename, "r") as node_file:
             for pair in node_file:
                 node = pair.split(';', 2)
                 if get_datetime_object(node[2].strip()) < time_limit:
@@ -36,7 +36,7 @@ def generate_wh_table_authors(ignore_lat=False, time_limit=None):
         print("Nodes added.")
 
         # Add edges into NetworkX graph by reading from CSV file
-        with open("graph_edges.csv", "r") as edge_file:
+        with open(edgelist_filename, "r") as edge_file:
             for pair in edge_file:
                 edge = pair.split(';')
                 edge[0] = int(edge[0])
@@ -54,7 +54,7 @@ def generate_wh_table_authors(ignore_lat=False, time_limit=None):
     else:
         lone_author_threads = get_lone_author_threads()
         # Add nodes into NetworkX graph only if they are not a part of a thread that has only a single author
-        with open("graph_nodes.csv", "r") as node_file:
+        with open(nodelist_filename, "r") as node_file:
             for pair in node_file:
                 node = pair.split(';', 2)
                 node[0] = int(node[0])
@@ -67,7 +67,7 @@ def generate_wh_table_authors(ignore_lat=False, time_limit=None):
         print("Nodes added.")
 
     # Add edges into NetworkX graph only if they are not a part of a thread that has only a single author
-        with open("graph_edges.csv", "r") as edge_file:
+        with open(edgelist_filename, "r") as edge_file:
             for pair in edge_file:
                 edge = pair.split(';')
                 edge[0] = int(edge[0])
@@ -103,7 +103,10 @@ def generate_wh_table_authors(ignore_lat=False, time_limit=None):
         # print("Source node:", source_node)
         for node, attributes in sorted(conn_subgraph.nodes_iter(data=True)):
             node_author = attributes['sender']
-            node_height = nx.shortest_path_length(conn_subgraph, source_node, node)
+            try:
+                node_height = nx.shortest_path_length(conn_subgraph, source_node, node)
+            except:
+                node_height = 1
             authors_at_height[node_height].add(node_author)
             if node_author not in thread_authors:
                 new_authors_at_height[node_height].add(node_author)
@@ -129,7 +132,7 @@ def generate_wh_table_authors(ignore_lat=False, time_limit=None):
             icol += 2
         irow += 1
 
-    with open('wh_table_authors.csv', 'w') as csvfile:
+    with open(output_filename, 'w') as csvfile:
         tablewriter = csv.writer(csvfile)
         tablewriter.writerow(["Height(h)", "Number of authors(i)"])
         tablewriter.writerow([" "] + "  ".join([str(x) for x in range(1, max_width + 1)]).split(" ") + [" ", "Subtotal"])
@@ -144,6 +147,4 @@ def generate_wh_table_authors(ignore_lat=False, time_limit=None):
             row_height += 1
             total += subtotal
         tablewriter.writerow(["Total:", total])
-        csvfile.close()
-
-generate_wh_table_authors()
+   
