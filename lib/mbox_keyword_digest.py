@@ -145,22 +145,33 @@ def generate_keyword_digest(mbox_filename, output_filename, author_uid_filename,
             keywords_list[num] = " ".join(keywords_list[num])
 
         print("Performing tf-idf analysis on the term-document matrix...")
-        vectorizer = TfidfVectorizer(analyzer='word', stop_words=english_stopwords, min_df=1)
+        vectorizer = TfidfVectorizer(analyzer='word', stop_words=english_stopwords, max_df=0.9, min_df=0.05,
+                                     use_idf=True, ngram_range=(1, 4))
         tfidf_matrix = vectorizer.fit_transform(keywords_list).toarray()
         feature_names = vectorizer.get_feature_names()
         if top_n is None:
             for author_email, author_uid in author_uid_map.items():
                 if max(tfidf_matrix[author_uid]) > 0 and len(keywords_list[num]) > 99:
                     try:
-                        indices = tfidf_matrix[author_uid].argsort()[-10:][::-1]
-                        if console_output:
-                            print(author_email)
+                        indices = tfidf_matrix[author_uid].argsort()[-20:][::-1]
+                        if not console_output:
+                            out_file.write(author_email + "\n")
+                            author_features = list()
                             for i in indices:
-                                print(feature_names[i], "(", tfidf_matrix[author_uid][i], ")", end="; ")
+                                author_features.append(feature_names[i])
+                                # author_features.append((feature_names[i], tfidf_matrix[author_uid][i]))
+                            author_features.sort(key=lambda x: -1*len(x))
+                            for i2 in range(len(author_features)):
+                                overlap_flag = 0
+                                for i1 in range(i2+1, len(author_features)):
+                                    if author_features[i1] in author_features[i2]:
+                                        overlap_flag = 1
+                                        break
+                                if not overlap_flag:
+                                    out_file.write(author_features[i2] + ", ")
                         else:
-                            out_file.write(author_email+"\n")
-                            for i in indices:
-                                out_file.write(feature_names[i] + " (" + str(tfidf_matrix[author_uid][i]) + ") ; ")
+                            print("ERROR: Console Output not implemented! Please write to file.")
+
                     except:
                         pass
                     finally:
@@ -173,17 +184,24 @@ def generate_keyword_digest(mbox_filename, output_filename, author_uid_filename,
             for author_email, author_uid in top_authors_index.items():
                 if max(tfidf_matrix[author_uid]) > 0 and len(keywords_list[author_uid]) > 99:
                     try:
-                        for i in range(len(tfidf_matrix[author_uid])):
-                            term_document_matrix[i][author_uid] = tfidf_matrix[author_uid][i]
-                        indices = tfidf_matrix[author_uid].argsort()[-10:][::-1]
-                        if console_output:
-                            print(author_email)
+                        indices = tfidf_matrix[author_uid].argsort()[-20:][::-1]
+                        if not console_output:
+                            out_file.write(author_email + "\n")
+                            author_features = list()
                             for i in indices:
-                                print(feature_names[i], "(", tfidf_matrix[author_uid][i], ")", end="; ")
+                                author_features.append(feature_names[i])
+                                # author_features.append((feature_names[i], tfidf_matrix[author_uid][i]))
+                            author_features.sort(key=lambda x: -1 * len(x))
+                            for i2 in range(len(author_features)):
+                                overlap_flag = 0
+                                for i1 in range(i2+1, len(author_features)):
+                                    if author_features[i1] in author_features[i2]:
+                                        overlap_flag = 1
+                                        break
+                                if not overlap_flag:
+                                    out_file.write(author_features[i2]+", ")
                         else:
-                            out_file.write(author_email+"\n")
-                            for i in indices:
-                                out_file.write(feature_names[i] + " (" + str(tfidf_matrix[author_uid][i]) + ") ; ")
+                            print("ERROR: Console Output not implemented! Please write to file.")
                     except:
                         pass
                     finally:

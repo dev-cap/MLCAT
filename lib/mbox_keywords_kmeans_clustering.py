@@ -135,7 +135,8 @@ def generate_kmeans_clustering(mbox_filename, output_filename, author_uid_filena
         keywords_list[num] = " ".join(keywords_list[num])
 
     print("Performing tf-idf analysis on the term-document matrix...")
-    vectorizer = TfidfVectorizer(analyzer='word', stop_words=english_stopwords, min_df=1)
+    vectorizer = TfidfVectorizer(analyzer='word', stop_words=english_stopwords, max_features=200000,
+                                       use_idf=True, ngram_range=(1, 4))
     tfidf_matrix = vectorizer.fit_transform(keywords_list).toarray()
 
     # with open("author_top_index.json", 'w') as json_file:

@@ -12,6 +12,12 @@ by this module.
 import json
 from util.read_utils import *
 import os.path
+import numpy as np
+from scipy.optimize import curve_fit
+import matplotlib.pyplot as plt
+
+def inv_func(x, a, b, c):
+    return a/x + b/(x**2) + c
 
 
 def thread_length_distribution(discussion_graph, foldername):
@@ -19,37 +25,39 @@ def thread_length_distribution(discussion_graph, foldername):
         os.makedirs(foldername)
     thread_lengths = list()
     for conn_subgraph in nx.weakly_connected_component_subgraphs(discussion_graph):
-        time_list = list()
         time_list = [datetime.datetime.strptime(x , "%a, %d %b %Y %H:%M:%S %z")
                      for x in nx.get_node_attributes(conn_subgraph, 'time').values()]
         current_thread_length = (max(time_list) - min(time_list)).total_seconds()
         thread_lengths.append((min(conn_subgraph.nodes()), current_thread_length))
     with open(foldername+"conversation_length.csv", mode='w') as dist_file:
         for node, current_thread_length in thread_lengths:
-            dist_file.write("{0};{1}\n".format(node, current_thread_length))
-            # dist_file.write("{0}\n".format(node, current_thread_length))
+            if current_thread_length > 9:
+                dist_file.write("{0};{1}\n".format(node, current_thread_length))
         dist_file.close()
-    # thread_lengths = [x for (y, x) in thread_lengths]
-    # thread_lengths.sort()
-    # print("95th Percentile Thread Length:", thread_lengths[95*len(thread_lengths)//100], "secs.",
-    #       "or", thread_lengths[95*len(thread_lengths)//100]/3600, "hrs.")
-    # print("99th Percentile Thread Length:", thread_lengths[99*len(thread_lengths)//100], "secs.",
-    #       "or", thread_lengths[99*len(thread_lengths)//100]/3600, "hrs.")
-    # return thread_lengths
+    thread_lengths = [x for (y, x) in thread_lengths if x > 9]
+    thread_lengths.sort()
+    print("95th Percentile Thread Length:", thread_lengths[95*len(thread_lengths)//100], "secs.",
+          "or", thread_lengths[95*len(thread_lengths)//100]/3600, "hrs.")
+    print("99th Percentile Thread Length:", thread_lengths[99*len(thread_lengths)//100], "secs.",
+          "or", thread_lengths[99*len(thread_lengths)//100]/3600, "hrs.")
+    return thread_lengths
 
 
-def message_inter_arrival_times(discussion_graph, json_data, foldername):
+def response_time(discussion_graph, json_data, foldername):
+    response_times = list()
     if not os.path.exists(foldername):
         os.makedirs(foldername)
     with open(foldername+"response_time.csv", mode='w') as dist_file:
         for src, dstn in discussion_graph.edges():
-            dist_file.write("{0};{1};{2}\n".format(src, dstn,
-                            abs(get_datetime_object(json_data[src]['Time']) - get_datetime_object(json_data[dstn]['Time'])).total_seconds()))
-            # dist_file.write("{0}\n".format(abs((json_data[str(src)]['Time'] - json_data[str(dstn)]['Time']).total_seconds())))
+            current_response_time = abs(get_datetime_object(json_data[src]['Time']) - get_datetime_object(json_data[dstn]['Time'])).total_seconds()
+            if current_response_time > 9:
+                response_times.append(current_response_time)
+                dist_file.write("{0};{1};{2}\n".format(src, dstn, current_response_time))
         dist_file.close()
+        return response_times
 
 
-def generate_time_stats_threads(nodelist_filename, edgelist_filename, clean_headers_filename, foldername, time_lbound=None, time_ubound=None):
+def generate_time_stats_threads(nodelist_filename, edgelist_filename, clean_headers_filename, foldername, time_lbound=None, time_ubound=None, plot=False):
     # Time limit can be specified as a parameter in the form of a timestamp in one of the identifiable formats and all
     # messages that have arrived before/after this timestamp will be ignored.
 
@@ -63,9 +71,10 @@ def generate_time_stats_threads(nodelist_filename, edgelist_filename, clean_head
     time_ubound = get_datetime_object(time_ubound)
 
     if time_lbound is None:
-        time_lbound = time.strftime("%a, %d %b %Y %H:%M:%S %z")
-    msgs_in_range = set()
+        time_lbound = "Sun, 01 Jan 2001 00:00:00 +0000"
     time_lbound = get_datetime_object(time_lbound)
+
+    msgs_in_range = set()
 
     print("All messages before", time_ubound, "and after", time_lbound, "are being considered.")
     discussion_graph = nx.DiGraph()
@@ -84,17 +93,6 @@ def generate_time_stats_threads(nodelist_filename, edgelist_filename, clean_head
                     discussion_graph.add_node(node[0], time=node[2].strip(), sender=from_addr)
             node_file.close()
         print("Nodes added.")
-
-        # Add edges into NetworkX graph by reading from CSV file
-        with open(edgelist_filename, "r") as edge_file:
-            for pair in edge_file:
-                edge = pair.split(';')
-                edge[0] = int(edge[0])
-                edge[1] = int(edge[1])
-                if edge[0] in msgs_in_range and edge[1] in msgs_in_range:
-                    discussion_graph.add_edge(*edge)
-            edge_file.close()
-        print("Edges added.")
 
     else:
         lone_author_threads = get_lone_author_threads(save_file=None, nodelist_filename=nodelist_filename, edgelist_filename=edgelist_filename)
@@ -148,10 +146,59 @@ def generate_time_stats_threads(nodelist_filename, edgelist_filename, clean_head
             # print("\nFrom", json_obj['From'], "\nTo", json_obj['To'], "\nCc", json_obj['Cc'])
             json_data[json_obj['Message-ID']] = json_obj
     print("JSON data loaded.")
+
     if len(discussion_graph.edges()) == 0:
         return "No messages"
-    thread_length_distribution(discussion_graph, foldername)
-    message_inter_arrival_times(discussion_graph, json_data, foldername)
+
+    thread_lengths = thread_length_distribution(discussion_graph, foldername)
+    response_times = sorted(response_time(discussion_graph, json_data, foldername))
+
+    if plot:
+        thread_lengths = thread_lengths[:int(len(thread_lengths)*0.9)]
+        y, x1 = np.histogram(thread_lengths, bins=50)
+        y = list(y)
+        max_y = sum(y)
+        if max_y != 0:
+            y = [y1 / max_y for y1 in y]
+        x = list()
+        for i1 in range(len(x1) - 1):
+            x.append((x1[i1] + x1[i1 + 1]) / 2)
+        popt, pcov = curve_fit(inv_func, x, y)
+        a, b, c = popt
+        plt.figure()
+        axes = plt.gca()
+        axes.set_xlim([0, max(x)])
+        axes.set_ylim([0, max(y)])
+        plt.plot(x, y, linestyle='--', color='b', label="Data")
+        plt.savefig(foldername + '../plots/thread_length.png')
+        x_range = np.linspace(min(x), max(x), 500)
+        plt.plot(x_range, a / x_range + b / (x_range ** 2) + c, 'r-', label="Fitted Curve")
+        plt.legend()
+        plt.savefig(foldername + '../plots/thread_length_inv.png')
+        plt.close()
+
+        response_times = response_times[:int(len(response_times)*0.9)]
+        y, x1 = np.histogram(response_times, bins=50)
+        y = list(y)
+        max_y = sum(y)
+        if max_y != 0:
+            y = [y1 / max_y for y1 in y]
+        x = list()
+        for i1 in range(0, len(x1) - 1):
+            x.append((x1[i1] + x1[i1 + 1]) / 2)
+        popt, pcov = curve_fit(inv_func, x, y)
+        a, b, c = popt
+        plt.figure()
+        axes = plt.gca()
+        axes.set_xlim([0, max(x)])
+        axes.set_ylim([0, max(y)])
+        plt.plot(x, y, linestyle='--', color='b', label="Data")
+        plt.savefig(foldername + '../plots/response_time.png')
+        x_range = np.linspace(min(x), max(x), 500)
+        plt.plot(x_range, a / x_range + b / (x_range ** 2) + c, 'r-', label="Fitted Curve")
+        plt.legend()
+        plt.savefig(foldername + '../plots/response_time_inv.png')
+        plt.close()
     return None
 
 

@@ -131,6 +131,6 @@ def generate_hyperedge_distribution(nodelist_filename, edgelist_filename, clean_
 
     plt.clf()
     data = [num_threads for author_id, num_threads in author_participation.items()]
-    plt.hist(data)
+    plt.hist(data, bins=50)
     plt.savefig(foldername+"/plots/author_thread_participation.png")
 

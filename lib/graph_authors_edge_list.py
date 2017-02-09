@@ -78,8 +78,8 @@ def generate_edge_list(author_nodelist_filename, author_edgelist_filename, nodel
     # print("Nodes:", nx.number_of_nodes(author_graph))
     # print("Edges:", nx.number_of_edges(author_graph))
 
-generate_edge_list(author_nodelist_filename='./data/lkml/tables/author_graph_nodes.txt', author_edgelist_filename='./data/lkml/tables/author_graph_edges.txt',
-                   nodelist_filename='./data/lkml/tables/graph_nodes.csv', edgelist_filename='./data/lkml/tables/graph_edges.csv',
-                   threads_json_filename="./data/lkml/json/clean_data.json", author_json_filename='./data/lkml/json/author_uid_map.json')
+# generate_edge_list(author_nodelist_filename='./data/lkml/tables/author_graph_nodes.txt', author_edgelist_filename='./data/lkml/tables/author_graph_edges.txt',
+#                    nodelist_filename='./data/lkml/tables/graph_nodes.csv', edgelist_filename='./data/lkml/tables/graph_edges.csv',
+#                    threads_json_filename="./data/lkml/json/clean_data.json", author_json_filename='./data/lkml/json/author_uid_map.json')
 
 
