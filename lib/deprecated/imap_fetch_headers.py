@@ -1,0 +1,16 @@
+from check_headers import *
+from data_cleanup import *
+from graph_threads_edge_list import generate_edge_list
+
+# Uncomment the following line to update "uid_map.json"
+# write_uid_map(1, 57635)
+
+last_uid = check_validity(True)
+remove_duplicate_headers()
+remove_unwanted_headers()
+add_missing_headers()
+replace_invalid_headers()
+
+get_mail_header([last_uid+1], True)
+remove_invalid_references()
+generate_edge_list(True)
