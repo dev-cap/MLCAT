@@ -1,16 +1,10 @@
-from hypergraph_statistics import generate_hyperedge_distribution
-from mbox_keyword_digest import generate_keyword_digest
-from author_ranking import generate_author_ranking
-from wh_table_authors import generate_wh_table_authors
-from time_statistics_authors import conversation_refresh_times
-from mbox_keywords_kmeans_clustering import generate_kmeans_clustering
-from time_statistics_curve_fitting import generate_crt_curve_fits
 import os.path
 
+from data_handling.mbox.keyword_digest import generate_keyword_digest
 
 mailbox_list = [d for d in os.listdir('data') if os.path.isdir(os.path.join('data', d))]
 mailbox_list = ['lkml', 'opensuse-kernel', 'opensuse-features', 'opensuse', 'opensuse-bugs', 'opensuse-factory', 'sakai-devel']
-mailbox_list = ['sakai-devel']
+mailbox_list = ['lkml', 'opensuse', 'sakai-devel']
 
 for mailbox in mailbox_list:
     # Define directories

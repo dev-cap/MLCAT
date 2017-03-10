@@ -1,9 +1,7 @@
-from heatmap_message_activity import generate_message_activity_heatmaps
-from wh_table_threads import generate_wh_table_threads
-from time_statistics_threads import generate_time_stats_threads
-from time_statistics_curve_fitting import generate_cl_curve_fits, generate_rt_curve_fits
 import os.path
 
+from author_analysis.curve_fitting import generate_cl_curve_fits, generate_rt_curve_fits
+from thread_analysis.time_statistics import generate_time_stats_threads
 
 mailbox_list = [d for d in os.listdir('data') if os.path.isdir(os.path.join('data', d))]
 mailbox_list = ['lkml', 'opensuse', 'opensuse-bugs', 'opensuse-factory', 'opensuse-features', 'opensuse-kernel', 'sakai-devel']

@@ -1,12 +1,14 @@
-import mailbox
 import json
+import mailbox
+
 import numpy as np
 from nltk.corpus import stopwords
-from ext import custom_stopwords
-from util.read_utils import *
 from nltk.stem import WordNetLemmatizer
 from sklearn.feature_extraction.text import TfidfVectorizer
-from author_ranking import generate_author_ranking
+
+from author_analysis.ranking import generate_author_ranking
+from util import custom_stopwords
+from util.read_utils import *
 
 
 def get_top_authors(top_n, json_filename):

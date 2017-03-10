@@ -1,12 +1,10 @@
-import mailbox
-import json
 import random
+
 import numpy as np
-from util.read_utils import *
-from sklearn.utils.extmath import randomized_svd
 from sklearn.feature_selection import chi2
-from mbox_keyword_digest import generate_keyword_digest
-from pylab import barh, plot, yticks, show, grid, xlabel, figure, savefig
+from sklearn.utils.extmath import randomized_svd
+
+from data_handling.mbox.keyword_digest import generate_keyword_digest
 
 
 def keyword_clusters_svd():
