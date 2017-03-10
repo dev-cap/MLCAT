@@ -1,11 +1,12 @@
-from data_cleanup import remove_invalid_references
-from mbox_hdr import extract_mail_header
-from graph_threads_edge_list import generate_edge_list
-from check_headers import *
 import os.path
 
+from data_handling.check_headers import *
+from data_handling.mbox.mbox_hdr import extract_mail_header
+from thread_analysis.graph.edge_list import generate_edge_list
+
 mailbox_list = [d for d in os.listdir('data') if os.path.isdir(os.path.join('data', d))]
-mailbox_list = ['opensuse', 'opensuse-factory', 'opensuse-bugs', 'lkml', 'opensuse-features', 'opensuse-kernel']
+mailbox_list = ['lkml', 'opensuse', 'opensuse-bugs', 'opensuse-factory', 'opensuse-features', 'opensuse-kernel', 'sakai-devel']
+mailbox_list = ['sakai-devel']
 
 for mailbox in mailbox_list:
     # Define directories

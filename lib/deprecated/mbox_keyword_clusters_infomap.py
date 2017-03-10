@@ -1,12 +1,13 @@
 import mailbox
-import json
-import numpy as np
+
 from nltk.corpus import stopwords
-from ext import custom_stopwords
-from util.read_utils import *
 from nltk.stem import WordNetLemmatizer
 from sklearn.feature_extraction.text import TfidfVectorizer
-from mbox_keyword_digest import get_message_body, get_top_authors
+
+from data_handling.mbox.keyword_digest import get_message_body
+from util import custom_stopwords
+from util.read_utils import *
+
 
 def get_author_clustering_infomap(tree_filename="infomap/output/"+"author_graph.tree"):
     """

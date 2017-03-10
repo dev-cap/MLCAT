@@ -1,8 +1,16 @@
 from util.read_utils import *
 import json
 import os.path
+import numpy as np
+from scipy.optimize import curve_fit
+import matplotlib.pyplot as plt
 
-def conversation_refresh_times(headers_filename, nodelist_filename, edgelist_filename, foldername, time_ubound = None, time_lbound = None):
+
+def inv_func(x, a, b, c):
+    return a/x + b/(x**2) + c
+
+
+def conversation_refresh_times(headers_filename, nodelist_filename, edgelist_filename, foldername, time_ubound = None, time_lbound = None, plot=False):
     """
 
     :param json_data:
@@ -159,11 +167,38 @@ def conversation_refresh_times(headers_filename, nodelist_filename, edgelist_fil
         with open(foldername + "conversation_refresh_times.csv", mode='w') as dist_file:
             dist_file.write("From Address;To Address;Conv. Refresh Time\n")
             for from_addr, to_address, crtime in crt:
-                if crtime > 0:
+                if crtime > 9:
                     dist_file.write("{0};{1};{2}\n".format(from_addr, to_address, str(crtime)))
             dist_file.close()
+
+        if plot:
+            crt = sorted([z for x, y, z in crt if z > 9])[:int(.9*len(crt))]
+            y, x1 = np.histogram(crt, bins=50)
+            y = list(y)
+            max_y = sum(y)
+            if max_y != 0:
+                y = [y1 / max_y for y1 in y]
+            x = list()
+            for i1 in range(len(x1)-1):
+                x.append((x1[i1]+x1[i1+1])/2)
+            popt, pcov = curve_fit(inv_func, x, y)
+            a, b, c = popt
+            plt.figure()
+            axes = plt.gca()
+            axes.set_xlim([0, max(x)])
+            axes.set_ylim([0, max(y)])
+            plt.plot(x, y, linestyle='--', color='b', label="Data")
+            plt.savefig(foldername + 'conversation_refresh_times.png')
+            x_range = np.linspace(min(x), max(x), 500)
+            plt.plot(x_range, a/x_range + b/(x_range**2) + c, 'r-', label="Fitted Curve")
+            plt.legend()
+            plt.savefig(foldername + 'conversation_refresh_times_inv.png')
+            plt.close()
         return None
+
     else:
         return "No messages!"
+
+
 
 

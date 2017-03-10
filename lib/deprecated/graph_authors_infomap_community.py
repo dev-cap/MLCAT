@@ -6,19 +6,19 @@ the vertex set of a graph and also provides some methods for getting the subgrap
 
 """
 import json
+import subprocess
+import sys
+
 import igraph
 import numpy
-import subprocess
 import plotly
-
-from author_ranking import generate_author_ranking
-from util.read_utils import *
 from matplotlib import pyplot as plt
-from scipy.cluster.hierarchy import dendrogram, linkage
 from plotly.tools import FigureFactory as FF
-from util.union_find import *
+from scipy.cluster.hierarchy import dendrogram, linkage
 
-import sys
+from author_analysis.ranking import generate_author_ranking
+from util.read_utils import *
+
 sys.setrecursionlimit(10000)
 
 
