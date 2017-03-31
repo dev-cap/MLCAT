@@ -1,10 +1,14 @@
 import json
 import re
-from util.read_json import lines_per_n
+from util.read_utils import lines_per_n
 
 
 def write_author_uid_map():
-
+    """
+    This function is used to generate and write to a JSON file the mapping of authors to a unique integer identifier.
+    Authors are identified through a regular expression search for their email addresses. The integer identifiers
+    generated are used in other modules like the generation and statistical analysis of hyperedges.
+    """
     index = 0
     author_set = set()
     author_uid_map = dict()
@@ -30,4 +34,3 @@ def write_author_uid_map():
         json.dump(author_uid_map, map_file, indent=1)
         map_file.close()
     print("UID map written to author_uid_map.json.")
-write_author_uid_map()

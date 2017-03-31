@@ -155,5 +155,3 @@ def msg_author_bipartite_graph(threadwise=False, ignore_lat=True, time_limit=Non
         print("No. of Weakly Connected Components: ", nx.number_weakly_connected_components(bipartite_graph))
         print("No. of Strongly Connected Components: ", nx.number_strongly_connected_components(bipartite_graph))
         # Do something!
-
-msg_author_bipartite_graph(threadwise=False, ignore_lat=True, time_limit=None)

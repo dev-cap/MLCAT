@@ -29,7 +29,7 @@ def get_lone_author_threads(save_file=None, nodelist_filename='graph_nodes.csv',
     # Add nodes into NetworkX graph by reading CSV file
     with open(nodelist_filename, "r") as node_file:
         for pair in node_file:
-            node = pair.split(',', 2)
+            node = pair.split(';', 2)
             from_addr = email_re.search(node[1].strip())
             from_addr = from_addr.group(0) if from_addr is not None else node[1].strip()
             discussion_graph.add_node(int(node[0]), time=node[2].strip(), sender=from_addr)
@@ -38,7 +38,7 @@ def get_lone_author_threads(save_file=None, nodelist_filename='graph_nodes.csv',
     # Add edges into NetworkX graph by reading CSV file
     with open(edgelist_filename, "r") as edge_file:
         for pair in edge_file:
-            edge = pair.split(',')
+            edge = pair.split(';')
             edge[0] = int(edge[0])
             edge[1] = int(edge[1])
             try:
@@ -77,10 +77,15 @@ def get_datetime_object(orig_time):
         trunc_date = trunc_date.strip()
         if "GMT" in trunc_date:
             trunc_date = trunc_date.replace("GMT", "+0000")
-        elif "CET 2016" in trunc_date:
-            trunc_date = trunc_date.replace("CET 2016", "2016 +0100")
+        elif "PST" in trunc_date:
+            trunc_date = trunc_date.replace("PST", "-0800")
+        elif "EST" in trunc_date:
+            trunc_date = trunc_date.replace("EST", "-0500")
+        elif "EET" in trunc_date:
+            trunc_date = trunc_date.replace("EET", "+0200")
         elif "CET" in trunc_date:
             trunc_date = trunc_date.replace("CET", "+0100")
+
         # Generating a datetime object considering multiple formats of the input parameter - with and without weekday
         if len(trunc_date) > 30 and trunc_date[14] == ':':
             datetime_obj = datetime.datetime.strptime(trunc_date, "%a, %b %d %H:%M:%S %Y %z")
@@ -111,17 +116,25 @@ def get_utc_time(orig_time):
     :param orig_time: Formatted string containing a date and time from a local timezone
     :return: Formatted string containing the date and time in UTC
     """
+    orig_time = str(orig_time)
     try:
         # Truncating the string to contain only required values and removing unwanted whitespace
         trunc_date = orig_time[:31] if len(orig_time) > 31 else orig_time
         trunc_date = trunc_date.strip()
         if "GMT" in trunc_date:
             trunc_date = trunc_date.replace("GMT", "+0000")
-        elif "CET 2016" in trunc_date:
-            trunc_date = trunc_date.replace("CET 2016", "2016 +0100")
+        elif "PST" in trunc_date:
+            trunc_date = trunc_date.replace("PST", "-0800")
+        elif "PDT" in trunc_date:
+            trunc_date = trunc_date.replace("PDT", "-0800")
+        elif "EST" in trunc_date:
+            trunc_date = trunc_date.replace("EST", "-0500")
+        elif "EET" in trunc_date:
+            trunc_date = trunc_date.replace("EET", "+0200")
         elif "CET" in trunc_date:
             trunc_date = trunc_date.replace("CET", "+0100")
         # Generating a datetime object considering multiple formats of the input parameter - with and without weekday
+
         if len(trunc_date) > 30 and trunc_date[14] == ':':
             datetime_obj = datetime.datetime.strptime(trunc_date, "%a, %b %d %H:%M:%S %Y %z")
         elif len(trunc_date) == 25 or len(trunc_date) == 26:
@@ -140,8 +153,8 @@ def get_utc_time(orig_time):
         return utc_dt.strftime("%a, %d %b %Y %H:%M:%S %z")
 
     except:
-        print("Unable to process date:", orig_time, trunc_date)
-        traceback.print_exc()
+        # print("Unable to process date:", orig_time, trunc_date)
+        return "Error"
 
 
 def get_messages_before(time_limit, nodelist_filename):
@@ -160,4 +173,3 @@ def get_messages_before(time_limit, nodelist_filename):
                 msgs_before_time.add(int(node[0]))
         node_file.close()
     return msgs_before_time
-

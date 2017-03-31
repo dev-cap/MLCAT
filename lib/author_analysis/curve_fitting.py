@@ -3,8 +3,8 @@ import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
 
 
-def exp_func(x, a, b, c):
-    return a * np.exp(-b * x) + c
+def inv_func(x, a, b, c):
+    return a/x + b/(x**2) + c
 
 
 def generate_crt_dist(csv_filename):
@@ -14,32 +14,29 @@ def generate_crt_dist(csv_filename):
         next(csv_file)
         for line in csv_file:
             crt_list.append(float(line.split(sep=';')[2]))
-    y, bin_edges = np.histogram(crt_list, bins=100)
-    count0 = 0
+    y, bin_edges = np.histogram(sorted(crt_list)[:int(0.9*len(crt_list))], bins=50)
     y = list(y)
+    x1 = list(bin_edges)
+    x = list()
+    for i1 in range(len(x1) - 1):
+        x.append((x1[i1] + x1[i1 + 1]) / 2)
     max_y = sum(y)
-    y.insert(0, max_y)
     if max_y != 0:
         y = [y1/max_y for y1 in y]
-    return list(bin_edges), y
+    return x, y
 
 
 def generate_crt_curve_fits(foldername):
     x, y = generate_crt_dist(foldername+'conversation_refresh_times.csv')
-    popt, pcov = curve_fit(exp_func, x, y)
+    popt, pcov = curve_fit(inv_func, x, y)
     a, b, c = popt
-    # try:
-    #     popt, pcov = curve_fit(exp_func, x, y)
-    # except:
-    #     print("Cannot fit data to exp in", foldername)
-    #     return None, None, None
     plt.figure()
-    plt.plot(x, y, 'b-', label="Data")
-    x_range = np.arange(0, max(x), max(x)/1000)
-    plt.plot(x_range, a * np.exp(-b * x_range) + c, 'r-', label="Fitted Curve")
     axes = plt.gca()
-    # axes.set_xlim([0, 2000])
-    axes.set_ylim([0, 1])
+    axes.set_xlim([0, max(x)])
+    axes.set_ylim([0, max(y)])
+    plt.plot(x, y, linestyle='--', color='b', label="Data")
+    x_range = np.linspace(min(x), max(x), 500)
+    plt.plot(x_range, a / x_range + b / (x_range ** 2) + c, 'r-', label="Fitted Curve")
     plt.legend()
     plt.savefig(foldername+'conversation_refresh_times.png')
     plt.close()
@@ -52,31 +49,33 @@ def generate_cl_dist(csv_filename):
     with open(csv_filename) as csv_file:
         for line in csv_file:
             cl_list.append(float(line.split(sep=';')[1]))
-    y, bin_edges = np.histogram(cl_list, bins=100)
-    count0 = 0
+    y, bin_edges = np.histogram(sorted(cl_list)[:int(0.9*len(cl_list))], bins=50)
     y = list(y)
+    x1 = list(bin_edges)
+    x = list()
+    for i1 in range(len(x1) - 1):
+        x.append((x1[i1] + x1[i1 + 1]) / 2)
     max_y = sum(y)
-    y.insert(0, max_y)
     if max_y != 0:
-        y = [y1/max_y for y1 in y]
-    return list(bin_edges), y
+        y = [y1 / max_y for y1 in y]
+    return x, y
 
 
 def generate_cl_curve_fits(foldername):
     x, y = generate_cl_dist(foldername+'conversation_length.csv')
     try:
-        popt, pcov = curve_fit(exp_func, x, y)
+        popt, pcov = curve_fit(inv_func, x, y)
     except:
         print("Cannot fit data to exp in", foldername)
         return None, None, None
     a, b, c = popt
     plt.figure()
-    plt.plot(x, y, 'b-', label="Data")
-    x_range = np.arange(0, max(x), max(x)/1000)
-    plt.plot(x_range, a * np.exp(-b * x_range) + c, 'r-', label="Fitted Curve")
     axes = plt.gca()
-    # axes.set_xlim([0, 2000])
-    axes.set_ylim([0, 1])
+    axes.set_xlim([0, max(x)])
+    axes.set_ylim([0, max(y)])
+    plt.plot(x, y, linestyle='--', color='b', label="Data")
+    x_range = np.linspace(min(x), max(x), 500)
+    plt.plot(x_range, a / x_range + b / (x_range ** 2) + c, 'r-', label="Fitted Curve")
     plt.legend()
     plt.savefig(foldername+'conversation_length.png')
     plt.close()
@@ -89,30 +88,33 @@ def generate_rt_dist(csv_filename):
     with open(csv_filename) as csv_file:
         for line in csv_file:
             rt_list.append(float(line.split(sep=';')[2]))
-    y, bin_edges = np.histogram(rt_list, bins=100)
+    y, bin_edges = np.histogram(sorted(rt_list)[:int(0.9*len(rt_list))], bins=50)
     y = list(y)
+    x1 = list(bin_edges)
+    x = list()
+    for i1 in range(len(x1) - 1):
+        x.append((x1[i1] + x1[i1 + 1]) / 2)
     max_y = sum(y)
-    y.insert(0, max_y)
     if max_y != 0:
-        y = [y1/max_y for y1 in y]
-    return list(bin_edges), y
+        y = [y1 / max_y for y1 in y]
+    return x, y
 
 
 def generate_rt_curve_fits(foldername):
     x, y = generate_rt_dist(foldername+'response_time.csv')
     try:
-        popt, pcov = curve_fit(exp_func, x, y)
+        popt, pcov = curve_fit(inv_func, x, y)
     except:
         print("Cannot fit data to exp in", foldername)
         return None, None, None
     a, b, c = popt
     plt.figure()
-    plt.plot(x, y, 'b-', label="Data")
-    x_range = np.arange(0, max(x), max(x)/1000)
-    plt.plot(x_range, a * np.exp(-b * x_range) + c, 'r-', label="Fitted Curve")
     axes = plt.gca()
-    # axes.set_xlim([0, 2000])
-    axes.set_ylim([0, 1])
+    axes.set_xlim([0, max(x)])
+    axes.set_ylim([0, max(y)])
+    plt.plot(x, y, linestyle='--', color='b', label="Data")
+    x_range = np.linspace(min(x), max(x), 500)
+    plt.plot(x_range, a / x_range + b / (x_range ** 2) + c, 'r-', label="Fitted Curve")
     plt.legend()
     plt.savefig(foldername+'response_time.png')
     plt.close()
