@@ -1,5 +1,5 @@
-# MailingListParser
-Parse mailing lists for detecting communication patterns.
+# Mailing List Networks - Parsing & Analysis
+Parse mailing lists for detecting communication patterns and detecting communities.
 
 [![Code Climate](https://codeclimate.com/github/prasadtalasila/MailingListParser/badges/gpa.svg)](https://codeclimate.com/github/prasadtalasila/MailingListParser)    
 

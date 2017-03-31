@@ -1,0 +1,121 @@
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.optimize import curve_fit
+
+
+def inv_func(x, a, b, c):
+    return a/x + b/(x**2) + c
+
+
+def generate_crt_dist(csv_filename):
+    # Returns Conversation Refresh Times (CRT) as a distribution
+    crt_list = list()
+    with open(csv_filename) as csv_file:
+        next(csv_file)
+        for line in csv_file:
+            crt_list.append(float(line.split(sep=';')[2]))
+    y, bin_edges = np.histogram(sorted(crt_list)[:int(0.9*len(crt_list))], bins=50)
+    y = list(y)
+    x1 = list(bin_edges)
+    x = list()
+    for i1 in range(len(x1) - 1):
+        x.append((x1[i1] + x1[i1 + 1]) / 2)
+    max_y = sum(y)
+    if max_y != 0:
+        y = [y1/max_y for y1 in y]
+    return x, y
+
+
+def generate_crt_curve_fits(foldername):
+    x, y = generate_crt_dist(foldername+'conversation_refresh_times.csv')
+    popt, pcov = curve_fit(inv_func, x, y)
+    a, b, c = popt
+    plt.figure()
+    axes = plt.gca()
+    axes.set_xlim([0, max(x)])
+    axes.set_ylim([0, max(y)])
+    plt.plot(x, y, linestyle='--', color='b', label="Data")
+    x_range = np.linspace(min(x), max(x), 500)
+    plt.plot(x_range, a / x_range + b / (x_range ** 2) + c, 'r-', label="Fitted Curve")
+    plt.legend()
+    plt.savefig(foldername+'conversation_refresh_times.png')
+    plt.close()
+    return popt
+
+
+def generate_cl_dist(csv_filename):
+    # Returns Conversation Length (CL) as a distribution
+    cl_list = list()
+    with open(csv_filename) as csv_file:
+        for line in csv_file:
+            cl_list.append(float(line.split(sep=';')[1]))
+    y, bin_edges = np.histogram(sorted(cl_list)[:int(0.9*len(cl_list))], bins=50)
+    y = list(y)
+    x1 = list(bin_edges)
+    x = list()
+    for i1 in range(len(x1) - 1):
+        x.append((x1[i1] + x1[i1 + 1]) / 2)
+    max_y = sum(y)
+    if max_y != 0:
+        y = [y1 / max_y for y1 in y]
+    return x, y
+
+
+def generate_cl_curve_fits(foldername):
+    x, y = generate_cl_dist(foldername+'conversation_length.csv')
+    try:
+        popt, pcov = curve_fit(inv_func, x, y)
+    except:
+        print("Cannot fit data to exp in", foldername)
+        return None, None, None
+    a, b, c = popt
+    plt.figure()
+    axes = plt.gca()
+    axes.set_xlim([0, max(x)])
+    axes.set_ylim([0, max(y)])
+    plt.plot(x, y, linestyle='--', color='b', label="Data")
+    x_range = np.linspace(min(x), max(x), 500)
+    plt.plot(x_range, a / x_range + b / (x_range ** 2) + c, 'r-', label="Fitted Curve")
+    plt.legend()
+    plt.savefig(foldername+'conversation_length.png')
+    plt.close()
+    return popt
+
+
+def generate_rt_dist(csv_filename):
+    # Returns Response Time (RT) as a distribution
+    rt_list = list()
+    with open(csv_filename) as csv_file:
+        for line in csv_file:
+            rt_list.append(float(line.split(sep=';')[2]))
+    y, bin_edges = np.histogram(sorted(rt_list)[:int(0.9*len(rt_list))], bins=50)
+    y = list(y)
+    x1 = list(bin_edges)
+    x = list()
+    for i1 in range(len(x1) - 1):
+        x.append((x1[i1] + x1[i1 + 1]) / 2)
+    max_y = sum(y)
+    if max_y != 0:
+        y = [y1 / max_y for y1 in y]
+    return x, y
+
+
+def generate_rt_curve_fits(foldername):
+    x, y = generate_rt_dist(foldername+'response_time.csv')
+    try:
+        popt, pcov = curve_fit(inv_func, x, y)
+    except:
+        print("Cannot fit data to exp in", foldername)
+        return None, None, None
+    a, b, c = popt
+    plt.figure()
+    axes = plt.gca()
+    axes.set_xlim([0, max(x)])
+    axes.set_ylim([0, max(y)])
+    plt.plot(x, y, linestyle='--', color='b', label="Data")
+    x_range = np.linspace(min(x), max(x), 500)
+    plt.plot(x_range, a / x_range + b / (x_range ** 2) + c, 'r-', label="Fitted Curve")
+    plt.legend()
+    plt.savefig(foldername+'response_time.png')
+    plt.close()
+    return popt
