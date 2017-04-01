@@ -1,7 +1,9 @@
 import os.path
 
 from author_analysis.curve_fitting import generate_cl_curve_fits, generate_rt_curve_fits
+from thread_analysis.message_activity import generate_message_activity_heatmaps
 from thread_analysis.time_statistics import generate_time_stats_threads
+from thread_analysis.wh_table import generate_wh_table_threads
 
 mailbox_list = [d for d in os.listdir('data') if os.path.isdir(os.path.join('data', d))]
 mailbox_list = ['lkml', 'opensuse', 'opensuse-bugs', 'opensuse-factory', 'opensuse-features', 'opensuse-kernel', 'sakai-devel']
@@ -17,8 +19,8 @@ for mailbox in mailbox_list:
     author_uid_filename = foldername + '/json/author_uid_map.json'
 
     print("Analyzing Thread Network in Mailbox:", mailbox)
-    # generate_message_activity_heatmaps(clean_headers_filename=headers_filename, foldername=foldername)
-    # generate_wh_table_threads(nodelist_filename, edgelist_filename, foldername+'/tables/wh_table_threads.csv')
+    generate_message_activity_heatmaps(clean_headers_filename=headers_filename, foldername=foldername)
+    generate_wh_table_threads(nodelist_filename, edgelist_filename, foldername+'/tables/wh_table_threads.csv')
     generate_time_stats_threads(nodelist_filename, edgelist_filename, headers_filename, foldername+'/tables/', plot=True)
 
     # For a range of months from Jan 2010 to Sep 2016, generate CL, RT curve fits
