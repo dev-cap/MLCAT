@@ -5,9 +5,9 @@ from thread_analysis.message_activity import generate_message_activity_heatmaps
 from thread_analysis.time_statistics import generate_time_stats_threads
 from thread_analysis.wh_table import generate_wh_table_threads
 
-mailbox_list = [d for d in os.listdir('data') if os.path.isdir(os.path.join('data', d))]
+# mailbox_list = [d for d in os.listdir('data') if os.path.isdir(os.path.join('data', d))]
 mailbox_list = ['lkml', 'opensuse', 'opensuse-bugs', 'opensuse-factory', 'opensuse-features', 'opensuse-kernel', 'sakai-devel']
-mailbox_list = ['opensuse']
+mailbox_list = ['sakai-devel']
 
 for mailbox in mailbox_list:
     # Define directories
