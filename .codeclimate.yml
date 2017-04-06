@@ -10,7 +10,7 @@ engines:
   fixme:
     enabled: false
   radon:
-    enabled: true
+    enabled: false
 ratings:
   paths:
   - "**.inc"
