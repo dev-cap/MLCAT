@@ -23,8 +23,7 @@ ratings:
   - "**.php"
   - "**.py"
   - "**.rb"
+  - "**.sh"
 exclude_paths:
-- docs/
-- sample/
+- data/
 - lib/deprecated/
-- test/data/
