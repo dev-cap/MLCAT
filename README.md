@@ -1,6 +1,6 @@
 # MailingListParser
 
-[![Build Status](https://travis-ci.org/achyudhk/Mailing-List-Network-Analyzer.svg?branch=master)](https://travis-ci.org/achyudhk/Mailing-List-Network-Analyzer)
+[![Build Status](https://travis-ci.org/achyudhk/Mailing-List-Network-Analyzer.svg?branch=development)](https://travis-ci.org/achyudhk/Mailing-List-Network-Analyzer)
 [![Requirements Status](https://requires.io/github/achyudhk/Mailing-List-Network-Analyzer/requirements.svg?branch=development)](https://requires.io/github/achyudhk/Mailing-List-Network-Analyzer/requirements/?branch=development)
 [![Code Climate](https://codeclimate.com/github/achyudhk/Mailing-List-Network-Analyzer/badges/gpa.svg)](https://codeclimate.com/github/achyudhk/Mailing-List-Network-Analyzer)
 
