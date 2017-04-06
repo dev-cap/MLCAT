@@ -2,6 +2,7 @@
 
 [![Requirements Status](https://requires.io/github/achyudhk/Mailing-List-Network-Analyzer/requirements.svg?branch=development)](https://requires.io/github/achyudhk/Mailing-List-Network-Analyzer/requirements/?branch=development)
 
+[![Code Climate](https://codeclimate.com/github/achyudhk/Mailing-List-Network-Analyzer/badges/gpa.svg)](https://codeclimate.com/github/achyudhk/Mailing-List-Network-Analyzer)
 
 Parse mailing lists for detecting communication patterns.
 
