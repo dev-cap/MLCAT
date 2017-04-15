@@ -173,3 +173,97 @@ def get_messages_before(time_limit, nodelist_filename):
                 msgs_before_time.add(int(node[0]))
         node_file.close()
     return msgs_before_time
+def add_elements_to_graph(ignore_lat, nodelist_filename, time_limit, msgs_before_time, email_re, edgelist_filename,
+                          discussion_graph):
+    # Add nodes into NetworkX graph by reading from CSV file
+    if not ignore_lat:
+        with open(nodelist_filename, "r") as node_file:
+            for pair in node_file:
+                node = pair.split(';')
+                if get_datetime_object(node[2].strip()) < time_limit:
+                    node[0] = int(node[0])
+                    msgs_before_time.add(node[0])
+                    from_addr = email_re.search(node[1].strip())
+                    from_addr = from_addr.group(0) if from_addr is not None else node[1].strip()
+                    discussion_graph.add_node(node[0], time=node[2].strip(), color="#ffffff", style='bold',
+                                              sender=from_addr)
+            node_file.close()
+        print("Nodes added.")
+
+        # Add edges into NetworkX graph by reading from CSV file
+        with open(edgelist_filename, "r") as edge_file:
+            for pair in edge_file:
+                edge = pair.split(';')
+                edge[0] = int(edge[0])
+                edge[1] = int(edge[1])
+                if edge[0] in msgs_before_time and edge[1] in msgs_before_time:
+                    discussion_graph.add_edge(*edge)
+            edge_file.close()
+        print("Edges added.")
+
+    else:
+        lone_author_threads = get_lone_author_threads(save_file=None, nodelist_filename=nodelist_filename,
+                                                      edgelist_filename=edgelist_filename)
+        # Add nodes into NetworkX graph only if they are not a part of a thread that has only a single author
+        with open(nodelist_filename, "r") as node_file:
+            for pair in node_file:
+                node = pair.split(';')
+                node[0] = int(node[0])
+                if get_datetime_object(node[2].strip()) < time_limit and node[0] not in lone_author_threads:
+                    msgs_before_time.add(node[0])
+                    from_addr = email_re.search(node[1].strip())
+                    from_addr = from_addr.group(0) if from_addr is not None else node[1].strip()
+                    discussion_graph.add_node(node[0], time=node[2].strip(), color="#ffffff", style='bold',
+                                              sender=from_addr)
+            node_file.close()
+        print("Nodes added.")
+
+        if len(msgs_before_time) == 0:
+            return "No messages!"
+
+        # Add edges into NetworkX graph only if they are not a part of a thread that has only a single author
+        with open(edgelist_filename, "r") as edge_file:
+            for pair in edge_file:
+                edge = pair.split(';')
+                edge[0] = int(edge[0])
+                edge[1] = int(edge[1])
+                if edge[0] not in lone_author_threads and edge[1] not in lone_author_threads:
+                    if edge[0] in msgs_before_time and edge[1] in msgs_before_time:
+                        discussion_graph.add_edge(*edge)
+            edge_file.close()
+        print("Edges added.")
+
+
+def load_json(ignore_lat, time_lbound, time_ubound, email_re, json_data, json_filename):
+    if not ignore_lat:
+        with open(json_filename, 'r') as json_file:
+            for chunk in lines_per_n(json_file, 9):
+                json_obj = json.loads(chunk)
+                json_obj['Message-ID'] = int(json_obj['Message-ID'])
+                json_obj['Time'] = datetime.datetime.strptime(json_obj['Time'], "%a, %d %b %Y %H:%M:%S %z")
+                if time_lbound <= json_obj['Time'] < time_ubound:
+                    # print("\nFrom", json_obj['From'], "\nTo", json_obj['To'], "\nCc", json_obj['Cc'])
+                    from_addr = email_re.search(json_obj['From'])
+                    json_obj['From'] = from_addr.group(0) if from_addr is not None else json_obj['From']
+                    json_obj['To'] = set(email_re.findall(json_obj['To']))
+                    json_obj['Cc'] = set(email_re.findall(json_obj['Cc'])) if json_obj['Cc'] is not None else None
+                    # print("\nFrom", json_obj['From'], "\nTo", json_obj['To'], "\nCc", json_obj['Cc'])
+                    json_data[json_obj['Message-ID']] = json_obj
+        print("JSON data loaded.")
+    else:
+        lone_author_threads = get_lone_author_threads(False)
+        with open(json_filename, 'r') as json_file:
+            for chunk in lines_per_n(json_file, 9):
+                json_obj = json.loads(chunk)
+                json_obj['Message-ID'] = int(json_obj['Message-ID'])
+                if json_obj['Message-ID'] not in lone_author_threads:
+                    json_obj['Time'] = datetime.datetime.strptime(json_obj['Time'], "%a, %d %b %Y %H:%M:%S %z")
+                    if time_lbound <= json_obj['Time'] < time_ubound:
+                        # print("\nFrom", json_obj['From'], "\nTo", json_obj['To'], "\nCc", json_obj['Cc'])
+                        from_addr = email_re.search(json_obj['From'])
+                        json_obj['From'] = from_addr.group(0) if from_addr is not None else json_obj['From']
+                        json_obj['To'] = set(email_re.findall(json_obj['To']))
+                        json_obj['Cc'] = set(email_re.findall(json_obj['Cc'])) if json_obj['Cc'] is not None else None
+                        # print("\nFrom", json_obj['From'], "\nTo", json_obj['To'], "\nCc", json_obj['Cc'])
+                        json_data[json_obj['Message-ID']] = json_obj
+        print("JSON data loaded.")
