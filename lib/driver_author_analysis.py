@@ -9,7 +9,7 @@ from author_analysis.time_statistics import conversation_refresh_times
 
 # mailbox_list = [d for d in os.listdir('data') if os.path.isdir(os.path.join('data', d))]
 mailbox_list = ['lkml', 'opensuse-kernel', 'opensuse-features', 'opensuse', 'opensuse-bugs', 'opensuse-factory', 'sakai-devel']
-mailbox_list = ['sakai-devel']
+mailbox_list = ['sakai-devel', 'lkml', 'opensuse', 'opensuse-bugs']
 
 for mailbox in mailbox_list:
     # Define directories
@@ -22,14 +22,14 @@ for mailbox in mailbox_list:
     author_uid_filename = foldername + '/json/author_uid_map.json'
 
     print("Processing Mailbox:", mailbox)
-    generate_hyperedge_distribution(nodelist_filename, edgelist_filename, headers_filename, foldername)
-    generate_keyword_digest(mbox_filename, output_filename=foldername+"/author_keyword_digest.txt", author_uid_filename=author_uid_filename,
-                            json_filename=headers_filename, top_n=250, console_output=False)
-    generate_author_ranking(headers_filename, output_filename=foldername+"/tables/author_ranking.csv", active_score=2, passive_score=1)
-    generate_wh_table_authors(nodelist_filename, edgelist_filename, foldername+'/tables/wh_table_authors.csv')
-    conversation_refresh_times(headers_filename, nodelist_filename, edgelist_filename, foldername, plot=True)
-    generate_kmeans_clustering(mbox_filename, author_uid_filename=author_uid_filename, json_filename=headers_filename,
-                               output_filename=foldername+"/json/kmeans_clustering.json", top_n=250)
+    # generate_hyperedge_distribution(nodelist_filename, edgelist_filename, headers_filename, foldername)
+    # generate_keyword_digest(mbox_filename, output_filename=foldername+"/author_keyword_digest.txt", author_uid_filename=author_uid_filename,
+    #                         json_filename=headers_filename, top_n=250, console_output=False)
+    # generate_author_ranking(headers_filename, output_filename=foldername+"/tables/author_ranking.csv", active_score=2, passive_score=1)
+    # generate_wh_table_authors(nodelist_filename, edgelist_filename, foldername+'/tables/wh_table_authors.csv')
+    # conversation_refresh_times(headers_filename, nodelist_filename, edgelist_filename, foldername, plot=True)
+    # generate_kmeans_clustering(mbox_filename, author_uid_filename=author_uid_filename, json_filename=headers_filename,
+    #                            output_filename=foldername+"/json/kmeans_clustering.json", top_n=250)
 
     # For a range of months from Jan 2010 to Dec 2016, generate CL, RT curve fits
     yearly_curve_fit_coeffs = list()
@@ -47,23 +47,23 @@ for mailbox in mailbox_list:
                                         time_lbound="01 " + month + " " + str(year) + " 00:00:00 +0000",
                                         time_ubound=str(max_day) + " " + month + " " + str(year) + " 23:59:59 +0000")
             if outstr is None:
-                a, b, c = generate_crt_curve_fits(foldername + '/curve_fit/' + month + '_' + str(year) + '/')
-                monthly_curve_fit_coeffs.append((month, year, a, b, c))
+                (a, b, c), rmsd = generate_crt_curve_fits(foldername + '/curve_fit/' + month + '_' + str(year) + '/')
+                monthly_curve_fit_coeffs.append((month, year, a, b, c, rmsd))
 
         outstr = conversation_refresh_times(headers_filename, nodelist_filename, edgelist_filename,
                                    foldername=foldername + '/curve_fit/' + 'FULL_' + str(year) + '/',
                                    time_lbound="01 Jan " + str(year) + " 00:00:00 +0000",
                                    time_ubound="31 Dec " + str(year) + " 23:59:59 +0000")
         if outstr is None:
-            a, b, c = generate_crt_curve_fits(foldername + '/curve_fit/' + 'FULL_' + str(year) + '/')
-            yearly_curve_fit_coeffs.append((year, a, b, c))
+            (a, b, c), rmsd = generate_crt_curve_fits(foldername + '/curve_fit/' + 'FULL_' + str(year) + '/')
+            yearly_curve_fit_coeffs.append((year, a, b, c, rmsd))
 
     with open(foldername + '/curve_fit/' + 'crt_curve_fit_coefficients.csv', 'w') as csv_file:
-        csv_file.write("Monthly CRT Curve-fit Coefficients:\nMonth, Year, A, B, C\n")
-        for month, year, a, b, c in monthly_curve_fit_coeffs:
-            csv_file.write(str(year) + ',' + month + ',' + str(a) + ',' + str(b) + ',' + str(c) + '\n')
-        csv_file.write("\nYearly CRT Curve-fit Coefficients:\nMonth, Year, A, B, C\n")
-        for year, a, b, c in yearly_curve_fit_coeffs:
-            csv_file.write(str(year) + ',' + ',' + str(a) + ',' + str(b) + ',' + str(c) + '\n')
+        csv_file.write("Monthly CRT Curve-fit Coefficients:\nMonth, Year, A, B, C, RMSD\n")
+        for month, year, a, b, c, rmsd in monthly_curve_fit_coeffs:
+            csv_file.write(str(year) + ',' + month + ',' + str(a) + ',' + str(b) + ',' + str(c) + ',' + str(rmsd) + '\n')
+        csv_file.write("\nYearly CRT Curve-fit Coefficients:\nMonth, Year, A, B, C, RMSD\n")
+        for year, a, b, c, rmsd in yearly_curve_fit_coeffs:
+            csv_file.write(str(year) + ',' + ',' + str(a) + ',' + str(b) + ',' + str(c) + ',' + str(rmsd) + '\n')
         csv_file.close()
     print("----------------")

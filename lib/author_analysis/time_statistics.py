@@ -7,11 +7,10 @@ import matplotlib.pyplot as plt
 
 
 def inv_func(x, a, b, c):
-    return a / x + b / (x ** 2) + c
+    return a/x + b/(x**2) + c
 
 
-def conversation_refresh_times(headers_filename, nodelist_filename, edgelist_filename, foldername, time_ubound=None,
-                               time_lbound=None, plot=False):
+def conversation_refresh_times(headers_filename, nodelist_filename, edgelist_filename, foldername, time_ubound = None, time_lbound = None, plot=False):
     """
 
     :param json_data:
@@ -40,14 +39,96 @@ def conversation_refresh_times(headers_filename, nodelist_filename, edgelist_fil
     print("All messages before", time_ubound, "and after", time_lbound, "are being considered.")
 
     # Add nodes into NetworkX graph by reading from CSV file
-    # Added a new variable time_limit to match other modules for refactoring purpose
-    time_limit = time_ubound
-    # Call this new function in read_utils.py
-    add_elements_to_graph(ignore_lat, nodelist_filename, time_limit, msgs_before_time, email_re, edgelist_filename,
-                          discussion_graph)
+    if not ignore_lat:
+        with open(nodelist_filename, "r") as node_file:
+            for pair in node_file:
+                node = pair.split(';', 2)
+                if get_datetime_object(node[2].strip()) < time_ubound:
+                    node[0] = int(node[0])
+                    msgs_before_time.add(node[0])
+                    from_addr = email_re.search(node[1].strip())
+                    from_addr = from_addr.group(0) if from_addr is not None else node[1].strip()
+                    discussion_graph.add_node(node[0], time=node[2].strip(), color="#ffffff", style='bold',
+                                              sender=from_addr)
+            node_file.close()
+        print("Nodes added.")
 
-    # call the new function from read_utils.py
-    load_json(ignore_lat, time_lbound, time_ubound, email_re, json_data, json_filename=headers_filename)
+        if len(msgs_before_time) == 0:
+            return "No messages!"
+
+        # Add edges into NetworkX graph by reading from CSV file
+        with open(edgelist_filename, "r") as edge_file:
+            for pair in edge_file:
+                edge = pair.split(';')
+                edge[0] = int(edge[0])
+                edge[1] = int(edge[1])
+                if edge[0] in msgs_before_time and edge[1] in msgs_before_time:
+                    discussion_graph.add_edge(*edge)
+            edge_file.close()
+        print("Edges added.")
+
+    else:
+        lone_author_threads = get_lone_author_threads(False)
+        # Add nodes into NetworkX graph only if they are not a part of a thread that has only a single author
+        with open(nodelist_filename, "r") as node_file:
+            for pair in node_file:
+                node = pair.split(';', 2)
+                node[0] = int(node[0])
+                if get_datetime_object(node[2].strip()) < time_ubound and node[0] not in lone_author_threads:
+                    msgs_before_time.add(node[0])
+                    from_addr = email_re.search(node[1].strip())
+                    from_addr = from_addr.group(0) if from_addr is not None else node[1].strip()
+                    discussion_graph.add_node(node[0], time=node[2].strip(), color="#ffffff", style='bold',
+                                              sender=from_addr)
+            node_file.close()
+        print("Nodes added.")
+
+        if len(msgs_before_time) == 0:
+            return "No messages!"
+
+        # Add edges into NetworkX graph only if they are not a part of a thread that has only a single author
+        with open(edgelist_filename, "r") as edge_file:
+            for pair in edge_file:
+                edge = pair.split(';')
+                edge[0] = int(edge[0])
+                edge[1] = int(edge[1])
+                if edge[0] not in lone_author_threads and edge[1] not in lone_author_threads:
+                    if edge[0] in msgs_before_time and edge[1] in msgs_before_time:
+                        discussion_graph.add_edge(*edge)
+            edge_file.close()
+        print("Edges added.")
+
+    if not ignore_lat:
+        with open(headers_filename, 'r') as json_file:
+            for chunk in lines_per_n(json_file, 9):
+                json_obj = json.loads(chunk)
+                json_obj['Message-ID'] = int(json_obj['Message-ID'])
+                json_obj['Time'] = datetime.datetime.strptime(json_obj['Time'], "%a, %d %b %Y %H:%M:%S %z")
+                if time_lbound <= json_obj['Time'] < time_ubound:
+                    # print("\nFrom", json_obj['From'], "\nTo", json_obj['To'], "\nCc", json_obj['Cc'])
+                    from_addr = email_re.search(json_obj['From'])
+                    json_obj['From'] = from_addr.group(0) if from_addr is not None else json_obj['From']
+                    json_obj['To'] = set(email_re.findall(json_obj['To']))
+                    json_obj['Cc'] = set(email_re.findall(json_obj['Cc'])) if json_obj['Cc'] is not None else None
+                    # print("\nFrom", json_obj['From'], "\nTo", json_obj['To'], "\nCc", json_obj['Cc'])
+                    json_data[json_obj['Message-ID']] = json_obj
+    else:
+        lone_author_threads = get_lone_author_threads(False)
+        with open(headers_filename, 'r') as json_file:
+            for chunk in lines_per_n(json_file, 9):
+                json_obj = json.loads(chunk)
+                json_obj['Message-ID'] = int(json_obj['Message-ID'])
+                if json_obj['Message-ID'] not in lone_author_threads:
+                    json_obj['Time'] = datetime.datetime.strptime(json_obj['Time'], "%a, %d %b %Y %H:%M:%S %z")
+                    if time_lbound <= json_obj['Time'] < time_ubound:
+                        # print("\nFrom", json_obj['From'], "\nTo", json_obj['To'], "\nCc", json_obj['Cc'])
+                        from_addr = email_re.search(json_obj['From'])
+                        json_obj['From'] = from_addr.group(0) if from_addr is not None else json_obj['From']
+                        json_obj['To'] = set(email_re.findall(json_obj['To']))
+                        json_obj['Cc'] = set(email_re.findall(json_obj['Cc'])) if json_obj['Cc'] is not None else None
+                        # print("\nFrom", json_obj['From'], "\nTo", json_obj['To'], "\nCc", json_obj['Cc'])
+                        json_data[json_obj['Message-ID']] = json_obj
+    print("JSON data loaded.")
 
     # The list crt stores the conversation refresh times between authors as a list of tuples containing the author
     # email IDs and the time in seconds.
@@ -57,7 +138,7 @@ def conversation_refresh_times(headers_filename, nodelist_filename, edgelist_fil
     # are referenced by a set containing the authors' email IDs.
     last_conv_time = dict()
 
-    for msg_id, message in sorted(json_data.items(), key=lambda x1: x1[1]['Time']):
+    for msg_id, message in sorted(json_data.items(), key = lambda x1: x1[1]['Time']):
         if message['Cc'] is None:
             addr_list = message['To']
         else:
@@ -73,10 +154,10 @@ def conversation_refresh_times(headers_filename, nodelist_filename, edgelist_fil
 
             if last_conv_time.get((addr1, addr2), None) is None:
                 last_conv_time[(addr1, addr2)] = (message['Message-ID'], message['Time'])
-            elif not nx.has_path(discussion_graph, message['Message-ID'], last_conv_time[(addr1, addr2)][0]) \
+            elif not nx.has_path(discussion_graph, message['Message-ID'], last_conv_time[(addr1, addr2)][0])\
                     and not nx.has_path(discussion_graph, last_conv_time[(addr1, addr2)][0], message['Message-ID']):
                 crt.append((message['From'], to_address,
-                            (message['Time'] - last_conv_time[((addr1, addr2))][1]).total_seconds()))
+                            (message['Time']-last_conv_time[((addr1, addr2))][1]).total_seconds()))
                 last_conv_time[(addr1, addr2)] = (message['Message-ID'], message['Time'])
 
     if len(crt) != 0:
@@ -91,15 +172,15 @@ def conversation_refresh_times(headers_filename, nodelist_filename, edgelist_fil
             dist_file.close()
 
         if plot:
-            crt = sorted([z for x, y, z in crt if z > 9])[:int(.9 * len(crt))]
+            crt = sorted([z for x, y, z in crt if z > 9])[:int(.9*len(crt))]
             y, x1 = np.histogram(crt, bins=50)
             y = list(y)
             max_y = sum(y)
             if max_y != 0:
                 y = [y1 / max_y for y1 in y]
             x = list()
-            for i1 in range(len(x1) - 1):
-                x.append((x1[i1] + x1[i1 + 1]) / 2)
+            for i1 in range(len(x1)-1):
+                x.append((x1[i1]+x1[i1+1])/2)
             popt, pcov = curve_fit(inv_func, x, y)
             a, b, c = popt
             plt.figure()
@@ -109,7 +190,7 @@ def conversation_refresh_times(headers_filename, nodelist_filename, edgelist_fil
             plt.plot(x, y, linestyle='--', color='b', label="Data")
             plt.savefig(foldername + 'conversation_refresh_times.png')
             x_range = np.linspace(min(x), max(x), 500)
-            plt.plot(x_range, a / x_range + b / (x_range ** 2) + c, 'r-', label="Fitted Curve")
+            plt.plot(x_range, a/x_range + b/(x_range**2) + c, 'r-', label="Fitted Curve")
             plt.legend()
             plt.savefig(foldername + 'conversation_refresh_times_inv.png')
             plt.close()
@@ -117,5 +198,7 @@ def conversation_refresh_times(headers_filename, nodelist_filename, edgelist_fil
 
     else:
         return "No messages!"
+
+
 
 
