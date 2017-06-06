@@ -1,4 +1,5 @@
 import os.path
+import json
 from author_analysis.curve_fitting import generate_crt_curve_fits
 from author_analysis.ranking import generate_author_ranking
 from author_analysis.wh_table import generate_wh_table_authors
@@ -6,14 +7,14 @@ from data_handling.mbox.keyword_clustering import generate_kmeans_clustering
 from data_handling.mbox.keyword_digest import generate_keyword_digest
 from thread_analysis.hypergraph import generate_hyperedge_distribution
 from author_analysis.time_statistics import conversation_refresh_times
-
+os.chdir("..")
 # mailbox_list = [d for d in os.listdir('data') if os.path.isdir(os.path.join('data', d))]
 mailbox_list = ['lkml', 'opensuse-kernel', 'opensuse-features', 'opensuse', 'opensuse-bugs', 'opensuse-factory', 'sakai-devel']
-mailbox_list = ['sakai-devel']
+mailbox_list = ['opensuse-kernel']
 
 for mailbox in mailbox_list:
     # Define directories
-    foldername = "./data/" + mailbox + '/'
+    foldername = "./data/" + mailbox
     mbox_filename = './data/' + mailbox + '/mbox/' + mailbox + '.mbox'
     headers_filename = foldername + '/json/headers.json'
     nodelist_filename = foldername + '/tables/graph_nodes.csv'
