@@ -1,8 +1,7 @@
 # MailingListParser
 
 [![Build Status](https://travis-ci.org/prasadtalasila/MailingListParser.svg?branch=development)](https://travis-ci.org/prasadtalasila/MailingListParser) 
-[![Code Climate](https://codeclimate.com/github/prasadtalasila/MailingListParser/badges/gpa.svg)](https://codeclimate.com/github/prasadtalasila/MailingListParser) [![Requirements Status](https://requires.io/github/prasadtalasila/MailingListParser/requirements.svg?branch=development)](https://requires.io/github/prasadtalasila/MailingListParser/requirements/?branch=development)
-
+[![Code Climate](https://codeclimate.com/github/prasadtalasila/MailingListParser/badges/gpa.svg)](https://codeclimate.com/github/prasadtalasila/MailingListParser) [![Requirements Status](https://requires.io/github/prasadtalasila/MailingListParser/requirements.svg?branch=master)](https://requires.io/github/prasadtalasila/MailingListParser/requirements/?branch=master)
 
 > Parsing mailing lists to detect communication patterns.
 
