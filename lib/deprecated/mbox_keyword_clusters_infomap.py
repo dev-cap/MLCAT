@@ -4,7 +4,7 @@ from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 from sklearn.feature_extraction.text import TfidfVectorizer
 
-from data_handling.mbox.keyword_digest import get_message_body
+from input.mbox.keyword_digest import get_message_body
 from util import custom_stopwords
 from util.read_utils import *
 

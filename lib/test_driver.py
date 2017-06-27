@@ -1,9 +1,9 @@
-from data_handling.check_headers import *
-from data_handling.data_cleanup import remove_invalid_references
-from data_handling.mbox.mbox_hdr import extract_mail_header
-from thread_analysis.graph.edge_list import generate_edge_list
 import traceback
 
+from analysis.thread import generate_edge_list
+from input.check_headers import *
+from input.data_cleanup import remove_invalid_references
+from input.mbox.mbox_hdr import extract_mail_header
 
 mailbox_list_thread_analysis = ['sakai-devel']
 
