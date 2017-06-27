@@ -17,7 +17,7 @@ Some of the visualisable sample outputs can be seen [here](https://github.com/pr
 
 ## Documentation
 
-MailingListParser uses [Sphinx Python Documentation Genertor](http://www.sphinx-doc.org/en/stable/) for generating documentation of the library. The documentation is setup to work with [Google Style Docstrings](http://www.sphinx-doc.org/en/stable/ext/example_google.html) which eases the documentation writing process.
+MailingListParser uses [Sphinx Python Documentation Generator](http://www.sphinx-doc.org/en/stable/) for generating documentation of the library. The documentation is setup to work with [Google Style Docstrings](http://www.sphinx-doc.org/en/stable/ext/example_google.html) which eases the documentation writing process.
 
 The documentation is deployed on the branch `gh-pages` who's updation has been made automatic by the a bash script which otherwise requires to run `make html` in docs directory after every commit.
 
