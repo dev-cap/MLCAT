@@ -1,0 +1,29 @@
+engines:
+  duplication:
+    enabled: true
+    checks:
+      Similar code:
+        enabled: false
+    config:
+      languages:
+      - ruby
+      - javascript
+      - python
+      - php
+  fixme:
+    enabled: false
+  radon:
+    enabled: false
+ratings:
+  paths:
+  - "**.inc"
+  - "**.js"
+  - "**.jsx"
+  - "**.module"
+  - "**.php"
+  - "**.py"
+  - "**.rb"
+  - "**.sh"
+exclude_paths:
+- data/
+- lib/deprecated/
