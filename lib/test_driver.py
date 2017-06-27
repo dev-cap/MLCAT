@@ -1,11 +1,9 @@
 import traceback
 
-from analysis.thread import generate_edge_list
+from analysis.author.edge_list import generate_edge_list
 from input.check_headers import *
 from input.data_cleanup import remove_invalid_references
 from input.mbox.mbox_hdr import extract_mail_header
-
-mailbox_list_thread_analysis = ['sakai-devel']
 
 
 # Test Data Handling Module
@@ -29,7 +27,8 @@ def driver_data_handling(mailbox_list):
             remove_duplicate_headers(json_header_filename=unclean_headers_filename)
             remove_invalid_references(input_json_filename=unclean_headers_filename, output_json_filename=clean_headers_filename, ref_toggle=True)
             generate_edge_list(nodelist_filename=nodelist_filename, edgelist_filename=edgelist_filename,
-                               json_filename=unclean_headers_filename)
+                               threads_json_filename=unclean_headers_filename, author_json_filename=author_uid_filename)
+
         except Exception as inst:
             return traceback.print_exc()
             return inst
@@ -59,4 +58,5 @@ def test_thread_analysis():
     assert driver_author_analysis(mailbox_list) == "Successful"
 
 
+mailbox_list_thread_analysis = ['sakai-devel']
 test_data_handling()

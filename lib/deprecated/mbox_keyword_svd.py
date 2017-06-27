@@ -4,11 +4,7 @@ import numpy as np
 from sklearn.feature_selection import chi2
 from sklearn.utils.extmath import randomized_svd
 
-<<<<<<< HEAD
-from data_handling.mbox.keyword_digest import generate_keyword_digest
-=======
 from input.mbox.keyword_digest import generate_keyword_digest
->>>>>>> development
 
 
 def keyword_clusters_svd():
