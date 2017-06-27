@@ -27,7 +27,7 @@ You can view the documentation hosted on `gh-pages` [here](http://prasadtalasila
 
 Presently, MailingListParser has various end-to-end implemented which reside in the [test directory](https://github.com/prasadtalasila/MailingListParser/tree/development/test/). We use py.test as the unit test framework and you can get a comprehensive idea of the various use cases of each of the modules from the corresponding tests.
 
-![Conversation Characteristics] (https://github.com/prasadtalasila/MailingListParser/blob/development/data/sakai-devel/plots/conversation_chars.png)
+![Conversation Characteristics](https://github.com/prasadtalasila/MailingListParser/blob/development/data/sakai-devel/plots/conversation_chars.png)
 
 ## Installation
 
