@@ -26,7 +26,7 @@ def driver_data_handling(mailbox_list):
             print("Last valid UID in JSON file:", last_uid)
             remove_duplicate_headers(json_header_filename=unclean_headers_filename)
             remove_invalid_references(input_json_filename=unclean_headers_filename, output_json_filename=clean_headers_filename, ref_toggle=True)
-            generate_edge_list(nodelist_filename=nodelist_filename, edgelist_filename=edgelist_filename,
+            generate_edge_list(author_nodelist_filename=nodelist_filename, author_edgelist_filename=edgelist_filename,
                                threads_json_filename=unclean_headers_filename, author_json_filename=author_uid_filename)
 
         except Exception as inst:
@@ -41,6 +41,7 @@ def test_data_handling():
 
 
 def driver_author_analysis(mailbox_list):
+    # TODO: Add test cases for analysis.thread here
     return "Successful"
 
 
@@ -50,6 +51,7 @@ def test_author_analysis():
 
 
 def driver_thread_analysis(mailbox_list):
+    # TODO: Add test cases for analysis.thread here
     return "Successful"
 
 
