@@ -12,7 +12,7 @@ Welcome to the MailingListParser project! The main objective of this project is 
 
 ## Usage
 
-The library's working has been modularised into many modules namely data_handling, author_analysis amd thread_analysis. The [test_driver.py file](https://github.com/prasadtalasila/MailingListParser/blob/development/lib/test_driver.py) presents a brief overview of how one can use IRCLogParser for parsing and analysis.
+The library's working has been modularised into many modules namely data_handling, author_analysis and thread_analysis. The [test_driver.py file](https://github.com/prasadtalasila/MailingListParser/blob/development/lib/test_driver.py) presents a brief overview of how one can use MailingListParser for parsing and analysis.
 
 Some of the visualisable sample outputs can be seen [here](https://github.com/prasadtalasila/MailingListParser/tree/development/data), categorized into various datasets, giving an idea about this project's capabilites and as to what kind of insights we can and we plan to derive from the datasets.
 
@@ -35,4 +35,4 @@ Run `pip install -r requirements.txt` in the root directory to install these dep
 
 ## License
 
-IRCLogParser is available under the [MIT License](https://github.com/prasadtalasila/IRCLogParser/tree/master/LISENCE.txt)
+MailingListParser is available under the [MIT License](https://github.com/prasadtalasila/IRCLogParser/tree/master/LISENCE.txt)
