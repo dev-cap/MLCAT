@@ -10,6 +10,10 @@ Welcome to MailingListParser's documentation!
    :maxdepth: 2
    :caption: Contents:
 
+   introduction
+   project_goals
+   analysis_techniques
+   code_documentation
 
 
 Indices and tables
