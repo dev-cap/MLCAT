@@ -1,7 +1,8 @@
 # MailingListParser
 
 [![Build Status](https://travis-ci.org/prasadtalasila/MailingListParser.svg?branch=development)](https://travis-ci.org/prasadtalasila/MailingListParser) 
-[![Code Climate](https://codeclimate.com/github/prasadtalasila/MailingListParser/badges/gpa.svg)](https://codeclimate.com/github/prasadtalasila/MailingListParser) [![Requirements Status](https://requires.io/github/prasadtalasila/MailingListParser/requirements.svg?branch=master)](https://requires.io/github/prasadtalasila/MailingListParser/requirements/?branch=master)
+[![Code Climate](https://codeclimate.com/github/prasadtalasila/MailingListParser/badges/gpa.svg)](https://codeclimate.com/github/prasadtalasila/MailingListParser) 
+[![Requirements Status](https://requires.io/github/prasadtalasila/MailingListParser/requirements.svg?branch=master)](https://requires.io/github/prasadtalasila/MailingListParser/requirements/?branch=master)
 
 > Parsing mailing lists to detect communication patterns.
 
@@ -11,7 +12,7 @@ Welcome to the MailingListParser project! The main objective of this project is 
 
 ## Usage
 
-The library's working has been modularised into many modules namely data_handling, author_analysis amd thread_analysis. The [test_driver.py file](https://github.com/prasadtalasila/MailingListParser/blob/development/lib/test_driver.py) presents a brief overview of how one can use MailingListParser for parsing and analysis.
+The library's working has been modularised into many modules namely input, analysis and util. The [test_driver.py file](https://github.com/achyudhk/Mailing-List-Network-Analyzer/blob/development/lib/test_driver.py) presents a brief overview of how one can use MailingListParser for parsing and analysis.
 
 Some of the visualisable sample outputs can be seen [here](https://github.com/prasadtalasila/MailingListParser/tree/development/data), categorized into various datasets, giving an idea about this project's capabilites and as to what kind of insights we can and we plan to derive from the datasets.
 
@@ -26,6 +27,8 @@ You can view the documentation hosted on `gh-pages` [here](http://prasadtalasila
 ## Testing Framework
 
 Presently, MailingListParser has various end-to-end implemented which reside in the [test directory](https://github.com/prasadtalasila/MailingListParser/tree/development/test/). We use py.test as the unit test framework and you can get a comprehensive idea of the various use cases of each of the modules from the corresponding tests.
+
+![Conversation Characteristics](https://github.com/achyudhk/Mailing-List-Network-Analyzer/blob/development/data/sakai-devel/plots/conversation_chars.png)
 
 ## Installation
 
