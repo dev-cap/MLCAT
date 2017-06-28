@@ -8,7 +8,7 @@
 
 Welcome to the MailingListParser project! The main objective of this project is to develop a mailing list parser to extract information from a mailing list such as senders,receivers, time stamps etc and then use this to construct an organizational (or communication) structure like conversation thread hypergraphs for further analysis. We utilize social network analysis techniques to examine the relationships between authors on common mailing lists like LKML, Sakai etc. Study of these interactions on different levels helps us in deriving the local and global communication patterns between users on different threads. This project draws its inspiration from various fields such as data mining, graph theory, information retrieval and inferential modelling in order to form predictive models that help in understanding certain intricate characteristics of a social network. This involves analyzing graphs with, say, authors as nodes and their correspondences as edges, to study the details about various network graph properties such as density, size, node centrality, degree, connectedness etc.
 
-![Vertex Clustering](https://github.com/prasadtalasila/MailingListParser/blob/master/data/lkml/graphs/vertex_clustering_infomap.png)
+![Vertex Clustering](https://raw.githubusercontent.com/prasadtalasila/MailingListParser/master/data/lkml/graphs/vertex_clustering_infomap.png)
 
 ## Usage
 
@@ -28,7 +28,7 @@ You can view the documentation hosted on `gh-pages` [here](http://prasadtalasila
 
 Presently, MailingListParser has various end-to-end implemented which reside in the [test directory](https://github.com/prasadtalasila/MailingListParser/tree/development/test/). We use py.test as the unit test framework and you can get a comprehensive idea of the various use cases of each of the modules from the corresponding tests.
 
-![Conversation Characteristics](https://github.com/achyudhk/Mailing-List-Network-Analyzer/blob/development/data/sakai-devel/plots/conversation_chars.png)
+![Conversation Characteristics](https://raw.githubusercontent.com/achyudhk/Mailing-List-Network-Analyzer/development/data/sakai-devel/plots/conversation_chars.png)
 
 ## Installation
 
