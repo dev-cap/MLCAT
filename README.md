@@ -20,9 +20,9 @@ Some of the visualisable sample outputs can be seen [here](https://github.com/pr
 
 MailingListParser uses [Sphinx Python Documentation Generator](http://www.sphinx-doc.org/en/stable/) for generating documentation of the library. The documentation is setup to work with [Google Style Docstrings](http://www.sphinx-doc.org/en/stable/ext/example_google.html) which eases the documentation writing process.
 
-The documentation is deployed on the branch `gh-pages` who's updation has been made automatic by the a bash script which otherwise requires to run `make html` in docs directory after every commit.
+The documentation can be found under 'docs/' whose updation has been made automatic by the a bash script which otherwise requires to run `make html` in the 'docs/' directory after every commit.
 
-You can view the documentation hosted on `gh-pages` [here](http://prasadtalasila.github.io/MailingListParser/).
+You can view the documentation hosted on `gh-pages` [here](http://achyudh.xyz/Mailing-List-Network-Analyzer/).
 
 ## Testing Framework
 
