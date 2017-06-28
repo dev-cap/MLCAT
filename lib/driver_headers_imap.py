@@ -1,7 +1,6 @@
-from data_handling.data_cleanup import *
-
-from data_handling.check_headers import *
-from thread_analysis.graph.edge_list import generate_edge_list
+from analysis.thread import generate_edge_list
+from input.check_headers import *
+from input.data_cleanup import *
 
 # Uncomment the following line to update "uid_map.json"
 # write_uid_map(1, 57635)
