@@ -2,9 +2,9 @@ import email
 import imaplib
 import json
 
-from data_handling.imap.connection import open_connection
+from input.imap.connection import open_connection
 
-from data_handling.imap.header import get_mail_header
+from input.imap.header import get_mail_header
 from util.read_utils import lines_per_n
 
 

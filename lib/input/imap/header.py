@@ -2,7 +2,7 @@ import email
 import imaplib
 import json
 
-from data_handling.imap.connection import open_connection
+from input.imap.connection import open_connection
 from util.json_encoder import NoIndent, MyEncoder
 from util.read_utils import *
 

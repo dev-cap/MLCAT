@@ -1,7 +1,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from sklearn.metrics import mean_squared_error
 from scipy.optimize import curve_fit
-
+plt.rcParams['font.size'] = 14
 
 def inv_func(x, a, b, c):
     return a/x + b/(x**2) + c
@@ -30,6 +31,8 @@ def generate_crt_curve_fits(foldername):
     x, y = generate_crt_dist(foldername+'conversation_refresh_times.csv')
     popt, pcov = curve_fit(inv_func, x, y)
     a, b, c = popt
+    # Find RMS error and Normalized-RMS error
+    rms =  mean_squared_error(inv_func(np.array(x), *popt), y)
     plt.figure()
     axes = plt.gca()
     axes.set_xlim([0, max(x)])
@@ -38,9 +41,11 @@ def generate_crt_curve_fits(foldername):
     x_range = np.linspace(min(x), max(x), 500)
     plt.plot(x_range, a / x_range + b / (x_range ** 2) + c, 'r-', label="Fitted Curve")
     plt.legend()
+    plt.ylabel('pdf')
+    plt.xlabel('time (in secs)')
     plt.savefig(foldername+'conversation_refresh_times.png')
     plt.close()
-    return popt
+    return popt, rms
 
 
 def generate_cl_dist(csv_filename):
@@ -69,6 +74,8 @@ def generate_cl_curve_fits(foldername):
         print("Cannot fit data to exp in", foldername)
         return None, None, None
     a, b, c = popt
+    # Find RMS error and Normalized-RMS error
+    rms =  mean_squared_error(inv_func(np.array(x), *popt), y)**2
     plt.figure()
     axes = plt.gca()
     axes.set_xlim([0, max(x)])
@@ -77,9 +84,11 @@ def generate_cl_curve_fits(foldername):
     x_range = np.linspace(min(x), max(x), 500)
     plt.plot(x_range, a / x_range + b / (x_range ** 2) + c, 'r-', label="Fitted Curve")
     plt.legend()
+    plt.ylabel('pdf')
+    plt.xlabel('time (in secs)')
     plt.savefig(foldername+'conversation_length.png')
     plt.close()
-    return popt
+    return popt, rms
 
 
 def generate_rt_dist(csv_filename):
@@ -108,6 +117,8 @@ def generate_rt_curve_fits(foldername):
         print("Cannot fit data to exp in", foldername)
         return None, None, None
     a, b, c = popt
+    # Find RMS error and Normalized-RMS error
+    rms =  mean_squared_error(inv_func(np.array(x), *popt), y)**2
     plt.figure()
     axes = plt.gca()
     axes.set_xlim([0, max(x)])
@@ -116,6 +127,8 @@ def generate_rt_curve_fits(foldername):
     x_range = np.linspace(min(x), max(x), 500)
     plt.plot(x_range, a / x_range + b / (x_range ** 2) + c, 'r-', label="Fitted Curve")
     plt.legend()
+    plt.ylabel('pdf')
+    plt.xlabel('time (in secs)')
     plt.savefig(foldername+'response_time.png')
     plt.close()
-    return popt
+    return popt, rms

@@ -7,10 +7,9 @@ from nltk.stem import WordNetLemmatizer
 from sklearn.cluster import KMeans
 from sklearn.feature_extraction.text import TfidfVectorizer
 
-from author_analysis.ranking import generate_author_ranking
+from analysis.author import generate_author_ranking
 from util import custom_stopwords
 from util.read_utils import *
-from data_handling.mbox import keyword_digest
 
 
 def get_top_authors(top_n, json_filename):
@@ -33,8 +32,54 @@ def save_sparse_csr(filename, array):
 
 
 def get_message_body(message):
-    msg_body=keyword_digest.get_message_body(message)
+    """
+
+    :param message:
+    :return:
+    """
+    msg_body = None
+    if message.is_multipart():
+        for part in message.walk():
+            if part.is_multipart():
+                for subpart in part.walk():
+                    msg_body = subpart.get_payload(decode=False)
+            else:
+                msg_body = part.get_payload(decode=False)
+    else:
+        msg_body = message.get_payload(decode=False)
+    msg_body = msg_body.splitlines()
+    for num in range(len(msg_body)):
+        if msg_body[num]:
+            if msg_body[num] == "---":
+                msg_body = msg_body[:num]
+                break
+            if msg_body[num][0] == '>' or msg_body[num][0] == '+' or msg_body[num][0] == '-' or msg_body[num][0] == '@':
+                msg_body[num] = ""
+                if num > 0:
+                    msg_body[num - 1] = ""
+            elif msg_body[num][:3] == "Cc:":
+                msg_body[num] = ""
+            elif msg_body[num][:14] == "Signed-off-by:":
+                msg_body[num] = ""
+            elif msg_body[num][:9] == "Acked-by:":
+                msg_body[num] = ""
+            elif msg_body[num][:5] == "From:":
+                msg_body[num] = ""
+            elif msg_body[num][:10] == "Tested-by:":
+                msg_body[num] = ""
+            elif msg_body[num][:12] == "Reported-by:":
+                msg_body[num] = ""
+            elif msg_body[num][:12] == "Reviewed-by:":
+                msg_body[num] = ""
+            elif msg_body[num][:5] == "Link:":
+                msg_body[num] = ""
+            elif msg_body[num][:13] == "Suggested-by:":
+                msg_body[num] = ""
+    msg_body = [x.strip() for x in msg_body]
+    msg_body = [x for x in msg_body if x != ""]
+    msg_body = '\n'.join(msg_body)
     return msg_body
+
 
 def generate_kmeans_clustering(mbox_filename, output_filename, author_uid_filename, json_filename, top_n = None):
     """

@@ -41,13 +41,38 @@ msgs_before_time = set()
 time_limit = get_datetime_object(time_limit)
 print("All messages before", time_limit, "are being considered.")
 
-time_lbound = "Sun, 01 Jan 2001 00:00:00 +0000"
-time_lbound = get_datetime_object(time_lbound)
-time_ubound=time_limit
-print("All messages before", time_ubound, "and after", time_lbound, "are being considered.")
-
-#call the method from read_utils
-load_json(ignore_lat, time_lbound, time_ubound, email_re, json_data, json_filename="clean_data.json")
+if not ignore_lat:
+    with open('clean_data.json', 'r') as json_file:
+        for chunk in lines_per_n(json_file, 9):
+            json_obj = json.loads(chunk)
+            json_obj['Message-ID'] = int(json_obj['Message-ID'])
+            json_obj['Time'] = datetime.datetime.strptime(json_obj['Time'], "%a, %d %b %Y %H:%M:%S %z")
+            if json_obj['Time'] < time_limit:
+                # print("\nFrom", json_obj['From'], "\nTo", json_obj['To'], "\nCc", json_obj['Cc'])
+                from_addr = email_re.search(json_obj['From'])
+                json_obj['From'] = from_addr.group(0) if from_addr is not None else json_obj['From']
+                json_obj['To'] = set(email_re.findall(json_obj['To']))
+                json_obj['Cc'] = set(email_re.findall(json_obj['Cc'])) if json_obj['Cc'] is not None else None
+                # print("\nFrom", json_obj['From'], "\nTo", json_obj['To'], "\nCc", json_obj['Cc'])
+                json_data[json_obj['Message-ID']] = json_obj
+    print("JSON data loaded.")
+else:
+    lone_author_threads = get_lone_author_threads(False)
+    with open('clean_data.json', 'r') as json_file:
+        for chunk in lines_per_n(json_file, 9):
+            json_obj = json.loads(chunk)
+            json_obj['Message-ID'] = int(json_obj['Message-ID'])
+            if json_obj['Message-ID'] not in lone_author_threads:
+                json_obj['Time'] = datetime.datetime.strptime(json_obj['Time'], "%a, %d %b %Y %H:%M:%S %z")
+                if json_obj['Time'] < time_limit:
+                    # print("\nFrom", json_obj['From'], "\nTo", json_obj['To'], "\nCc", json_obj['Cc'])
+                    from_addr = email_re.search(json_obj['From'])
+                    json_obj['From'] = from_addr.group(0) if from_addr is not None else json_obj['From']
+                    json_obj['To'] = set(email_re.findall(json_obj['To']))
+                    json_obj['Cc'] = set(email_re.findall(json_obj['Cc'])) if json_obj['Cc'] is not None else None
+                    # print("\nFrom", json_obj['From'], "\nTo", json_obj['To'], "\nCc", json_obj['Cc'])
+                    json_data[json_obj['Message-ID']] = json_obj
+    print("JSON data loaded.")
 
 for msg_id, message in json_data.items():
     if message['Cc'] is None:
@@ -63,3 +88,4 @@ print("No. of Weakly Connected Components:", nx.number_weakly_connected_componen
 print("No. of Strongly Connected Components:", nx.number_strongly_connected_components(author_graph))
 print("Nodes:", nx.number_of_nodes(author_graph))
 print("Edges:", nx.number_of_edges(author_graph))
+

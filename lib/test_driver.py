@@ -1,11 +1,9 @@
-from data_handling.check_headers import *
-from data_handling.data_cleanup import remove_invalid_references
-from data_handling.mbox.mbox_hdr import extract_mail_header
-from thread_analysis.graph.edge_list import generate_edge_list
 import traceback
 
-
-mailbox_list_thread_analysis = ['sakai-devel']
+from analysis.thread.graph.edge_list import generate_edge_list
+from input.check_headers import *
+from input.data_cleanup import remove_invalid_references
+from input.mbox.mbox_hdr import extract_mail_header
 
 
 # Test Data Handling Module
@@ -28,8 +26,8 @@ def driver_data_handling(mailbox_list):
             print("Last valid UID in JSON file:", last_uid)
             remove_duplicate_headers(json_header_filename=unclean_headers_filename)
             remove_invalid_references(input_json_filename=unclean_headers_filename, output_json_filename=clean_headers_filename, ref_toggle=True)
-            generate_edge_list(nodelist_filename=nodelist_filename, edgelist_filename=edgelist_filename,
-                               json_filename=unclean_headers_filename)
+            generate_edge_list(nodelist_filename=nodelist_filename, edgelist_filename=edgelist_filename, json_filename=unclean_headers_filename)
+
         except Exception as inst:
             return traceback.print_exc()
             return inst
@@ -42,6 +40,7 @@ def test_data_handling():
 
 
 def driver_author_analysis(mailbox_list):
+    # TODO: Add test cases for analysis.thread here
     return "Successful"
 
 
@@ -51,6 +50,7 @@ def test_author_analysis():
 
 
 def driver_thread_analysis(mailbox_list):
+    # TODO: Add test cases for analysis.thread here
     return "Successful"
 
 
@@ -59,4 +59,5 @@ def test_thread_analysis():
     assert driver_author_analysis(mailbox_list) == "Successful"
 
 
+mailbox_list_thread_analysis = ['sakai-devel']
 test_data_handling()
