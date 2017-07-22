@@ -3,7 +3,7 @@
 
 # You can set these variables from the command line.
 SPHINXOPTS    =
-SPHINXBUILD   = python3 -c "import sys,sphinx;sys.exit(sphinx.main(sys.argv))"
+SPHINXBUILD   = sphinx-build
 SPHINXPROJ    = MailingListParser
 SOURCEDIR     = source
 BUILDDIR      = build
