@@ -8,7 +8,7 @@ def generate_author_ranking(json_filename, output_filename, active_score, passiv
     :param json_data:
     :param active_score:
     :param passive_score:
-    :return:
+    :return: Sorted author scores
     """
 
     # Time limit can be specified here in the form of a timestamp in one of the identifiable formats. All messages

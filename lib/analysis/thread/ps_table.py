@@ -5,6 +5,7 @@ import networkx as nx
 
 def generate_participant_size_table(ignore_lat=False, time_limit=None):
     """
+
     This function generate a table containing the number of mails in a thread and the corresponding aggregate count
     of the number of threads that have that number of mails in them, along with the total number of authors who have
     participated in such threads and the average number of authors. This table is then written to a CSV file.

@@ -9,7 +9,11 @@ def inv_func(x, a, b, c):
 
 
 def generate_crt_dist(csv_filename):
-    # Returns Conversation Refresh Times (CRT) as a distribution
+    """
+
+    :param csv_filename: The csv filename as a parameter
+    :return: CRT distribution
+    """
     crt_list = list()
     with open(csv_filename) as csv_file:
         next(csv_file)
@@ -28,6 +32,11 @@ def generate_crt_dist(csv_filename):
 
 
 def generate_crt_curve_fits(foldername):
+    """
+
+    :param foldername: Folder name as a parameter
+    :return:
+    """
     x, y = generate_crt_dist(foldername+'conversation_refresh_times.csv')
     popt, pcov = curve_fit(inv_func, x, y)
     a, b, c = popt
@@ -49,7 +58,11 @@ def generate_crt_curve_fits(foldername):
 
 
 def generate_cl_dist(csv_filename):
-    # Returns Conversation Length (CL) as a distribution
+    """
+
+    :param csv_filename: The csv filename as a parameter
+    :return: Conversation Length (CL) as a distribution
+    """
     cl_list = list()
     with open(csv_filename) as csv_file:
         for line in csv_file:
@@ -67,6 +80,11 @@ def generate_cl_dist(csv_filename):
 
 
 def generate_cl_curve_fits(foldername):
+    """
+
+    :param foldername: Folder name as a parameter
+    :return:
+    """
     x, y = generate_cl_dist(foldername+'conversation_length.csv')
     try:
         popt, pcov = curve_fit(inv_func, x, y)
@@ -92,7 +110,11 @@ def generate_cl_curve_fits(foldername):
 
 
 def generate_rt_dist(csv_filename):
-    # Returns Response Time (RT) as a distribution
+    """
+
+    :param csv_filename: The csv filename as a parameter
+    :return: Response Time (RT) as a distribution
+    """
     rt_list = list()
     with open(csv_filename) as csv_file:
         for line in csv_file:
@@ -110,6 +132,11 @@ def generate_rt_dist(csv_filename):
 
 
 def generate_rt_curve_fits(foldername):
+    """
+
+    :param foldername: Folder name as a parameter
+    :return:
+    """
     x, y = generate_rt_dist(foldername+'response_time.csv')
     try:
         popt, pcov = curve_fit(inv_func, x, y)

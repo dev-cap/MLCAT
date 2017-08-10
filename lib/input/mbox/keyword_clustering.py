@@ -13,6 +13,11 @@ from util.read_utils import *
 
 
 def get_top_authors(top_n, json_filename):
+    """
+
+    
+    :return:Top authors and indices
+    """
     top_authors = set()
     top_authors_index = dict()
     author_scores = generate_author_ranking(json_filename, output_filename=None, active_score=2, passive_score=1, write_to_file=False)
@@ -35,7 +40,7 @@ def get_message_body(message):
     """
 
     :param message:
-    :return:
+    :return:Message Body
     """
     msg_body = None
     if message.is_multipart():
@@ -83,6 +88,7 @@ def get_message_body(message):
 
 def generate_kmeans_clustering(mbox_filename, output_filename, author_uid_filename, json_filename, top_n = None):
     """
+
     From the .MBOX file, this function extracts the email content is extracted using two predefined classes
     available in the Python Standard Library: Mailbox and Message. Feature vectors are created for all the authors
     by obtaining meaningful words from the mail content, after removing the stop words, using NLTK libraries.
