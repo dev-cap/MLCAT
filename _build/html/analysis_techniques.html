@@ -1,0 +1,363 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Analysis Techniques &#8212; MailingListParser 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Code for Documentation" href="modules.html" />
+    <link rel="prev" title="What does MailingListParser plan to accomplish?" href="project_goals.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="modules.html" title="Code for Documentation"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="project_goals.html" title="What does MailingListParser plan to accomplish?"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">MailingListParser 0.1 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="analysis-techniques">
+<h1>Analysis Techniques<a class="headerlink" href="#analysis-techniques" title="Permalink to this headline">¶</a></h1>
+<p>This section consists of different analysis procedures that are used by MailingListParser for examining the author interactions from different mailing list threads or mails of the same thread.</p>
+<div class="section" id="data-preprocessing">
+<h2>Data Preprocessing<a class="headerlink" href="#data-preprocessing" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="data-collection-methodology-for-imap">
+<h3>Data Collection Methodology for IMAP<a class="headerlink" href="#data-collection-methodology-for-imap" title="Permalink to this headline">¶</a></h3>
+<p>From the email stream of the mailing list that has been cleaned from spam, the RFC 822 mail headers are extracted and the From, To, CC, Message-ID, In-Reply-To and the time-stamp fields are saved to a JSON file (&#8220;headers.json&#8221;) using the <strong>imap_hdr.py</strong> and <strong>imap_conn.py</strong> modules. The mapping between the UIDs and Message-IDs are stored in another JSON file (&#8220;thread_uid_map.json&#8221;) in order to facilitate the reconstruction of the threads from the Reference or In-Reply-To fields. Since we have access to the mails after the time of subscription to the mailing list, if any of the mails contain a reference to mails before subscription (in the form of a 0 in its list of references), then they represent some sort of incomplete information and cannot be included for analysis. The JSON file is cleaned to remove such orphaned children nodes using the <strong>&#8220;data_cleanup.py&#8221;</strong> module and saved to clean_data.json.</p>
+</div>
+<div class="section" id="data-collection-methodology-for-mbox">
+<h3>Data Collection Methodology for MBOX<a class="headerlink" href="#data-collection-methodology-for-mbox" title="Permalink to this headline">¶</a></h3>
+<p>From the .MBOX file, the header information is extracted using two predefined classes available in the Python Standard Library: Mailbox and Message, for accessing and manipulating on-disk mailboxes and the messages they contain respectively. Mailbox offers a dictionary-like mapping from keys to message and messages can be a string or a file and that contain an RFC 2822-compliant message, which is read and parsed. The messages are parsed and the header information containing the fields From, To, CC, Message-ID, In-Reply-To, Reference and Time is extracted for each message in the .MBOX file using the <strong>mbox_hdr.py</strong> module and is then saved to a JSON file (&#8220;headers.json&#8221;). The Reference and In-Reply-To fields are used to reconstruct the thread and they point to either a Message_ID or to 0 (referring to a mail not present in the mailbox file). Hence an unique Message-ID is provided to each message in the .MBOX file in the ascending order of their arrival times. The The mapping between the UIDs and Message-IDs are stored in another JSON file (&#8220;thread_uid_map.json&#8221;) in order to facilitate the reconstruction of the threads. The JSON file is then cleaned to remove orphaned children nodes using the <strong>&#8220;data_cleanup.py&#8221;</strong> module and saved to clean_data.json in a process that is similar to the one used for headers fetched directly from the IMAP servers.</p>
+</div>
+</div>
+<div class="section" id="concepts">
+<h2>Concepts<a class="headerlink" href="#concepts" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="message-thread-graphs">
+<h3>Message Thread Graphs<a class="headerlink" href="#message-thread-graphs" title="Permalink to this headline">¶</a></h3>
+<p>The idea is to generate one graph for each message thread. Each messaging thread is a directed tree with directed edge going from child mail to parent mail. If a mail elicits two responses these two child nodes are shown at the same level.</p>
+</div>
+<div class="section" id="author-interaction-graphs">
+<h3>Author Interaction Graphs<a class="headerlink" href="#author-interaction-graphs" title="Permalink to this headline">¶</a></h3>
+<p>These graphs that show the interaction between authors either through multiple edges or through edge weights. There is an edge from one author to another if the former sent a message to the latter. These graphs can be generated either thread-wise and for the entire mailing list.</p>
+</div>
+<div class="section" id="author-message-bipartite-graphs">
+<h3>Author Message Bipartite Graphs<a class="headerlink" href="#author-message-bipartite-graphs" title="Permalink to this headline">¶</a></h3>
+<p>The bipartite graph among all the users and messages in the mailing list such that all the users are on one side and all the messages will be on another. A directed edge would be drawn from author to the message sent by the author. A directed edge would be drawn from message to all the users who are in To and CC fields. A projection of this bipartite graph is then generated.</p>
+</div>
+<div class="section" id="width-height-tables">
+<h3>Width-Height Tables<a class="headerlink" href="#width-height-tables" title="Permalink to this headline">¶</a></h3>
+<p>The width height table is a representation of the number of nodes in the graph that have a given height and a given number of children in a tabular form. The width height table for the authors is a representation of the number of total and new authors in a thread aggregated at a given generation.</p>
+</div>
+</div>
+<div class="section" id="analysis">
+<h2>Analysis<a class="headerlink" href="#analysis" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="analysis-of-threads">
+<h3>Analysis of Threads<a class="headerlink" href="#analysis-of-threads" title="Permalink to this headline">¶</a></h3>
+<p>The analysis of the threads in the mailing list utilizes the graph_nodes.csv, graph_edges.csv and clean_data.json files generated during the data collection process. The graph_generate_dot.py and graph_generate_gexf.py modules generate the graph files in GEXF, DOT and PNG formats, which are the used for further analysis and for verification of results on a thread level basis. The wh_table_threads.py module generates a width height table for the authors graph and saves it as a CSV file. The width height table is a representation of the number of nodes in the graph that have a given height and a given number of children in a tabular form. This table can further be used for non-parametric estimation. The time_statistics_threads.py module generates a frequency distribution of the inter-arrival times between nodes in threads and another distribution of the length of threads.</p>
+<p>_**A note on ignoring lone author threads:<a href="#id1"><span class="problematic" id="id2">**</span></a>_ Many of the analysis modules allow for ignoring threads that have only a single author. This is preferable as such threads don&#8217;t correspond to interactions between individuals and more often than not are patches. If another author joins the thread, then it becomes a conversation between multiple individuals and the thread is no longer ignored in the analysis. Further, this allows for comparisons of the results of the analysis between the cases where such threads are ignored or taken into consideration.</p>
+<p>The analysis was centered on the following topics:
+1. <strong>thread width-height table:</strong> we need to perform frequency interpretation of this table with 1% and 5% significance cutoffs; we can also try the non-parametric estimation / kernel density functions on the frequency data to summarize the data into a standard form.
+2. <strong>thread length analysis</strong>
+3. <strong>message arrival time analysis:</strong> Initial hypothesis was that the message arrival time would be Poisson, however it is not the case. A proper fitting to a well-known distribution would be good.</p>
+<div class="section" id="server-model">
+<h4>Server model<a class="headerlink" href="#server-model" title="Permalink to this headline">¶</a></h4>
+<p>A suggestion from Ramprasad Joshi is to model each user as a server in a circle. The servers can arrive and depart at a predictable churn rate. The servers can issue tokens aka ask questions on the mailing list; the issued tokens can be consumed by any server including the source itself. A source consuming its own token is equivalent to a source sending an email question and answering the question herself. A service model has to be evolved on top of this theoretical framework.
+A few questions that we can ask on this framework are:
+1. What is the churn rate? Is it an invariant?
+1. What are the characteristics of message arrival and servicing times?</p>
+</div>
+</div>
+<div class="section" id="analysis-of-author-interactions">
+<h3>Analysis of Author Interactions<a class="headerlink" href="#analysis-of-author-interactions" title="Permalink to this headline">¶</a></h3>
+<p>The author-centric analysis primarily uses clean_data.json for referring to the To, CC, and From fields as indexed by the graph_nodes.csv and graph_edges.csv files. The analysis of the temporal behaviour of the authors is done on an author_centric temporal multigraph or a weighted graph depending on the requirements. These graphs are generated by the graph_generate_authors.py module. This graph is also used to generate a width height table for the authors which is a representation of the number of total and new authors in a thread aggregated at a given generation. The participant_size table is also generated which is a series between the number of mails in a thread and the corresponding number of authors who have participated in that thread. There seems to be a correlation between the number of authors participating in a discussion and the number of generations in (length of) a discussion thread.</p>
+<p>We can take three kinds of graphs for any temporal graph. They are: aggregate graph, time window graph, probabilistic edge decay (PED) graph. All three of these must be tried on the authors&#8217; interaction graph. Another interesting aspect of this graph is to find the natural recurrence cycle for the graph. Once the graphs are created, we can find the following network properties:
+1. Degree distribution
+1. Popular authors
+1. Mean path length and other relevant centrality measures
+1. Community detection</p>
+<div class="section" id="community-detection">
+<h4>Community Detection<a class="headerlink" href="#community-detection" title="Permalink to this headline">¶</a></h4>
+<p>Community detection algorithms are used to find the clustering and modularity coefficients across timescales, and associate relevant labels for communities and the authors belonging to them through text mining. The <em>Infomap community detection algorithm</em> pertaining to weighted and directed links was used for the multilevel community detection analysis. The Infomap algorithm is based on information theoretic principles. It tries to build a grouping which provides the shortest description length for a random walk on the graph, where the description length is measured by the expected number of bits per vertex required to encode the path of a random walk. The <em>Edge-betweenness community detection algorithm</em> is a hierarchical decomposition process where edges are removed in the decreasing order of the number of shortest paths that pass through a given edge, which is termed as the edge-betweenness score. This method is slow  due to the computational complexity of calculating the edge-betweenness scores, which have to be calculated every iteration (after each edge removal).</p>
+<p>Dendrograms, which are tree diagrams used to show the arrangement of clusters identified by the hierarchical clustering algorithms, were plotted with using the results given by the aforementioned algorithms, along with the vertex clustering for the Infomap method. Due to the restrictions in visually representing a large number of authors, the 1000 most active authors in the mailing list were used for plotting the dendrograms.</p>
+<p><strong>Dendrogram from the Edge-betweenness Method</strong></p>
+<img alt="_images/dendrogram_edge_betweenness.png" class="align-center" src="_images/dendrogram_edge_betweenness.png" />
+<p><strong>Dendrogram from the Infomaps Method</strong></p>
+<img alt="_images/dendrogram_infomap.png" class="align-center" src="_images/dendrogram_infomap.png" />
+<p><strong>Vertex Clustering from the Infomap Method</strong></p>
+<img alt="_images/vertex_clustering_infomap.png" class="align-center" src="_images/vertex_clustering_infomap.png" />
+</div>
+<div class="section" id="keyword-digest">
+<h4>Keyword Digest<a class="headerlink" href="#keyword-digest" title="Permalink to this headline">¶</a></h4>
+<p>The keywords pertaining to each author was extracted after the tokenization and lemmatization of the mails. The WordNet lemmatizer was used and a custom set of stop words that included common English words along with frequently used technical jargon were removed after tokenization. From this keyword digest of the authors, a term-document matrix was constructed such that the columns of the matrix are the users and the rows of the matrix correspond to the keywords. Each entry equals the tf-idf normalized coefficient of the keyword for a user. If a keyword is not present in the top-10 keywords of a user, then the corresponding matrix entry would be zero. On the resultant matrix, singular value decomposition (SVD) was performed to reduce the dimensions that need to be considered. From SVD analysis, the diagonal values of the transformation matrix tell us the most important clusters of keywords for all the users. The 95th percentile of these diagonal elements turned out to be at the 531st element out of 1000 elements.</p>
+<p>Using the top-10 keywords of each author, the recurring keywords of the group was computed. The clusters provided by the Infomap clustering algorithm was used for this purpose.
+In order to complete this step, chi-square goodness of fit was performed on the document-term matrix, i.e., the transpose matrix of the term-document matrix.</p>
+</div>
+</div>
+</div>
+<div class="section" id="statistical-results">
+<h2>Statistical Results<a class="headerlink" href="#statistical-results" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="statistics-on-the-discussion-threads">
+<h3>Statistics on the Discussion Threads<a class="headerlink" href="#statistics-on-the-discussion-threads" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="width-height-table-for-threads">
+<h4>1. Width-Height Table for Threads<a class="headerlink" href="#width-height-table-for-threads" title="Permalink to this headline">¶</a></h4>
+<p>The width height table is a representation of the number of nodes in the graph that have a given height and a given number of children in a tabular form. The wh_table_threads.py module generates a width height table for the authors graph and saves it as a CSV file.</p>
+<img alt="_images/wh_table_threads.png" class="align-center" src="_images/wh_table_threads.png" />
+</div>
+<div class="section" id="discussion-thread-lengths">
+<h4>2. Discussion Thread Lengths<a class="headerlink" href="#discussion-thread-lengths" title="Permalink to this headline">¶</a></h4>
+<dl class="docutils">
+<dt>A typical discussion thread can span 3 generations (with 1 Standard Deviation(s)) and 2 authors participating (with 0.5 Standard Deviation(s)) in the discussion. The following are the 95th and 99th percentile thread lengths:</dt>
+<dd><ul class="first last simple">
+<li><dl class="first docutils">
+<dt>Ignoring threads that have only a single author:</dt>
+<dd><ul class="first last">
+<li>95th Percentile Thread Length: 1238550.0 secs. or 344.04 hrs.</li>
+<li>99th Percentile Thread Length: 3603957.0 secs. or 1001.01 hrs.</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Including threads that have only a single author:</dt>
+<dd><ul class="first last">
+<li>95th Percentile Thread Length: 1812083.0 secs. or 503.36 hrs.</li>
+<li>99th Percentile Thread Length: 4674019.0 secs. or 1298.34 hrs.</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li>Thus, by ignoring the threads that have only a single author, it takes 21 days for 95% of the threads in the LKML to end and 54 days for 99% of the threads to end.</li>
+</ul>
+</dd>
+</dl>
+<img alt="_images/thread_length_hist.png" class="align-center" src="_images/thread_length_hist.png" />
+<img alt="_images/inter_arrival_times_hist_range.png" class="align-center" src="_images/inter_arrival_times_hist_range.png" />
+</div>
+<div class="section" id="message-activity-heatmaps">
+<h4>3. Message Activity Heatmaps<a class="headerlink" href="#message-activity-heatmaps" title="Permalink to this headline">¶</a></h4>
+<p>To estimate the user activity on an online community, we divide the 24 hours of a day into 48 bins of 30 minutes each. Each bin consists of the number of messages sent during that particular time interval. The daily bins are aggregated into monthly bins. The activity information gained from such heatmaps would inform the new users of a mailing list about the peak hours and increase the chances of participating in active conversations during specific times of a day.
+The following heatmap shows the weekly message activity:</p>
+<img alt="_static/monthly-message-activity-heatmap.png" class="align-center" src="_static/monthly-message-activity-heatmap.png" />
+<p>The following heatmap shows the weekly message activity:</p>
+<img alt="_static/weekly-message-activity-heatmap.png" class="align-center" src="_static/weekly-message-activity-heatmap.png" />
+</div>
+</div>
+<div class="section" id="statistics-on-the-author-network">
+<h3>Statistics on the Author Network<a class="headerlink" href="#statistics-on-the-author-network" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="width-height-table-for-the-author-interaction-graph">
+<h4>1. Width Height Table for the Author Interaction Graph<a class="headerlink" href="#width-height-table-for-the-author-interaction-graph" title="Permalink to this headline">¶</a></h4>
+<img alt="_images/wh_table_authors.png" class="align-center" src="_images/wh_table_authors.png" />
+<p>The width height table for the authors is a representation of the number of total and new authors in a thread aggregated at a given generation.</p>
+</div>
+<div class="section" id="participant-size-table">
+<h4>2. Participant-Size Table<a class="headerlink" href="#participant-size-table" title="Permalink to this headline">¶</a></h4>
+<img alt="_images/participant_size_table.png" class="align-center" src="_images/participant_size_table.png" />
+<p>The participant_size table is a series between the number of mails in a thread and the corresponding number of authors who have participated in that thread. The first twenty entries of this table is given above.</p>
+</div>
+<div class="section" id="degree-distribution-of-authors">
+<h4>3. Degree Distribution of Authors<a class="headerlink" href="#degree-distribution-of-authors" title="Permalink to this headline">¶</a></h4>
+<img alt="_images/degree_dist_hist.png" class="align-center" src="_images/degree_dist_hist.png" />
+<p>The degree distribution of the nodes is as expected having a mean of zero (as sum of in-degrees = sum of out-degrees) with a standard deviation of 57.22. The degree distribution curve is bell shaped without any skew and is centered at zero. Excluding some outliers, most of the degree differentials are around zero with 90th percentile of 23 and 95th percentile of 42 for the absolute values of the degree differentials.</p>
+</div>
+<div class="section" id="author-thread-participation">
+<h4>4. Author Thread Participation<a class="headerlink" href="#author-thread-participation" title="Permalink to this headline">¶</a></h4>
+<img alt="_images/author_thread_participation.png" class="align-center" src="_images/author_thread_participation.png" />
+<p>An author is said to be an active participant in a thread if he has sent at least one mail in the thread. This graph represents the total number of threads each author has participated in. It can be seen that majority of the subscribers to the mailing list are passive observers. This finding correlates with the observations from hyperedges generated for the threads.</p>
+</div>
+<div class="section" id="distribution-of-hyperedges-among-authors">
+<h4>5. Distribution of Hyperedges among Authors<a class="headerlink" href="#distribution-of-hyperedges-among-authors" title="Permalink to this headline">¶</a></h4>
+<img alt="_images/hyperedge_distribution.png" class="align-center" src="_images/hyperedge_distribution.png" />
+<p>This graph represents the number of receiving vertices upon which the hyperedge is incident on, with the y-axis measuring the number of such hyperedges incident on the corresponding number of edges represented by the x-axis. The graph resembles a Poisson curve where it peaks such that maximum number of hyperedges are incident on 5 vertices and then decreases from that maximum.</p>
+</div>
+<div class="section" id="conversation-refresh-times-crt">
+<h4>6. Conversation Refresh Times (CRT)<a class="headerlink" href="#conversation-refresh-times-crt" title="Permalink to this headline">¶</a></h4>
+<img alt="_images/conversation_refresh_times.png" class="align-center" src="_images/conversation_refresh_times.png" />
+<p>For a pair of users, this refers to the time when one conversation (or a thread) ends and another one starts and for overlapping conversations, the last matching messages are considered. These times are generated as a probability distribution (PDF) and then plotted as a histogram between the conversation refresh times (in seconds) and frequency.</p>
+</div>
+<div class="section" id="clustering-coefficients-of-the-authors">
+<h4>7. Clustering Coefficients of the Authors<a class="headerlink" href="#clustering-coefficients-of-the-authors" title="Permalink to this headline">¶</a></h4>
+<p>For unweighted graphs, the clustering of a node u is the fraction of possible triangles through that node that exist, and  for weighted graphs, the clustering is defined as the geometric average of the subgraph edge weights. Clustering coefficients for the author&#8217;s network was generated using the clustering module of the NetworkX package.</p>
+</div>
+</div>
+</div>
+<div class="section" id="conclusions">
+<h2>Conclusions<a class="headerlink" href="#conclusions" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>A typical discussion thread can span 3 generations (with 1 Standard Deviation(s)) and 2 authors participating (with 0.5 Standard Deviation(s)) in the discussion. The following are the 95th and 99th percentile thread lengths:</li>
+</ol>
+<blockquote>
+<div><ul class="simple">
+<li><dl class="first docutils">
+<dt>Ignoring threads that have only a single author:</dt>
+<dd><ul class="first last">
+<li>95th Percentile Thread Length: 1238550.0 secs. or 344.04 hrs.</li>
+<li>99th Percentile Thread Length: 3603957.0 secs. or 1001.01 hrs.</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Including threads that have only a single author:</dt>
+<dd><ul class="first last">
+<li>95th Percentile Thread Length: 1812083.0 secs. or 503.36 hrs.</li>
+<li>99th Percentile Thread Length: 4674019.0 secs. or 1298.34 hrs.</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li>Thus, by ignoring the threads that have only a single author, it takes 21 days for 95% of the threads in the LKML to end and 54 days for 99% of the threads to end.</li>
+</ul>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li>For discussions that happen slowly in time, authors arrive slowly and the discussion spans many generations. In contrast, for discussions that end quickly (non-singular) in time, authors arrive quickly and the discussion ends within a few generations. This difference in the temporal characteristics of the authors can be attributed to the type of the topic. For popular topics, authors come in quickly from many sources whereas for specialized topics help trickles in slowly over time leading to a _skinny_ and long thread. (Question: What are these popular threads? Can text mining help us detect popular topics?)</li>
+</ol>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Analysis Techniques</a><ul>
+<li><a class="reference internal" href="#data-preprocessing">Data Preprocessing</a><ul>
+<li><a class="reference internal" href="#data-collection-methodology-for-imap">Data Collection Methodology for IMAP</a></li>
+<li><a class="reference internal" href="#data-collection-methodology-for-mbox">Data Collection Methodology for MBOX</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#concepts">Concepts</a><ul>
+<li><a class="reference internal" href="#message-thread-graphs">Message Thread Graphs</a></li>
+<li><a class="reference internal" href="#author-interaction-graphs">Author Interaction Graphs</a></li>
+<li><a class="reference internal" href="#author-message-bipartite-graphs">Author Message Bipartite Graphs</a></li>
+<li><a class="reference internal" href="#width-height-tables">Width-Height Tables</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#analysis">Analysis</a><ul>
+<li><a class="reference internal" href="#analysis-of-threads">Analysis of Threads</a><ul>
+<li><a class="reference internal" href="#server-model">Server model</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#analysis-of-author-interactions">Analysis of Author Interactions</a><ul>
+<li><a class="reference internal" href="#community-detection">Community Detection</a></li>
+<li><a class="reference internal" href="#keyword-digest">Keyword Digest</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#statistical-results">Statistical Results</a><ul>
+<li><a class="reference internal" href="#statistics-on-the-discussion-threads">Statistics on the Discussion Threads</a><ul>
+<li><a class="reference internal" href="#width-height-table-for-threads">1. Width-Height Table for Threads</a></li>
+<li><a class="reference internal" href="#discussion-thread-lengths">2. Discussion Thread Lengths</a></li>
+<li><a class="reference internal" href="#message-activity-heatmaps">3. Message Activity Heatmaps</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#statistics-on-the-author-network">Statistics on the Author Network</a><ul>
+<li><a class="reference internal" href="#width-height-table-for-the-author-interaction-graph">1. Width Height Table for the Author Interaction Graph</a></li>
+<li><a class="reference internal" href="#participant-size-table">2. Participant-Size Table</a></li>
+<li><a class="reference internal" href="#degree-distribution-of-authors">3. Degree Distribution of Authors</a></li>
+<li><a class="reference internal" href="#author-thread-participation">4. Author Thread Participation</a></li>
+<li><a class="reference internal" href="#distribution-of-hyperedges-among-authors">5. Distribution of Hyperedges among Authors</a></li>
+<li><a class="reference internal" href="#conversation-refresh-times-crt">6. Conversation Refresh Times (CRT)</a></li>
+<li><a class="reference internal" href="#clustering-coefficients-of-the-authors">7. Clustering Coefficients of the Authors</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#conclusions">Conclusions</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="project_goals.html"
+                        title="previous chapter">What does MailingListParser plan to accomplish?</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="modules.html"
+                        title="next chapter">Code for Documentation</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/analysis_techniques.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="modules.html" title="Code for Documentation"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="project_goals.html" title="What does MailingListParser plan to accomplish?"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">MailingListParser 0.1 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, Prasad Talasila,Achyudh Ram.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.
+    </div>
+  </body>
+</html>

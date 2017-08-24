@@ -1,0 +1,248 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>analysis.author.graph.bipartite &#8212; MailingListParser 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../../../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">MailingListParser 0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for analysis.author.graph.bipartite</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This module is used to generate bipartite graph among all the users and messages in the mailing list such that all</span>
+<span class="sd">the users are on one side and all the messages will be on another. A directed edge would be drawn from author to the</span>
+<span class="sd">message sent by the author. A directed edge would be drawn from message to all the users who are in To and CC fields.</span>
+<span class="sd">A projection of this bipartite graph is then generated.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">from</span> <span class="nn">util.read_utils</span> <span class="k">import</span> <span class="o">*</span>
+
+
+<div class="viewcode-block" id="msg_author_bipartite_graph"><a class="viewcode-back" href="../../../../analysis.author.graph.html#analysis.author.graph.bipartite.msg_author_bipartite_graph">[docs]</a><span class="k">def</span> <span class="nf">msg_author_bipartite_graph</span><span class="p">(</span><span class="n">threadwise</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">ignore_lat</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">time_limit</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    :param threadwise: If true, a bipartite graph is generated for each thread individually.</span>
+<span class="sd">    :param ignore_lat: If true, then messages that belong to threads that have only a single author are ignored.</span>
+<span class="sd">    :param time_limit: Time limit can be specified here in the form of a timestamp in one of the identifiable formats</span>
+<span class="sd">            and all messages that have arrived after this timestamp will be ignored.</span>
+<span class="sd">    :return:</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">email_re</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;[\w\.-]+@[\w\.-]+&#39;</span><span class="p">)</span>
+    <span class="n">json_data</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">time_limit</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">time_limit</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%a, </span><span class="si">%d</span><span class="s2"> %b %Y %H:%M:%S %z&quot;</span><span class="p">)</span>
+    <span class="n">msgs_before_time</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="n">time_limit</span> <span class="o">=</span> <span class="n">get_datetime_object</span><span class="p">(</span><span class="n">time_limit</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;All messages before&quot;</span><span class="p">,</span> <span class="n">time_limit</span><span class="p">,</span> <span class="s2">&quot;are being considered.&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">threadwise</span><span class="p">:</span>
+        <span class="c1"># Generate a bipartite graph for each thread individually</span>
+        <span class="n">discussion_graph</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">()</span>
+        <span class="c1"># Add nodes into NetworkX graph by reading from CSV file</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">ignore_lat</span><span class="p">:</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;graph_nodes.csv&quot;</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">node_file</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">pair</span> <span class="ow">in</span> <span class="n">node_file</span><span class="p">:</span>
+                    <span class="n">node</span> <span class="o">=</span> <span class="n">pair</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;;&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">get_datetime_object</span><span class="p">(</span><span class="n">node</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span> <span class="o">&lt;</span> <span class="n">time_limit</span><span class="p">:</span>
+                        <span class="n">node</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">node</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                        <span class="n">msgs_before_time</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">node</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                        <span class="n">from_addr</span> <span class="o">=</span> <span class="n">email_re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">node</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+                        <span class="n">from_addr</span> <span class="o">=</span> <span class="n">from_addr</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="k">if</span> <span class="n">from_addr</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">node</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                        <span class="n">discussion_graph</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">node</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">time</span><span class="o">=</span><span class="n">node</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">(),</span> <span class="n">sender</span><span class="o">=</span><span class="n">from_addr</span><span class="p">)</span>
+                <span class="n">node_file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Nodes added.&quot;</span><span class="p">)</span>
+            <span class="c1"># Add edges into NetworkX graph by reading from CSV file</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;graph_edges.csv&quot;</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">edge_file</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">pair</span> <span class="ow">in</span> <span class="n">edge_file</span><span class="p">:</span>
+                    <span class="n">edge</span> <span class="o">=</span> <span class="n">pair</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;;&#39;</span><span class="p">)</span>
+                    <span class="n">edge</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">edge</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                    <span class="n">edge</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">edge</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                    <span class="k">if</span> <span class="n">edge</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="n">msgs_before_time</span> <span class="ow">and</span> <span class="n">edge</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">in</span> <span class="n">msgs_before_time</span><span class="p">:</span>
+                        <span class="n">discussion_graph</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="o">*</span><span class="n">edge</span><span class="p">)</span>
+                <span class="n">edge_file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Edges added.&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">lone_author_threads</span> <span class="o">=</span> <span class="n">get_lone_author_threads</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+            <span class="c1"># Add nodes into NetworkX graph only if they are not a part of a thread that has only a single author</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;graph_nodes.csv&quot;</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">node_file</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">pair</span> <span class="ow">in</span> <span class="n">node_file</span><span class="p">:</span>
+                    <span class="n">node</span> <span class="o">=</span> <span class="n">pair</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;;&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+                    <span class="n">node</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">node</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                    <span class="k">if</span> <span class="n">get_datetime_object</span><span class="p">(</span><span class="n">node</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span> <span class="o">&lt;</span> <span class="n">time_limit</span> <span class="ow">and</span> <span class="n">node</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">lone_author_threads</span><span class="p">:</span>
+                        <span class="n">msgs_before_time</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">node</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                        <span class="n">from_addr</span> <span class="o">=</span> <span class="n">email_re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">node</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+                        <span class="n">from_addr</span> <span class="o">=</span> <span class="n">from_addr</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="k">if</span> <span class="n">from_addr</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">node</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                        <span class="n">discussion_graph</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">node</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">time</span><span class="o">=</span><span class="n">node</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">(),</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#ffffff&quot;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">,</span> <span class="n">sender</span><span class="o">=</span><span class="n">from_addr</span><span class="p">)</span>
+                <span class="n">node_file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Nodes added.&quot;</span><span class="p">)</span>
+            <span class="c1"># Add edges into NetworkX graph only if they are not a part of a thread that has only a single author</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;graph_edges.csv&quot;</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">edge_file</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">pair</span> <span class="ow">in</span> <span class="n">edge_file</span><span class="p">:</span>
+                    <span class="n">edge</span> <span class="o">=</span> <span class="n">pair</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;;&#39;</span><span class="p">)</span>
+                    <span class="n">edge</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">edge</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                    <span class="n">edge</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">edge</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                    <span class="k">if</span> <span class="n">edge</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">lone_author_threads</span> <span class="ow">and</span> <span class="n">edge</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">lone_author_threads</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">edge</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="n">msgs_before_time</span> <span class="ow">and</span> <span class="n">edge</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">in</span> <span class="n">msgs_before_time</span><span class="p">:</span>
+                            <span class="n">discussion_graph</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="o">*</span><span class="n">edge</span><span class="p">)</span>
+                <span class="n">edge_file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Edges added.&quot;</span><span class="p">)</span>
+
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;clean_data.json&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">json_file</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">lines_per_n</span><span class="p">(</span><span class="n">json_file</span><span class="p">,</span> <span class="mi">9</span><span class="p">):</span>
+                <span class="n">json_obj</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
+                <span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;Message-ID&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;Message-ID&#39;</span><span class="p">])</span>
+                <span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">],</span> <span class="s2">&quot;%a, </span><span class="si">%d</span><span class="s2"> %b %Y %H:%M:%S %z&quot;</span><span class="p">)</span>
+                <span class="c1"># print(&quot;\nFrom&quot;, json_obj[&#39;From&#39;], &quot;\nTo&quot;, json_obj[&#39;To&#39;], &quot;\nCc&quot;, json_obj[&#39;Cc&#39;])</span>
+                <span class="n">from_addr</span> <span class="o">=</span> <span class="n">email_re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;From&#39;</span><span class="p">])</span>
+                <span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;From&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">from_addr</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="k">if</span> <span class="n">from_addr</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;From&#39;</span><span class="p">]</span>
+                <span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;To&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">email_re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;To&#39;</span><span class="p">]))</span>
+                <span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;Cc&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">email_re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;Cc&#39;</span><span class="p">]))</span> <span class="k">if</span> <span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;Cc&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span>
+                <span class="c1"># print(&quot;\nFrom&quot;, json_obj[&#39;From&#39;], &quot;\nTo&quot;, json_obj[&#39;To&#39;], &quot;\nCc&quot;, json_obj[&#39;Cc&#39;])</span>
+                <span class="n">json_data</span><span class="p">[</span><span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;Message-ID&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">json_obj</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;JSON data loaded.&quot;</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">conn_subgraph</span> <span class="ow">in</span> <span class="n">nx</span><span class="o">.</span><span class="n">weakly_connected_component_subgraphs</span><span class="p">(</span><span class="n">discussion_graph</span><span class="p">):</span>
+            <span class="n">bipartite_graph</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">node_uid</span> <span class="ow">in</span> <span class="n">conn_subgraph</span><span class="o">.</span><span class="n">nodes</span><span class="p">():</span>
+                <span class="n">message</span> <span class="o">=</span> <span class="n">json_data</span><span class="p">[</span><span class="n">node_uid</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">message</span><span class="p">[</span><span class="s1">&#39;Cc&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">addr_list</span> <span class="o">=</span> <span class="n">message</span><span class="p">[</span><span class="s1">&#39;To&#39;</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">addr_list</span> <span class="o">=</span> <span class="n">message</span><span class="p">[</span><span class="s1">&#39;To&#39;</span><span class="p">]</span> <span class="o">|</span> <span class="n">message</span><span class="p">[</span><span class="s1">&#39;Cc&#39;</span><span class="p">]</span>
+                <span class="n">bipartite_graph</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">message</span><span class="p">[</span><span class="s1">&#39;From&#39;</span><span class="p">],</span> <span class="n">message</span><span class="p">[</span><span class="s1">&#39;Message-ID&#39;</span><span class="p">],</span> <span class="n">style</span><span class="o">=</span><span class="s1">&#39;solid&#39;</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">to_address</span> <span class="ow">in</span> <span class="n">addr_list</span><span class="p">:</span>
+                    <span class="n">bipartite_graph</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">message</span><span class="p">[</span><span class="s1">&#39;Message-ID&#39;</span><span class="p">],</span> <span class="n">to_address</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s1">&#39;dashed&#39;</span><span class="p">)</span>
+                <span class="c1"># Do something!</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No. of Nodes: &quot;</span><span class="p">,</span> <span class="n">nx</span><span class="o">.</span><span class="n">number_of_nodes</span><span class="p">(</span><span class="n">bipartite_graph</span><span class="p">))</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No. of Edges: &quot;</span><span class="p">,</span> <span class="n">nx</span><span class="o">.</span><span class="n">number_of_edges</span><span class="p">(</span><span class="n">bipartite_graph</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Make a message author bipartite graph for all the threads</span>
+        <span class="n">bipartite_graph</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">ignore_lat</span><span class="p">:</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;clean_data.json&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">json_file</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">lines_per_n</span><span class="p">(</span><span class="n">json_file</span><span class="p">,</span> <span class="mi">9</span><span class="p">):</span>
+                    <span class="n">json_obj</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
+                    <span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;Message-ID&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;Message-ID&#39;</span><span class="p">])</span>
+                    <span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">],</span> <span class="s2">&quot;%a, </span><span class="si">%d</span><span class="s2"> %b %Y %H:%M:%S %z&quot;</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">time_limit</span><span class="p">:</span>
+                        <span class="c1"># print(&quot;\nFrom&quot;, json_obj[&#39;From&#39;], &quot;\nTo&quot;, json_obj[&#39;To&#39;], &quot;\nCc&quot;, json_obj[&#39;Cc&#39;])</span>
+                        <span class="n">from_addr</span> <span class="o">=</span> <span class="n">email_re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;From&#39;</span><span class="p">])</span>
+                        <span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;From&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">from_addr</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="k">if</span> <span class="n">from_addr</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;From&#39;</span><span class="p">]</span>
+                        <span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;To&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">email_re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;To&#39;</span><span class="p">]))</span>
+                        <span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;Cc&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">email_re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;Cc&#39;</span><span class="p">]))</span> <span class="k">if</span> <span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;Cc&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span>
+                        <span class="c1"># print(&quot;\nFrom&quot;, json_obj[&#39;From&#39;], &quot;\nTo&quot;, json_obj[&#39;To&#39;], &quot;\nCc&quot;, json_obj[&#39;Cc&#39;])</span>
+                        <span class="n">json_data</span><span class="p">[</span><span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;Message-ID&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">json_obj</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;JSON data loaded.&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">lone_author_threads</span> <span class="o">=</span> <span class="n">get_lone_author_threads</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;clean_data.json&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">json_file</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">lines_per_n</span><span class="p">(</span><span class="n">json_file</span><span class="p">,</span> <span class="mi">9</span><span class="p">):</span>
+                    <span class="n">json_obj</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
+                    <span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;Message-ID&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;Message-ID&#39;</span><span class="p">])</span>
+                    <span class="k">if</span> <span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;Message-ID&#39;</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">lone_author_threads</span><span class="p">:</span>
+                        <span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">],</span> <span class="s2">&quot;%a, </span><span class="si">%d</span><span class="s2"> %b %Y %H:%M:%S %z&quot;</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">time_limit</span><span class="p">:</span>
+                            <span class="c1"># print(&quot;\nFrom&quot;, json_obj[&#39;From&#39;], &quot;\nTo&quot;, json_obj[&#39;To&#39;], &quot;\nCc&quot;, json_obj[&#39;Cc&#39;])</span>
+                            <span class="n">from_addr</span> <span class="o">=</span> <span class="n">email_re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;From&#39;</span><span class="p">])</span>
+                            <span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;From&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">from_addr</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="k">if</span> <span class="n">from_addr</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;From&#39;</span><span class="p">]</span>
+                            <span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;To&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">email_re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;To&#39;</span><span class="p">]))</span>
+                            <span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;Cc&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">email_re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;Cc&#39;</span><span class="p">]))</span> <span class="k">if</span> <span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;Cc&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span>
+                            <span class="c1"># print(&quot;\nFrom&quot;, json_obj[&#39;From&#39;], &quot;\nTo&quot;, json_obj[&#39;To&#39;], &quot;\nCc&quot;, json_obj[&#39;Cc&#39;])</span>
+                            <span class="n">json_data</span><span class="p">[</span><span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;Message-ID&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">json_obj</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;JSON data loaded.&quot;</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">msg_id</span><span class="p">,</span> <span class="n">message</span> <span class="ow">in</span> <span class="n">json_data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">message</span><span class="p">[</span><span class="s1">&#39;Cc&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">addr_list</span> <span class="o">=</span> <span class="n">message</span><span class="p">[</span><span class="s1">&#39;To&#39;</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">addr_list</span> <span class="o">=</span> <span class="n">message</span><span class="p">[</span><span class="s1">&#39;To&#39;</span><span class="p">]</span> <span class="o">|</span> <span class="n">message</span><span class="p">[</span><span class="s1">&#39;Cc&#39;</span><span class="p">]</span>
+            <span class="n">bipartite_graph</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">message</span><span class="p">[</span><span class="s1">&#39;From&#39;</span><span class="p">],</span> <span class="n">message</span><span class="p">[</span><span class="s1">&#39;Message-ID&#39;</span><span class="p">],</span> <span class="n">style</span><span class="o">=</span><span class="s1">&#39;solid&#39;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">to_address</span> <span class="ow">in</span> <span class="n">addr_list</span><span class="p">:</span>
+                <span class="n">bipartite_graph</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">message</span><span class="p">[</span><span class="s1">&#39;Message-ID&#39;</span><span class="p">],</span> <span class="n">to_address</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s1">&#39;dashed&#39;</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No. of Nodes: &quot;</span><span class="p">,</span> <span class="n">nx</span><span class="o">.</span><span class="n">number_of_nodes</span><span class="p">(</span><span class="n">bipartite_graph</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No. of Edges: &quot;</span><span class="p">,</span> <span class="n">nx</span><span class="o">.</span><span class="n">number_of_edges</span><span class="p">(</span><span class="n">bipartite_graph</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No. of Weakly Connected Components: &quot;</span><span class="p">,</span> <span class="n">nx</span><span class="o">.</span><span class="n">number_weakly_connected_components</span><span class="p">(</span><span class="n">bipartite_graph</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No. of Strongly Connected Components: &quot;</span><span class="p">,</span> <span class="n">nx</span><span class="o">.</span><span class="n">number_strongly_connected_components</span><span class="p">(</span><span class="n">bipartite_graph</span><span class="p">))</span></div>
+        <span class="c1"># Do something!</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">MailingListParser 0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, Prasad Talasila,Achyudh Ram.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.
+    </div>
+  </body>
+</html>

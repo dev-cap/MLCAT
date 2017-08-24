@@ -1,0 +1,249 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>input.imap.header &#8212; MailingListParser 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">MailingListParser 0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for input.imap.header</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">email</span>
+<span class="kn">import</span> <span class="nn">imaplib</span>
+<span class="kn">import</span> <span class="nn">json</span>
+
+<span class="kn">from</span> <span class="nn">input.imap.connection</span> <span class="k">import</span> <span class="n">open_connection</span>
+<span class="kn">from</span> <span class="nn">util.json_encoder</span> <span class="k">import</span> <span class="n">NoIndent</span><span class="p">,</span> <span class="n">MyEncoder</span>
+<span class="kn">from</span> <span class="nn">util.read_utils</span> <span class="k">import</span> <span class="o">*</span>
+
+
+<div class="viewcode-block" id="init_uid_map"><a class="viewcode-back" href="../../../input.imap.html#input.imap.header.init_uid_map">[docs]</a><span class="k">def</span> <span class="nf">init_uid_map</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    To ensure that references are correctly recorded in the JSON file such that there are no references to mails that</span>
+<span class="sd">    do not exist and to ease the processing of headers, a map with the string in the Message-Id field of the header to</span>
+<span class="sd">    the UID of the mail is required. This function reads the header.json file and adds required entries to the map.</span>
+<span class="sd">    :return: A map with the string in the Message-Id field of the header to the UID of the mail</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Initializing UID map...&quot;</span><span class="p">)</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;thread_uid_map.json&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">map_file</span><span class="p">:</span>
+        <span class="n">uid_msg_id_map</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">map_file</span><span class="p">)</span>
+        <span class="n">map_file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">uid_msg_id_map</span></div>
+
+
+<div class="viewcode-block" id="get_mail_header"><a class="viewcode-back" href="../../../input.imap.html#input.imap.header.get_mail_header">[docs]</a><span class="k">def</span> <span class="nf">get_mail_header</span><span class="p">(</span><span class="n">to_get</span><span class="p">,</span> <span class="n">range_</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This function fetches the emails from the IMAP server as per the parameters passed.</span>
+<span class="sd">    :param to_get: List of UIDs of the mails to get. Default value is 2000.</span>
+<span class="sd">    :param range_: If true, fetches all emails from the first element in to_get, till the newest mail.</span>
+<span class="sd">    If false, fetches only the emails with the UIDs present in to_get. Default value is true.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># This is used to map the string in the Message-Id field of the header to the UID of the mail.</span>
+    <span class="c1"># By doing so we ease the further processing of information.</span>
+    <span class="n">uid_msg_id_map</span> <span class="o">=</span> <span class="n">init_uid_map</span><span class="p">()</span>
+
+    <span class="c1"># To start with an empty UID map, uncomment the following line:</span>
+    <span class="c1"># uid_msg_id_map ={}</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The issue lies in with the fact that we are trying to download a whole list of messages in the inbox at once.</span>
+<span class="sd">    This causes a buffer overflow and hence imaplib raises an error(the max it allows, by default, is 10000 bytes).</span>
+<span class="sd">    So, one possible solution is to change the _MAXLINE value to a bigger number.</span>
+<span class="sd">    Also gmail has no problem with a search this big.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">imaplib</span><span class="o">.</span><span class="n">_MAXLINE</span> <span class="o">=</span> <span class="mi">800000</span>
+
+    <span class="c1"># Connection object for gmail inbox</span>
+    <span class="n">conn</span> <span class="o">=</span> <span class="n">open_connection</span><span class="p">()</span>
+
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># Selecting the inbox from which mails will be fetched</span>
+        <span class="n">conn</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s1">&#39;INBOX&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Variable to keep track of the number of unseen messages in the chosen mailbox</span>
+        <span class="n">processed_msgs</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">to_get</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">to_get</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">search_str</span> <span class="o">=</span> <span class="s1">&#39;UID &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">to_get</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="s1">&#39;:*&#39;</span>
+            <span class="n">retcode</span><span class="p">,</span> <span class="n">uids</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">uid</span><span class="p">(</span><span class="s1">&#39;SEARCH&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">search_str</span><span class="p">)</span>
+            <span class="n">last_uid</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">uids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="k">if</span> <span class="n">range_</span> <span class="ow">and</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">to_get</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">to_get</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">uid</span> <span class="ow">in</span> <span class="n">uids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">():</span>
+                <span class="n">to_get</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">uid</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="n">range_</span> <span class="ow">and</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">to_get</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">):</span>
+            <span class="n">to_get</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">to_get</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">to_get</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+            <span class="n">retcode</span> <span class="o">=</span> <span class="s2">&quot;OK&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">retcode</span> <span class="o">=</span> <span class="s2">&quot;OK&quot;</span>
+
+        <span class="c1"># Remove UIDs that are greater than the last UID available in the inbox</span>
+        <span class="n">to_get</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">to_get</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="n">last_uid</span><span class="p">]</span>
+        <span class="n">num_of_messages</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">to_get</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of messages to fetch:&quot;</span><span class="p">,</span> <span class="n">num_of_messages</span><span class="p">)</span>
+
+        <span class="c1"># retcode indicates the success or failure of the imap request</span>
+        <span class="k">if</span> <span class="n">retcode</span> <span class="o">==</span> <span class="s2">&quot;OK&quot;</span><span class="p">:</span>
+            <span class="c1"># header.json file will store all the required data</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;headers.json&quot;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+
+                <span class="k">for</span> <span class="n">num</span> <span class="ow">in</span> <span class="n">to_get</span><span class="p">:</span>
+
+                    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Processing mail #&#39;</span><span class="p">,</span> <span class="n">num</span><span class="p">)</span>
+                    <span class="n">processed_msgs</span> <span class="o">+=</span> <span class="mi">1</span>
+
+                    <span class="c1"># conn.uid() converts the arguments provided to an IMAP command to fetch the mail using the UID sepcified by num</span>
+                    <span class="c1"># Uncomment the line below to fetch the entire message rather than just the mail headers.</span>
+                    <span class="c1"># typ, msg_header = conn.uid(&#39;FETCH&#39;, num, &#39;(RFC822)&#39;)</span>
+
+                    <span class="n">typ</span><span class="p">,</span> <span class="n">msg_header</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">uid</span><span class="p">(</span><span class="s1">&#39;FETCH&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">num</span><span class="p">),</span> <span class="s1">&#39;(RFC822.HEADER)&#39;</span><span class="p">)</span>
+
+                    <span class="c1"># print(msg_header)</span>
+
+                    <span class="k">for</span> <span class="n">response_part</span> <span class="ow">in</span> <span class="n">msg_header</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">response_part</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+
+                            <span class="c1"># response_part contains the required info as a byte stream. This has to be converted to a message stream.</span>
+                            <span class="c1"># This is done using the email module</span>
+                            <span class="n">original</span> <span class="o">=</span> <span class="n">email</span><span class="o">.</span><span class="n">message_from_bytes</span><span class="p">(</span><span class="n">response_part</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+                            <span class="c1"># The splicing is done as to remove the &#39;&lt;&#39; and &#39;&gt;&#39; from the message-id string</span>
+                            <span class="n">uid_msg_id_map</span><span class="p">[</span><span class="n">original</span><span class="p">[</span><span class="s1">&#39;Message-ID&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="n">num</span>
+
+                            <span class="n">data</span> <span class="o">=</span> <span class="p">{}</span>
+                            <span class="n">data</span><span class="p">[</span><span class="s1">&#39;Message-ID&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">num</span>
+                            <span class="n">data</span><span class="p">[</span><span class="s1">&#39;From&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">original</span><span class="p">[</span><span class="s1">&#39;From&#39;</span><span class="p">]</span>
+                            <span class="n">data</span><span class="p">[</span><span class="s1">&#39;To&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">original</span><span class="p">[</span><span class="s1">&#39;To&#39;</span><span class="p">]</span>
+                            <span class="n">data</span><span class="p">[</span><span class="s1">&#39;Cc&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">original</span><span class="p">[</span><span class="s1">&#39;Cc&#39;</span><span class="p">]</span>
+                            <span class="n">data</span><span class="p">[</span><span class="s1">&#39;In-Reply-To&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">original</span><span class="p">[</span><span class="s1">&#39;In-Reply-To&#39;</span><span class="p">]</span>
+                            <span class="n">data</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_utc_time</span><span class="p">(</span><span class="n">original</span><span class="p">[</span><span class="s1">&#39;Date&#39;</span><span class="p">])</span>
+
+                            <span class="k">if</span> <span class="n">original</span><span class="p">[</span><span class="s1">&#39;References&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                                <span class="n">data</span><span class="p">[</span><span class="s1">&#39;References&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+                            <span class="k">else</span><span class="p">:</span>
+                                <span class="n">uid_list</span> <span class="o">=</span> <span class="p">[]</span>
+                                <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">                                Since all the references are also in string, we have to go through each string in the list of references.</span>
+<span class="sd">                                For each references string in the list, we check if we have already encountered it. In such a case, we</span>
+<span class="sd">                                associate the the UID of the mail that had the first occurrence of this string.</span>
+<span class="sd">                                If not, we just append the value 0.</span>
+<span class="sd">                                Also splicing is done for references to remove &#39;&lt;&#39; and &#39;&gt;&#39;</span>
+<span class="sd">                                &quot;&quot;&quot;</span>
+
+                                <span class="k">for</span> <span class="n">references</span> <span class="ow">in</span> <span class="n">original</span><span class="p">[</span><span class="s1">&#39;References&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">():</span>
+                                    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">references</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">uid_msg_id_map</span><span class="o">.</span><span class="n">keys</span><span class="p">())):</span>
+                                        <span class="n">uid_msg_id_map</span><span class="p">[</span><span class="n">references</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">0</span>
+                                    <span class="n">uid_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">uid_msg_id_map</span><span class="p">[</span><span class="n">references</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]])</span>
+
+                                <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">                                Each element of a list, when written into a .json file take a line each. To pretty print it we make</span>
+<span class="sd">                                it an object of NoIndent class and use a custom encoder class called MyEncoder</span>
+<span class="sd">                                &quot;&quot;&quot;</span>
+                                <span class="n">data</span><span class="p">[</span><span class="s1">&#39;References&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">NoIndent</span><span class="p">(</span><span class="n">uid_list</span><span class="p">)</span>
+
+                            <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">MyEncoder</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+                            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+                <span class="c1"># Marking all message as seen</span>
+                <span class="n">typ</span><span class="p">,</span> <span class="n">msg_header</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">uid</span><span class="p">(</span><span class="s1">&#39;STORE&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">num</span><span class="p">),</span> <span class="s1">&#39;+FLAGS&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\\</span><span class="s1">Seen&#39;</span><span class="p">)</span>
+
+                <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of messages processed:&quot;</span><span class="p">,</span> <span class="n">processed_msgs</span><span class="p">)</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="n">conn</span><span class="o">.</span><span class="n">logout</span><span class="p">()</span>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    It is not an issue to append to an already existing JSON file as in the case that there are duplicate keys, the</span>
+<span class="sd">    value of the second key is overwritten into the first. In this case, the values of the keys are the same Message-ID.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Writing UID map to file...&quot;</span><span class="p">)</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;thread_uid_map.json&quot;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">uid_msg_id_map</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">MailingListParser 0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, Prasad Talasila,Achyudh Ram.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,298 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>util package &#8212; MailingListParser 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="input.mbox package" href="input.mbox.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="input.mbox.html" title="input.mbox package"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">MailingListParser 0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" accesskey="U">Code for Documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="util-package">
+<h1>util package<a class="headerlink" href="#util-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-util.author_uid_map">
+<span id="util-author-uid-map-module"></span><h2>util.author_uid_map module<a class="headerlink" href="#module-util.author_uid_map" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="util.author_uid_map.write_author_uid_map">
+<code class="descclassname">util.author_uid_map.</code><code class="descname">write_author_uid_map</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/author_uid_map.html#write_author_uid_map"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.author_uid_map.write_author_uid_map" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function is used to generate and write to a JSON file the mapping of authors to a unique integer identifier.
+Authors are identified through a regular expression search for their email addresses. The integer identifiers
+generated are used in other modules like the generation and statistical analysis of hyperedges.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-util.custom_stopwords">
+<span id="util-custom-stopwords-module"></span><h2>util.custom_stopwords module<a class="headerlink" href="#module-util.custom_stopwords" title="Permalink to this headline">¶</a></h2>
+<p>All the words in these sets will have to be in lowercase.
+Add custom stopwords to the second</p>
+</div>
+<div class="section" id="util-graph-leaf-nodes-module">
+<h2>util.graph_leaf_nodes module<a class="headerlink" href="#util-graph-leaf-nodes-module" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-util.json_encoder">
+<span id="util-json-encoder-module"></span><h2>util.json_encoder module<a class="headerlink" href="#module-util.json_encoder" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="util.json_encoder.MyEncoder">
+<em class="property">class </em><code class="descclassname">util.json_encoder.</code><code class="descname">MyEncoder</code><span class="sig-paren">(</span><em>*</em>, <em>skipkeys=False</em>, <em>ensure_ascii=True</em>, <em>check_circular=True</em>, <em>allow_nan=True</em>, <em>sort_keys=False</em>, <em>indent=None</em>, <em>separators=None</em>, <em>default=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/json_encoder.html#MyEncoder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.json_encoder.MyEncoder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">json.encoder.JSONEncoder</span></code></p>
+<dl class="method">
+<dt id="util.json_encoder.MyEncoder.default">
+<code class="descname">default</code><span class="sig-paren">(</span><em>obj</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/json_encoder.html#MyEncoder.default"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.json_encoder.MyEncoder.default" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="util.json_encoder.NoIndent">
+<em class="property">class </em><code class="descclassname">util.json_encoder.</code><code class="descname">NoIndent</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/json_encoder.html#NoIndent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.json_encoder.NoIndent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-util.preprocessing_utils">
+<span id="util-preprocessing-utils-module"></span><h2>util.preprocessing_utils module<a class="headerlink" href="#module-util.preprocessing_utils" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="util.preprocessing_utils.is_outlier">
+<code class="descclassname">util.preprocessing_utils.</code><code class="descname">is_outlier</code><span class="sig-paren">(</span><em>points</em>, <em>thresh=3.5</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/preprocessing_utils.html#is_outlier"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.preprocessing_utils.is_outlier" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a boolean array with True if points are outliers and False
+otherwise.</p>
+<blockquote>
+<div><p>points : An numobservations by numdimensions array of observations
+thresh : The modified z-score to use as a threshold. Observations with</p>
+<blockquote>
+<div>a modified z-score (based on the median absolute deviation) greater
+than this value will be classified as outliers.</div></blockquote>
+</div></blockquote>
+<blockquote>
+<div>mask : A numobservations-length boolean array.</div></blockquote>
+<blockquote>
+<div>Boris Iglewicz and David Hoaglin (1993), &#8220;Volume 16: How to Detect and
+Handle Outliers&#8221;, The ASQC Basic References in Quality Control:
+Statistical Techniques, Edward F. Mykytka, Ph.D., Editor.</div></blockquote>
+</dd></dl>
+
+</div>
+<div class="section" id="module-util.read_utils">
+<span id="util-read-utils-module"></span><h2>util.read_utils module<a class="headerlink" href="#module-util.read_utils" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="util.read_utils.get_datetime_object">
+<code class="descclassname">util.read_utils.</code><code class="descname">get_datetime_object</code><span class="sig-paren">(</span><em>orig_time</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/read_utils.html#get_datetime_object"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.read_utils.get_datetime_object" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function to convert a formatted string containing date and time from a local timezone to UTC, by taking into
+consideration multiple formats of the input parameter and then return the corresponding datetime object.
+:param orig_time: Formatted string containing a date and time from a local timezone
+:return: A datetime object corresponding to the input string in UTC</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="util.read_utils.get_lone_author_threads">
+<code class="descclassname">util.read_utils.</code><code class="descname">get_lone_author_threads</code><span class="sig-paren">(</span><em>save_file=None</em>, <em>nodelist_filename='graph_nodes.csv'</em>, <em>edgelist_filename='graph_edges.csv'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/read_utils.html#get_lone_author_threads"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.read_utils.get_lone_author_threads" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function returns the UID of all the nodes that belong to a thread that has only one author
+:param save_file: If True, the list of UIDs of nodes are saved to a text file
+:return: A set containing the UID of all the nodes that belong to a thread that has a single author</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="util.read_utils.get_messages_before">
+<code class="descclassname">util.read_utils.</code><code class="descname">get_messages_before</code><span class="sig-paren">(</span><em>time_limit</em>, <em>nodelist_filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/read_utils.html#get_messages_before"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.read_utils.get_messages_before" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function returns a set of Message-IDs that have arrived before the time limit passed as parameter.
+:param time_limit: A string formatted time stamp in one of the recognized formats.
+:return: A set containing Message-IDs that have arrived before the time limit passed as parameter.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="util.read_utils.get_utc_time">
+<code class="descclassname">util.read_utils.</code><code class="descname">get_utc_time</code><span class="sig-paren">(</span><em>orig_time</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/read_utils.html#get_utc_time"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.read_utils.get_utc_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function to convert a formatted string containing date and time from a local timezone to UTC, by taking into
+consideration multiple formats of the input parameter
+:param orig_time: Formatted string containing a date and time from a local timezone
+:return: Formatted string containing the date and time in UTC</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="util.read_utils.lines_per_n">
+<code class="descclassname">util.read_utils.</code><code class="descname">lines_per_n</code><span class="sig-paren">(</span><em>f</em>, <em>n</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/read_utils.html#lines_per_n"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.read_utils.lines_per_n" title="Permalink to this definition">¶</a></dt>
+<dd><p>Each json object in the headers.json file occupies a set number of lines.
+This function is used to read those set number of lines and return them.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="util-snaa-curve-fit-layout-module">
+<h2>util.snaa_curve_fit_layout module<a class="headerlink" href="#util-snaa-curve-fit-layout-module" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="util-thread-graph-nx-module">
+<h2>util.thread_graph_nx module<a class="headerlink" href="#util-thread-graph-nx-module" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-util.union_find">
+<span id="util-union-find-module"></span><h2>util.union_find module<a class="headerlink" href="#module-util.union_find" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="union-find-with-path-compression">
+<h3>Union Find with path compression<a class="headerlink" href="#union-find-with-path-compression" title="Permalink to this headline">¶</a></h3>
+<p>A disjoint-set data structure, also called union-find data structure
+implements two functions:
+union(A, B) - merge A&#8217;s set with B&#8217;s set
+find(A) - finds what set A belongs to
+Union with path compression approach:
+Each node visited on the way to a root node may as well be attached
+directly to the root node.
+attach the smaller tree to the root of the larger tree
+Time Complexity  :  O(a(n)), where a(n) is the inverse of the function
+n=f(x)=A(x,x) and A is the extremely fast-growing Ackermann function.
+Author: NRYoung
+Source: <a class="reference external" href="https://github.com/nryoung/algorithms/blob/master/algorithms/data_structures/union_find_with_path_compression.py">https://github.com/nryoung/algorithms/blob/master/algorithms/data_structures/union_find_with_path_compression.py</a></p>
+<dl class="class">
+<dt id="util.union_find.UnionFind">
+<em class="property">class </em><code class="descclassname">util.union_find.</code><code class="descname">UnionFind</code><span class="sig-paren">(</span><em>N</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/union_find.html#UnionFind"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.union_find.UnionFind" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="util.union_find.UnionFind.find">
+<code class="descname">find</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/union_find.html#UnionFind.find"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.union_find.UnionFind.find" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="util.union_find.UnionFind.is_connected">
+<code class="descname">is_connected</code><span class="sig-paren">(</span><em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/union_find.html#UnionFind.is_connected"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.union_find.UnionFind.is_connected" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="util.union_find.UnionFind.make_set">
+<code class="descname">make_set</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/union_find.html#UnionFind.make_set"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.union_find.UnionFind.make_set" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="util.union_find.UnionFind.parent">
+<code class="descname">parent</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/union_find.html#UnionFind.parent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.union_find.UnionFind.parent" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="util.union_find.UnionFind.union">
+<code class="descname">union</code><span class="sig-paren">(</span><em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/union_find.html#UnionFind.union"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.union_find.UnionFind.union" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="module-util">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-util" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">util package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-util.author_uid_map">util.author_uid_map module</a></li>
+<li><a class="reference internal" href="#module-util.custom_stopwords">util.custom_stopwords module</a></li>
+<li><a class="reference internal" href="#util-graph-leaf-nodes-module">util.graph_leaf_nodes module</a></li>
+<li><a class="reference internal" href="#module-util.json_encoder">util.json_encoder module</a></li>
+<li><a class="reference internal" href="#module-util.preprocessing_utils">util.preprocessing_utils module</a></li>
+<li><a class="reference internal" href="#module-util.read_utils">util.read_utils module</a></li>
+<li><a class="reference internal" href="#util-snaa-curve-fit-layout-module">util.snaa_curve_fit_layout module</a></li>
+<li><a class="reference internal" href="#util-thread-graph-nx-module">util.thread_graph_nx module</a></li>
+<li><a class="reference internal" href="#module-util.union_find">util.union_find module</a><ul>
+<li><a class="reference internal" href="#union-find-with-path-compression">Union Find with path compression</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-util">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="input.mbox.html"
+                        title="previous chapter">input.mbox package</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/util.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="input.mbox.html" title="input.mbox package"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">MailingListParser 0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" >Code for Documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, Prasad Talasila,Achyudh Ram.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.
+    </div>
+  </body>
+</html>

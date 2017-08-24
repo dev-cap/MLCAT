@@ -1,0 +1,353 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>input.check_headers &#8212; MailingListParser 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">MailingListParser 0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for input.check_headers</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">email</span>
+<span class="kn">import</span> <span class="nn">imaplib</span>
+<span class="kn">import</span> <span class="nn">json</span>
+
+<span class="kn">from</span> <span class="nn">input.imap.connection</span> <span class="k">import</span> <span class="n">open_connection</span>
+
+<span class="kn">from</span> <span class="nn">input.imap.header</span> <span class="k">import</span> <span class="n">get_mail_header</span>
+<span class="kn">from</span> <span class="nn">util.read_utils</span> <span class="k">import</span> <span class="n">lines_per_n</span>
+
+
+<div class="viewcode-block" id="get_unavailable_uid"><a class="viewcode-back" href="../../input.html#input.check_headers.get_unavailable_uid">[docs]</a><span class="k">def</span> <span class="nf">get_unavailable_uid</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This function returns a list of UIDs that are not available in the IMAP server</span>
+<span class="sd">    :return: List containing the UIDs not available in the IMAP server</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">imaplib</span><span class="o">.</span><span class="n">_MAXLINE</span> <span class="o">=</span> <span class="mi">800000</span>
+    <span class="n">conn</span> <span class="o">=</span> <span class="n">open_connection</span><span class="p">()</span>
+    <span class="n">conn</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s1">&#39;INBOX&#39;</span><span class="p">)</span>
+    <span class="n">search_str</span> <span class="o">=</span> <span class="s1">&#39;UID &#39;</span> <span class="o">+</span> <span class="s1">&#39;1:*&#39;</span>
+    <span class="n">retcode</span><span class="p">,</span> <span class="n">uids</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">uid</span><span class="p">(</span><span class="s1">&#39;SEARCH&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">search_str</span><span class="p">)</span>
+
+    <span class="n">available_uid</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">uid</span> <span class="ow">in</span> <span class="n">uids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">():</span>
+        <span class="n">available_uid</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">uid</span><span class="p">))</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="k">pass</span>
+    <span class="n">conn</span><span class="o">.</span><span class="n">logout</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="nb">set</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">available_uid</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="n">available_uid</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">available_uid</span><span class="p">)</span></div>
+
+<span class="c1"># This list stores the UIDs of mails that have duplicate entries in the JSON file.</span>
+<span class="n">duplicate_uid</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+<span class="c1"># This set stores the UIDs of mails that don&#39;t have an entry in the JSON file - UIDs are consecutive numbers.</span>
+<span class="n">missing_uid</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+<span class="c1"># This list stores the UIDs of mails that have entries with insufficient entries in the JSON file.</span>
+<span class="n">invalid_uid</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+<span class="c1"># This set stores the UIDs of mails that are not forwarded from LKML subscription which is stored in a text file.</span>
+<span class="n">unwanted_uid</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+<span class="c1"># This set stores the UIDs for which corresponding mails are not available in the IMAP server.</span>
+<span class="n">unavailable_uid</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+<span class="n">last_uid_read</span> <span class="o">=</span> <span class="mi">0</span>
+
+
+<div class="viewcode-block" id="check_validity"><a class="viewcode-back" href="../../input.html#input.check_headers.check_validity">[docs]</a><span class="k">def</span> <span class="nf">check_validity</span><span class="p">(</span><span class="n">check_unavailable_uid</span><span class="o">=</span><span class="s1">&#39;False&#39;</span><span class="p">,</span> <span class="n">json_header_filename</span><span class="o">=</span><span class="s1">&#39;headers.json&#39;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This function checks for and prints duplicate, missing, and invalid objects in the &quot;headers.json&quot; file.</span>
+<span class="sd">    This function can be run first to generate a list of duplicate, missing, or invalid objects&#39; UIDs which</span>
+<span class="sd">    can then be used to add or remove their entries from the JSON file.</span>
+<span class="sd">    :return: Last UID that was checked by the function.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">previous_uid</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="c1"># The &quot;read_uid&quot; set is used to keep track of all the UIDs that have been read from the JSON file.</span>
+    <span class="c1"># In case a duplicate exists, it would be read twice and hence would fail the set membership test.</span>
+    <span class="n">read_uid</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([])</span>
+
+    <span class="c1"># This variable contains the last UID that was checked. This variable is returned by the function.</span>
+    <span class="n">last_valid_uid</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="n">header_attrib</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Message-ID&#39;</span><span class="p">,</span> <span class="s1">&#39;From&#39;</span><span class="p">,</span> <span class="s1">&#39;To&#39;</span><span class="p">,</span> <span class="s1">&#39;Cc&#39;</span><span class="p">,</span> <span class="s1">&#39;In-Reply-To&#39;</span><span class="p">,</span> <span class="s1">&#39;Time&#39;</span><span class="p">}</span>
+
+    <span class="c1"># Read UIDs of mails that are not forwarded from LKML subscription which is stored in a text file.</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">json_header_filename</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">json_file</span><span class="p">:</span>
+
+        <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">lines_per_n</span><span class="p">(</span><span class="n">json_file</span><span class="p">,</span> <span class="mi">9</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">json_obj</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Unreadable JSON object after UID: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">previous_uid</span><span class="p">))</span>
+                <span class="k">break</span>
+
+            <span class="c1"># Checking for duplicate objects</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;Message-ID&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="n">read_uid</span><span class="p">:</span>
+                <span class="n">read_uid</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;Message-ID&#39;</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">duplicate_uid</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;Message-ID&#39;</span><span class="p">])</span>
+
+            <span class="c1"># Check if the JSON object has sufficient attributes by checking if &quot;header_attrib&quot; is a subset of its keys</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">set</span><span class="p">(</span><span class="n">header_attrib</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">json_obj</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="ow">or</span> <span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">invalid_uid</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;Message-ID&#39;</span><span class="p">])</span>
+
+            <span class="c1"># Check if it is a mail that is sent directly to &quot;lkml.subscriber@gmail.com&quot;, in which caseit has not been</span>
+            <span class="c1"># forwarded from the LKML subscription.</span>
+            <span class="k">if</span> <span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;To&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;lkml.subscriber@gmail.com&quot;</span><span class="p">:</span>
+                <span class="n">unwanted_uid</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;Message-ID&#39;</span><span class="p">])</span>
+
+            <span class="n">previous_uid</span> <span class="o">=</span> <span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;Message-ID&#39;</span><span class="p">]</span>
+
+    <span class="c1"># Calculate the missing UIDs by performing a set difference on all the UIDs possible till the highest UID read</span>
+    <span class="c1"># from the actual UIDs that have been read.</span>
+    <span class="k">if</span> <span class="n">previous_uid</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">global</span> <span class="n">last_uid_read</span>
+        <span class="n">last_uid_read</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">read_uid</span><span class="p">)</span>
+        <span class="k">global</span> <span class="n">missing_uid</span>
+        <span class="n">missing_uid</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">read_uid</span><span class="p">),</span> <span class="n">last_uid_read</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span> <span class="o">-</span> <span class="n">read_uid</span>
+        <span class="k">global</span> <span class="n">unavailable_uid</span>
+
+    <span class="k">if</span> <span class="n">check_unavailable_uid</span><span class="p">:</span>
+        <span class="n">unavailable_uid</span> <span class="o">=</span> <span class="n">get_unavailable_uid</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Unavailable UIDs: &quot;</span><span class="p">,</span> <span class="n">unavailable_uid</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">unavailable_uid</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="s2">&quot;None&quot;</span><span class="p">)</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;unwanted_uid.txt&quot;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">unw_file</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">uid</span> <span class="ow">in</span> <span class="n">unwanted_uid</span><span class="p">:</span>
+                <span class="n">unw_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">uid</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Unwanted UIDs: &quot;</span><span class="p">,</span> <span class="n">unwanted_uid</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">unwanted_uid</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="s2">&quot;None&quot;</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Duplicate UIDs: &quot;</span><span class="p">,</span> <span class="n">duplicate_uid</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">duplicate_uid</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="s2">&quot;None&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Missing UIDs: &quot;</span><span class="p">,</span> <span class="n">missing_uid</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">missing_uid</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="s2">&quot;None&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Invalid UIDs: &quot;</span><span class="p">,</span> <span class="n">invalid_uid</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">invalid_uid</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="s2">&quot;None&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">last_uid_read</span></div>
+
+
+<div class="viewcode-block" id="remove_unwanted_headers"><a class="viewcode-back" href="../../input.html#input.check_headers.remove_unwanted_headers">[docs]</a><span class="k">def</span> <span class="nf">remove_unwanted_headers</span><span class="p">(</span><span class="n">to_remove</span><span class="o">=</span><span class="n">unwanted_uid</span><span class="p">,</span> <span class="n">json_header_filename</span><span class="o">=</span><span class="s1">&#39;headers.json&#39;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This function removes all the UIDs specified in the to_remove parameter. By default, it removes all the unwanted</span>
+<span class="sd">    entries in the JSON file, i.e. the list of UIDs of mails that are not forwarded from LKML subscription.</span>
+<span class="sd">    :param to_remove: A list of UIDs that need to be removed. Default value is the list of unwanted mails&#39; UIDs</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">to_remove</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Removing unwanted headers...&quot;</span><span class="p">)</span>
+        <span class="c1"># This list contains a list of JSON objects that need to be written to file</span>
+        <span class="n">write_to_file</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">json_header_filename</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">json_file</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">lines_per_n</span><span class="p">(</span><span class="n">json_file</span><span class="p">,</span> <span class="mi">9</span><span class="p">):</span>
+                <span class="n">json_obj</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;Message-ID&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="n">unwanted_uid</span><span class="p">:</span>
+                    <span class="n">write_to_file</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">json_obj</span><span class="p">)</span>
+
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">json_header_filename</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">json_file</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">json_obj</span> <span class="ow">in</span> <span class="n">write_to_file</span><span class="p">:</span>
+                <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">json_obj</span><span class="p">,</span> <span class="n">json_file</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">json_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="remove_duplicate_headers"><a class="viewcode-back" href="../../input.html#input.check_headers.remove_duplicate_headers">[docs]</a><span class="k">def</span> <span class="nf">remove_duplicate_headers</span><span class="p">(</span><span class="n">to_remove</span><span class="o">=</span><span class="n">duplicate_uid</span><span class="p">,</span> <span class="n">json_header_filename</span><span class="o">=</span><span class="s1">&#39;headers.json&#39;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This function removes all the duplicate entries of the UIDs specified in the to_remove parameter. By default,</span>
+<span class="sd">    it removes all the duplicate entries in the JSON file.</span>
+<span class="sd">    :param to_remove: A list of UIDs that need to be removed. Default value is the list of duplicate mails&#39; UIDs.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># The &quot;read_uid&quot; set is used to keep track of all the UIDs that have been read from the JSON file.</span>
+    <span class="c1"># In case a duplicate exists, it would be read twice and hence would fail the set membership test.</span>
+    <span class="n">read_uid</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([])</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">to_remove</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Removing duplicate headers...&quot;</span><span class="p">)</span>
+        <span class="c1"># This list contains a list of JSON objects that need to be written to file</span>
+        <span class="n">write_to_file</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">json_header_filename</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">json_file</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">lines_per_n</span><span class="p">(</span><span class="n">json_file</span><span class="p">,</span> <span class="mi">9</span><span class="p">):</span>
+                <span class="n">json_obj</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;Message-ID&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="n">read_uid</span><span class="p">:</span>
+                    <span class="n">write_to_file</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">json_obj</span><span class="p">)</span>
+                <span class="n">read_uid</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;Message-ID&#39;</span><span class="p">])</span>
+
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">json_header_filename</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">json_file</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">json_obj</span> <span class="ow">in</span> <span class="n">write_to_file</span><span class="p">:</span>
+                <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">json_obj</span><span class="p">,</span> <span class="n">json_file</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">json_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="add_missing_headers"><a class="viewcode-back" href="../../input.html#input.check_headers.add_missing_headers">[docs]</a><span class="k">def</span> <span class="nf">add_missing_headers</span><span class="p">(</span><span class="n">to_add</span><span class="o">=</span><span class="n">missing_uid</span><span class="p">,</span> <span class="n">unwanted_uid_filename</span><span class="o">=</span><span class="s2">&quot;unwanted_uid.txt&quot;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This function adds the mails that have been missed out, considering the fact that UIDs are consecutive.</span>
+<span class="sd">    If a mail that is missing in the JSON file is not available or has been deleted, this function ignores that UID.</span>
+<span class="sd">    :param to_add: A list of UIDs that need to be added. Default value is the list of missing mails&#39; UIDs.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># To prevent replacement of mails that are not forwarded from the LKML subscription:</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">unwanted_uid_filename</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">unw_file</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">unw_file</span><span class="p">:</span>
+            <span class="n">unwanted_uid</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()))</span>
+    <span class="n">to_add</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">to_add</span> <span class="k">if</span> <span class="n">x</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">unwanted_uid</span><span class="p">]</span>
+    <span class="c1"># To prevent attempts to replace mails are known to be not available in the IMAP server:</span>
+    <span class="n">to_add</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">to_add</span> <span class="k">if</span> <span class="n">x</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">unavailable_uid</span><span class="p">]</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">to_add</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Fetching missing headers...&quot;</span><span class="p">)</span>
+        <span class="n">get_mail_header</span><span class="p">(</span><span class="n">to_add</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="replace_invalid_headers"><a class="viewcode-back" href="../../input.html#input.check_headers.replace_invalid_headers">[docs]</a><span class="k">def</span> <span class="nf">replace_invalid_headers</span><span class="p">(</span><span class="n">to_replace</span><span class="o">=</span><span class="n">invalid_uid</span><span class="p">,</span> <span class="n">json_header_filename</span><span class="o">=</span><span class="s2">&quot;headers.json&quot;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This function removes the mail headers that have insufficient attributes and fetches those headers again.</span>
+<span class="sd">    If an attribute is missing in the original mail header or if the mail has been deleted, this function ignores that UID.</span>
+<span class="sd">    :param to_replace: A list of UIDs that need to be replaced. Default value is the list of invalid mails&#39; UIDs.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">to_replace</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Replacing invalid headers...&quot;</span><span class="p">)</span>
+        <span class="c1"># This list contains a list of JSON objects that need to be written to file</span>
+        <span class="n">write_to_file</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">json_header_filename</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">json_file</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">lines_per_n</span><span class="p">(</span><span class="n">json_file</span><span class="p">,</span> <span class="mi">9</span><span class="p">):</span>
+                <span class="n">json_obj</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;Message-ID&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="n">invalid_uid</span><span class="p">:</span>
+                    <span class="n">write_to_file</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">json_obj</span><span class="p">)</span>
+
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">json_header_filename</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">json_file</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">json_obj</span> <span class="ow">in</span> <span class="n">write_to_file</span><span class="p">:</span>
+                <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">json_obj</span><span class="p">,</span> <span class="n">json_file</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">json_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="n">add_missing_headers</span><span class="p">(</span><span class="n">to_replace</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="write_uid_map"><a class="viewcode-back" href="../../input.html#input.check_headers.write_uid_map">[docs]</a><span class="k">def</span> <span class="nf">write_uid_map</span><span class="p">(</span><span class="n">from_index</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">to_index</span><span class="o">=</span><span class="n">last_uid_read</span><span class="p">,</span> <span class="n">uid_map_filename</span><span class="o">=</span><span class="s2">&quot;thread_uid_map.json&quot;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    To ensure that references are correctly recorded in the JSON file such that there are no references to mails that</span>
+<span class="sd">    do not exist and to ease the processing of headers, a map with the string in the Message-Id field of the header to</span>
+<span class="sd">    the UID of the mail is required. This function fetches the headers from the IMAP server and adds the required</span>
+<span class="sd">    pairs of Message_ID and UID to the JSON file.</span>
+<span class="sd">    :param from_index: Fetches headers from this UID onwards.</span>
+<span class="sd">    :param to_index: Fetches headers till this UID (non inclusive).</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">uid_map_filename</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">map_file</span><span class="p">:</span>
+        <span class="n">uid_msg_id_map</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">map_file</span><span class="p">)</span>
+        <span class="n">map_file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+    <span class="n">to_get</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">from_index</span><span class="p">,</span> <span class="n">to_index</span><span class="p">))</span>
+    <span class="n">imaplib</span><span class="o">.</span><span class="n">_MAXLINE</span> <span class="o">=</span> <span class="mi">800000</span>
+    <span class="n">conn</span> <span class="o">=</span> <span class="n">open_connection</span><span class="p">()</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">conn</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s1">&#39;INBOX&#39;</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">num</span> <span class="ow">in</span> <span class="n">to_get</span><span class="p">:</span>
+            <span class="c1"># conn.uid() converts the arguments provided to an IMAP command to fetch the mail using the UID sepcified by num</span>
+            <span class="c1"># Uncomment the line below to fetch the entire message rather than just the mail headers.</span>
+            <span class="c1"># typ, msg_header = conn.uid(&#39;FETCH&#39;, num, &#39;(RFC822)&#39;)</span>
+            <span class="n">typ</span><span class="p">,</span> <span class="n">msg_header</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">uid</span><span class="p">(</span><span class="s1">&#39;FETCH&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">num</span><span class="p">),</span> <span class="s1">&#39;(RFC822.HEADER)&#39;</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">response_part</span> <span class="ow">in</span> <span class="n">msg_header</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">response_part</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Processing mail #&quot;</span><span class="p">,</span> <span class="n">num</span><span class="p">)</span>
+
+                    <span class="c1"># &quot;response_part&quot; contains the required info as a byte stream.</span>
+                    <span class="c1"># This has to be converted to a message stream using the email module</span>
+                    <span class="n">original</span> <span class="o">=</span> <span class="n">email</span><span class="o">.</span><span class="n">message_from_bytes</span><span class="p">(</span><span class="n">response_part</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+                    <span class="c1"># The splicing is done as to remove the &#39;&lt;&#39; and &#39;&gt;&#39; from the message-id string</span>
+                    <span class="n">uid_msg_id_map</span><span class="p">[</span><span class="n">original</span><span class="p">[</span><span class="s1">&#39;Message-ID&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="n">num</span>
+
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="n">conn</span><span class="o">.</span><span class="n">logout</span><span class="p">()</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">uid_map_filename</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">uid_msg_id_map</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">MailingListParser 0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, Prasad Talasila,Achyudh Ram.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.
+    </div>
+  </body>
+</html>

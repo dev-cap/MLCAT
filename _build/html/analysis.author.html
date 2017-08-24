@@ -1,0 +1,240 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>analysis.author package &#8212; MailingListParser 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="analysis.author.graph package" href="analysis.author.graph.html" />
+    <link rel="prev" title="analysis package" href="analysis.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="analysis.author.graph.html" title="analysis.author.graph package"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="analysis.html" title="analysis package"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">MailingListParser 0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" >Code for Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="analysis.html" accesskey="U">analysis package</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="analysis-author-package">
+<h1>analysis.author package<a class="headerlink" href="#analysis-author-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="analysis.author.graph.html">analysis.author.graph package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="analysis.author.graph.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="analysis.author.graph.html#analysis-author-graph-author-interaction-module">analysis.author.graph.author_interaction module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="analysis.author.graph.html#module-analysis.author.graph.bipartite">analysis.author.graph.bipartite module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="analysis.author.graph.html#analysis-author-graph-generate-module">analysis.author.graph.generate module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="analysis.author.graph.html#module-analysis.author.graph">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="analysis-author-curve-fitting-module">
+<h2>analysis.author.curve_fitting module<a class="headerlink" href="#analysis-author-curve-fitting-module" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-analysis.author.edge_list">
+<span id="analysis-author-edge-list-module"></span><h2>analysis.author.edge_list module<a class="headerlink" href="#module-analysis.author.edge_list" title="Permalink to this headline">¶</a></h2>
+<p>This module is used to  graphs that show the interaction between authors in the mailing list. There is an edge from
+one author to another if the former sent a message to the latter either in To or by marking in CC. These graphs are for
+the entire mailing list.</p>
+<dl class="function">
+<dt id="analysis.author.edge_list.generate_edge_list">
+<code class="descclassname">analysis.author.edge_list.</code><code class="descname">generate_edge_list</code><span class="sig-paren">(</span><em>author_nodelist_filename</em>, <em>author_edgelist_filename</em>, <em>nodelist_filename='graph_nodes.csv'</em>, <em>edgelist_filename='graph_edges.csv'</em>, <em>threads_json_filename='clean_data.json'</em>, <em>author_json_filename='author_uid_map.json'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/author/edge_list.html#generate_edge_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analysis.author.edge_list.generate_edge_list" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-analysis.author.ranking">
+<span id="analysis-author-ranking-module"></span><h2>analysis.author.ranking module<a class="headerlink" href="#module-analysis.author.ranking" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="analysis.author.ranking.generate_author_ranking">
+<code class="descclassname">analysis.author.ranking.</code><code class="descname">generate_author_ranking</code><span class="sig-paren">(</span><em>json_filename</em>, <em>output_filename</em>, <em>active_score</em>, <em>passive_score</em>, <em>write_to_file=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/author/ranking.html#generate_author_ranking"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analysis.author.ranking.generate_author_ranking" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>json_data</strong> &#8211; </li>
+<li><strong>active_score</strong> &#8211; </li>
+<li><strong>passive_score</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Sorted author scores</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-analysis.author.time_statistics">
+<span id="analysis-author-time-statistics-module"></span><h2>analysis.author.time_statistics module<a class="headerlink" href="#module-analysis.author.time_statistics" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="analysis.author.time_statistics.conversation_refresh_times">
+<code class="descclassname">analysis.author.time_statistics.</code><code class="descname">conversation_refresh_times</code><span class="sig-paren">(</span><em>headers_filename</em>, <em>nodelist_filename</em>, <em>edgelist_filename</em>, <em>foldername</em>, <em>time_ubound=None</em>, <em>time_lbound=None</em>, <em>plot=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/author/time_statistics.html#conversation_refresh_times"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analysis.author.time_statistics.conversation_refresh_times" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>json_data</strong> &#8211; </li>
+<li><strong>discussion_graph</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="analysis.author.time_statistics.inv_func">
+<code class="descclassname">analysis.author.time_statistics.</code><code class="descname">inv_func</code><span class="sig-paren">(</span><em>x</em>, <em>a</em>, <em>b</em>, <em>c</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/author/time_statistics.html#inv_func"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analysis.author.time_statistics.inv_func" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-analysis.author.wh_table">
+<span id="analysis-author-wh-table-module"></span><h2>analysis.author.wh_table module<a class="headerlink" href="#module-analysis.author.wh_table" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="analysis.author.wh_table.generate_wh_table_authors">
+<code class="descclassname">analysis.author.wh_table.</code><code class="descname">generate_wh_table_authors</code><span class="sig-paren">(</span><em>nodelist_filename</em>, <em>edgelist_filename</em>, <em>output_filename</em>, <em>ignore_lat=False</em>, <em>time_limit=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/author/wh_table.html#generate_wh_table_authors"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analysis.author.wh_table.generate_wh_table_authors" title="Permalink to this definition">¶</a></dt>
+<dd><p>This module is used to generate the author version of the width height table. The width height table for the
+authors is a representation of the number of total and new authors in a thread aggregated at a given generation.
+The table, which itself is temporarily stored in a two dimensional array, is then written into a CSV file. These
+tables are can be used to decipher the basic conversation structure.
+:param ignore_lat: If true, then lone author threads are ignored.
+:param time_limit: All messages until this timne are considered and all messages after this time are ignored. Time</p>
+<blockquote>
+<div>is specified as a string in one of the recognized formats.</div></blockquote>
+</dd></dl>
+
+</div>
+<div class="section" id="module-analysis.author">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-analysis.author" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">analysis.author package</a><ul>
+<li><a class="reference internal" href="#subpackages">Subpackages</a></li>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#analysis-author-curve-fitting-module">analysis.author.curve_fitting module</a></li>
+<li><a class="reference internal" href="#module-analysis.author.edge_list">analysis.author.edge_list module</a></li>
+<li><a class="reference internal" href="#module-analysis.author.ranking">analysis.author.ranking module</a></li>
+<li><a class="reference internal" href="#module-analysis.author.time_statistics">analysis.author.time_statistics module</a></li>
+<li><a class="reference internal" href="#module-analysis.author.wh_table">analysis.author.wh_table module</a></li>
+<li><a class="reference internal" href="#module-analysis.author">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="analysis.html"
+                        title="previous chapter">analysis package</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="analysis.author.graph.html"
+                        title="next chapter">analysis.author.graph package</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/analysis.author.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="analysis.author.graph.html" title="analysis.author.graph package"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="analysis.html" title="analysis package"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">MailingListParser 0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" >Code for Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="analysis.html" >analysis package</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, Prasad Talasila,Achyudh Ram.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.
+    </div>
+  </body>
+</html>

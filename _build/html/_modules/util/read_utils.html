@@ -1,0 +1,266 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>util.read_utils &#8212; MailingListParser 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">MailingListParser 0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for util.read_utils</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">traceback</span>
+<span class="kn">import</span> <span class="nn">pytz</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">networkx</span> <span class="k">as</span> <span class="nn">nx</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="k">import</span> <span class="n">islice</span><span class="p">,</span> <span class="n">chain</span>
+
+
+<div class="viewcode-block" id="lines_per_n"><a class="viewcode-back" href="../../util.html#util.read_utils.lines_per_n">[docs]</a><span class="k">def</span> <span class="nf">lines_per_n</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Each json object in the headers.json file occupies a set number of lines.</span>
+<span class="sd">    This function is used to read those set number of lines and return them.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span> <span class="p">:</span>
+        <span class="k">yield</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">chain</span><span class="p">([</span><span class="n">line</span><span class="p">],</span> <span class="n">islice</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)))</span></div>
+
+
+<div class="viewcode-block" id="get_lone_author_threads"><a class="viewcode-back" href="../../util.html#util.read_utils.get_lone_author_threads">[docs]</a><span class="k">def</span> <span class="nf">get_lone_author_threads</span><span class="p">(</span><span class="n">save_file</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">nodelist_filename</span><span class="o">=</span><span class="s1">&#39;graph_nodes.csv&#39;</span><span class="p">,</span> <span class="n">edgelist_filename</span><span class="o">=</span><span class="s1">&#39;graph_edges.csv&#39;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This function returns the UID of all the nodes that belong to a thread that has only one author</span>
+<span class="sd">    :param save_file: If True, the list of UIDs of nodes are saved to a text file</span>
+<span class="sd">    :return: A set containing the UID of all the nodes that belong to a thread that has a single author</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">discussion_graph</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">()</span>
+    <span class="n">email_re</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;[\w\.-]+@[\w\.-]+&#39;</span><span class="p">)</span>
+    <span class="n">lone_author_threads</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+    <span class="c1"># Add nodes into NetworkX graph by reading CSV file</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">nodelist_filename</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">node_file</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">pair</span> <span class="ow">in</span> <span class="n">node_file</span><span class="p">:</span>
+            <span class="n">node</span> <span class="o">=</span> <span class="n">pair</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;;&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+            <span class="n">from_addr</span> <span class="o">=</span> <span class="n">email_re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">node</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+            <span class="n">from_addr</span> <span class="o">=</span> <span class="n">from_addr</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="k">if</span> <span class="n">from_addr</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">node</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="n">discussion_graph</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">node</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">time</span><span class="o">=</span><span class="n">node</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">(),</span> <span class="n">sender</span><span class="o">=</span><span class="n">from_addr</span><span class="p">)</span>
+        <span class="n">node_file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+    <span class="c1"># Add edges into NetworkX graph by reading CSV file</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">edgelist_filename</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">edge_file</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">pair</span> <span class="ow">in</span> <span class="n">edge_file</span><span class="p">:</span>
+            <span class="n">edge</span> <span class="o">=</span> <span class="n">pair</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;;&#39;</span><span class="p">)</span>
+            <span class="n">edge</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">edge</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">edge</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">edge</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">discussion_graph</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">edge</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="s1">&#39;sender&#39;</span><span class="p">]</span>
+                <span class="n">discussion_graph</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">edge</span><span class="p">[</span><span class="mi">1</span><span class="p">]][</span><span class="s1">&#39;sender&#39;</span><span class="p">]</span>
+                <span class="n">discussion_graph</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="o">*</span><span class="n">edge</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                <span class="k">pass</span>
+        <span class="n">edge_file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+    <span class="k">for</span> <span class="n">conn_subgraph</span> <span class="ow">in</span> <span class="n">nx</span><span class="o">.</span><span class="n">weakly_connected_component_subgraphs</span><span class="p">(</span><span class="n">discussion_graph</span><span class="p">):</span>
+        <span class="n">thread_authors</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">node</span><span class="p">,</span> <span class="n">attributes</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">conn_subgraph</span><span class="o">.</span><span class="n">nodes_iter</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="kc">True</span><span class="p">)):</span>
+            <span class="n">thread_authors</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">attributes</span><span class="p">[</span><span class="s1">&#39;sender&#39;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">thread_authors</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">lone_author_threads</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">conn_subgraph</span><span class="o">.</span><span class="n">nodes</span><span class="p">())</span>
+
+    <span class="k">if</span> <span class="n">save_file</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Saving to lone_author_threads.txt...&quot;</span><span class="p">)</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;lone_author_threads.txt&quot;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">txt_file</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">uid</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">lone_author_threads</span><span class="p">):</span>
+                <span class="n">txt_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">uid</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">lone_author_threads</span></div>
+
+
+<div class="viewcode-block" id="get_datetime_object"><a class="viewcode-back" href="../../util.html#util.read_utils.get_datetime_object">[docs]</a><span class="k">def</span> <span class="nf">get_datetime_object</span><span class="p">(</span><span class="n">orig_time</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A function to convert a formatted string containing date and time from a local timezone to UTC, by taking into</span>
+<span class="sd">    consideration multiple formats of the input parameter and then return the corresponding datetime object.</span>
+<span class="sd">    :param orig_time: Formatted string containing a date and time from a local timezone</span>
+<span class="sd">    :return: A datetime object corresponding to the input string in UTC</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># Truncating the string to contain only required values and removing unwanted whitespace</span>
+        <span class="n">trunc_date</span> <span class="o">=</span> <span class="n">orig_time</span><span class="p">[:</span><span class="mi">31</span><span class="p">]</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">orig_time</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">31</span> <span class="k">else</span> <span class="n">orig_time</span>
+        <span class="n">trunc_date</span> <span class="o">=</span> <span class="n">trunc_date</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">if</span> <span class="s2">&quot;GMT&quot;</span> <span class="ow">in</span> <span class="n">trunc_date</span><span class="p">:</span>
+            <span class="n">trunc_date</span> <span class="o">=</span> <span class="n">trunc_date</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;GMT&quot;</span><span class="p">,</span> <span class="s2">&quot;+0000&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="s2">&quot;PST&quot;</span> <span class="ow">in</span> <span class="n">trunc_date</span><span class="p">:</span>
+            <span class="n">trunc_date</span> <span class="o">=</span> <span class="n">trunc_date</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;PST&quot;</span><span class="p">,</span> <span class="s2">&quot;-0800&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="s2">&quot;EST&quot;</span> <span class="ow">in</span> <span class="n">trunc_date</span><span class="p">:</span>
+            <span class="n">trunc_date</span> <span class="o">=</span> <span class="n">trunc_date</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;EST&quot;</span><span class="p">,</span> <span class="s2">&quot;-0500&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="s2">&quot;EET&quot;</span> <span class="ow">in</span> <span class="n">trunc_date</span><span class="p">:</span>
+            <span class="n">trunc_date</span> <span class="o">=</span> <span class="n">trunc_date</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;EET&quot;</span><span class="p">,</span> <span class="s2">&quot;+0200&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="s2">&quot;CET&quot;</span> <span class="ow">in</span> <span class="n">trunc_date</span><span class="p">:</span>
+            <span class="n">trunc_date</span> <span class="o">=</span> <span class="n">trunc_date</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;CET&quot;</span><span class="p">,</span> <span class="s2">&quot;+0100&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Generating a datetime object considering multiple formats of the input parameter - with and without weekday</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">trunc_date</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">30</span> <span class="ow">and</span> <span class="n">trunc_date</span><span class="p">[</span><span class="mi">14</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;:&#39;</span><span class="p">:</span>
+            <span class="n">datetime_obj</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">trunc_date</span><span class="p">,</span> <span class="s2">&quot;%a, %b </span><span class="si">%d</span><span class="s2"> %H:%M:%S %Y %z&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">trunc_date</span><span class="p">)</span> <span class="o">==</span> <span class="mi">25</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">trunc_date</span><span class="p">)</span> <span class="o">==</span> <span class="mi">26</span><span class="p">:</span>
+            <span class="n">datetime_obj</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">trunc_date</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">%d</span><span class="s2"> %b %Y %H:%M:%S %z&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">trunc_date</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;,&#39;</span> <span class="ow">and</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">trunc_date</span><span class="p">)</span> <span class="o">==</span> <span class="mi">28</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">trunc_date</span><span class="p">)</span> <span class="o">==</span> <span class="mi">29</span><span class="p">)</span> <span class="ow">and</span> <span class="s1">&#39;+&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">trunc_date</span> <span class="ow">and</span> <span class="s1">&#39;-&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">trunc_date</span><span class="p">:</span>
+            <span class="n">datetime_obj</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">trunc_date</span><span class="p">,</span> <span class="s2">&quot;%a, </span><span class="si">%d</span><span class="s2"> %b %Y %H:%M:%S %Z&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">trunc_date</span><span class="p">)</span> <span class="o">==</span> <span class="mi">27</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">trunc_date</span><span class="p">)</span> <span class="o">==</span> <span class="mi">28</span><span class="p">:</span>
+            <span class="n">datetime_obj</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">trunc_date</span><span class="p">,</span> <span class="s2">&quot;%a, </span><span class="si">%d</span><span class="s2"> %b %Y %H:%M %z&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">str</span><span class="o">.</span><span class="n">isalpha</span><span class="p">(</span><span class="n">trunc_date</span><span class="p">[</span><span class="mi">5</span><span class="p">])</span> <span class="ow">and</span> <span class="nb">str</span><span class="o">.</span><span class="n">isdigit</span><span class="p">(</span><span class="n">trunc_date</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]):</span>
+            <span class="n">datetime_obj</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">trunc_date</span><span class="p">,</span> <span class="s2">&quot;%a, %b </span><span class="si">%d</span><span class="s2"> %H:%M:%S %z %Y&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">datetime_obj</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">trunc_date</span><span class="p">,</span> <span class="s2">&quot;%a, </span><span class="si">%d</span><span class="s2"> %b %Y %H:%M:%S %z&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Converting the datetime object into a formatted string</span>
+        <span class="n">utc_dt</span> <span class="o">=</span> <span class="n">datetime_obj</span><span class="o">.</span><span class="n">astimezone</span><span class="p">(</span><span class="n">pytz</span><span class="o">.</span><span class="n">utc</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">utc_dt</span>
+
+    <span class="k">except</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Unable to process date:&quot;</span><span class="p">,</span> <span class="n">orig_time</span><span class="p">,</span> <span class="n">trunc_date</span><span class="p">)</span>
+        <span class="n">traceback</span><span class="o">.</span><span class="n">print_exc</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="get_utc_time"><a class="viewcode-back" href="../../util.html#util.read_utils.get_utc_time">[docs]</a><span class="k">def</span> <span class="nf">get_utc_time</span><span class="p">(</span><span class="n">orig_time</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A function to convert a formatted string containing date and time from a local timezone to UTC, by taking into</span>
+<span class="sd">    consideration multiple formats of the input parameter</span>
+<span class="sd">    :param orig_time: Formatted string containing a date and time from a local timezone</span>
+<span class="sd">    :return: Formatted string containing the date and time in UTC</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">orig_time</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">orig_time</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># Truncating the string to contain only required values and removing unwanted whitespace</span>
+        <span class="n">trunc_date</span> <span class="o">=</span> <span class="n">orig_time</span><span class="p">[:</span><span class="mi">31</span><span class="p">]</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">orig_time</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">31</span> <span class="k">else</span> <span class="n">orig_time</span>
+        <span class="n">trunc_date</span> <span class="o">=</span> <span class="n">trunc_date</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">if</span> <span class="s2">&quot;GMT&quot;</span> <span class="ow">in</span> <span class="n">trunc_date</span><span class="p">:</span>
+            <span class="n">trunc_date</span> <span class="o">=</span> <span class="n">trunc_date</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;GMT&quot;</span><span class="p">,</span> <span class="s2">&quot;+0000&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="s2">&quot;PST&quot;</span> <span class="ow">in</span> <span class="n">trunc_date</span><span class="p">:</span>
+            <span class="n">trunc_date</span> <span class="o">=</span> <span class="n">trunc_date</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;PST&quot;</span><span class="p">,</span> <span class="s2">&quot;-0800&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="s2">&quot;PDT&quot;</span> <span class="ow">in</span> <span class="n">trunc_date</span><span class="p">:</span>
+            <span class="n">trunc_date</span> <span class="o">=</span> <span class="n">trunc_date</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;PDT&quot;</span><span class="p">,</span> <span class="s2">&quot;-0800&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="s2">&quot;EST&quot;</span> <span class="ow">in</span> <span class="n">trunc_date</span><span class="p">:</span>
+            <span class="n">trunc_date</span> <span class="o">=</span> <span class="n">trunc_date</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;EST&quot;</span><span class="p">,</span> <span class="s2">&quot;-0500&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="s2">&quot;EET&quot;</span> <span class="ow">in</span> <span class="n">trunc_date</span><span class="p">:</span>
+            <span class="n">trunc_date</span> <span class="o">=</span> <span class="n">trunc_date</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;EET&quot;</span><span class="p">,</span> <span class="s2">&quot;+0200&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="s2">&quot;CET&quot;</span> <span class="ow">in</span> <span class="n">trunc_date</span><span class="p">:</span>
+            <span class="n">trunc_date</span> <span class="o">=</span> <span class="n">trunc_date</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;CET&quot;</span><span class="p">,</span> <span class="s2">&quot;+0100&quot;</span><span class="p">)</span>
+        <span class="c1"># Generating a datetime object considering multiple formats of the input parameter - with and without weekday</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">trunc_date</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">30</span> <span class="ow">and</span> <span class="n">trunc_date</span><span class="p">[</span><span class="mi">14</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;:&#39;</span><span class="p">:</span>
+            <span class="n">datetime_obj</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">trunc_date</span><span class="p">,</span> <span class="s2">&quot;%a, %b </span><span class="si">%d</span><span class="s2"> %H:%M:%S %Y %z&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">trunc_date</span><span class="p">)</span> <span class="o">==</span> <span class="mi">25</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">trunc_date</span><span class="p">)</span> <span class="o">==</span> <span class="mi">26</span><span class="p">:</span>
+            <span class="n">datetime_obj</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">trunc_date</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">%d</span><span class="s2"> %b %Y %H:%M:%S %z&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">trunc_date</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;,&#39;</span> <span class="ow">and</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">trunc_date</span><span class="p">)</span> <span class="o">==</span> <span class="mi">28</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">trunc_date</span><span class="p">)</span> <span class="o">==</span> <span class="mi">29</span><span class="p">)</span> <span class="ow">and</span> <span class="s1">&#39;+&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">trunc_date</span> <span class="ow">and</span> <span class="s1">&#39;-&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">trunc_date</span><span class="p">:</span>
+            <span class="n">datetime_obj</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">trunc_date</span><span class="p">,</span> <span class="s2">&quot;%a, </span><span class="si">%d</span><span class="s2"> %b %Y %H:%M:%S %Z&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">trunc_date</span><span class="p">)</span> <span class="o">==</span> <span class="mi">27</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">trunc_date</span><span class="p">)</span> <span class="o">==</span> <span class="mi">28</span><span class="p">:</span>
+            <span class="n">datetime_obj</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">trunc_date</span><span class="p">,</span> <span class="s2">&quot;%a, </span><span class="si">%d</span><span class="s2"> %b %Y %H:%M %z&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">str</span><span class="o">.</span><span class="n">isalpha</span><span class="p">(</span><span class="n">trunc_date</span><span class="p">[</span><span class="mi">5</span><span class="p">])</span> <span class="ow">and</span> <span class="nb">str</span><span class="o">.</span><span class="n">isdigit</span><span class="p">(</span><span class="n">trunc_date</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]):</span>
+            <span class="n">datetime_obj</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">trunc_date</span><span class="p">,</span> <span class="s2">&quot;%a, %b </span><span class="si">%d</span><span class="s2"> %H:%M:%S %z %Y&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">datetime_obj</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">trunc_date</span><span class="p">,</span> <span class="s2">&quot;%a, </span><span class="si">%d</span><span class="s2"> %b %Y %H:%M:%S %z&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Converting the datetime object into a formatted string</span>
+        <span class="n">utc_dt</span> <span class="o">=</span> <span class="n">datetime_obj</span><span class="o">.</span><span class="n">astimezone</span><span class="p">(</span><span class="n">pytz</span><span class="o">.</span><span class="n">utc</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">utc_dt</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%a, </span><span class="si">%d</span><span class="s2"> %b %Y %H:%M:%S %z&quot;</span><span class="p">)</span>
+
+    <span class="k">except</span><span class="p">:</span>
+        <span class="c1"># print(&quot;Unable to process date:&quot;, orig_time, trunc_date)</span>
+        <span class="k">return</span> <span class="s2">&quot;Error&quot;</span></div>
+
+
+<div class="viewcode-block" id="get_messages_before"><a class="viewcode-back" href="../../util.html#util.read_utils.get_messages_before">[docs]</a><span class="k">def</span> <span class="nf">get_messages_before</span><span class="p">(</span><span class="n">time_limit</span><span class="p">,</span> <span class="n">nodelist_filename</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This function returns a set of Message-IDs that have arrived before the time limit passed as parameter.</span>
+<span class="sd">    :param time_limit: A string formatted time stamp in one of the recognized formats.</span>
+<span class="sd">    :return: A set containing Message-IDs that have arrived before the time limit passed as parameter.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">time_limit</span> <span class="o">=</span> <span class="n">get_datetime_object</span><span class="p">(</span><span class="n">time_limit</span><span class="p">)</span>
+    <span class="n">msgs_before_time</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">nodelist_filename</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">node_file</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">pair</span> <span class="ow">in</span> <span class="n">node_file</span><span class="p">:</span>
+            <span class="n">node</span> <span class="o">=</span> <span class="n">pair</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;;&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+            <span class="n">sent_time</span> <span class="o">=</span> <span class="n">node</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">get_datetime_object</span><span class="p">(</span><span class="n">sent_time</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">time_limit</span><span class="p">:</span>
+                <span class="n">msgs_before_time</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">node</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+        <span class="n">node_file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">msgs_before_time</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">MailingListParser 0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, Prasad Talasila,Achyudh Ram.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.
+    </div>
+  </body>
+</html>

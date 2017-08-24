@@ -1,0 +1,160 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>What does MailingListParser plan to accomplish? &#8212; MailingListParser 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Analysis Techniques" href="analysis_techniques.html" />
+    <link rel="prev" title="What is MailingListParser?" href="introduction.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="analysis_techniques.html" title="Analysis Techniques"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="introduction.html" title="What is MailingListParser?"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">MailingListParser 0.1 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="what-does-mailinglistparser-plan-to-accomplish">
+<h1>What does MailingListParser plan to accomplish?<a class="headerlink" href="#what-does-mailinglistparser-plan-to-accomplish" title="Permalink to this headline">¶</a></h1>
+<p>This project aims to cover some of the most prevalent issues and topics in social networking. It can be used to identify the community structure in a mailing list, track the community of experts on channels, form different types of graphs for making predictive models, assign weights based on the activeness or response times for each user amongst various other activities.</p>
+<div class="section" id="overall-research-objectives">
+<h2>Overall Research Objectives<a class="headerlink" href="#overall-research-objectives" title="Permalink to this headline">¶</a></h2>
+<p>The objective of this research is to answer the following questions:</p>
+<ol class="arabic simple">
+<li>How does a typical mailing list subscriber communicate with other subscribers?</li>
+<li>What are the invariant characteristics of a discussion thread on the mailing list?</li>
+<li>What are the suitable graph models (simple, weighted - directed, hypergraph) for the discussion threads and subscriber communication?</li>
+<li>In light of answers to above questions, what kind of updates can be done to mailing list filters in order to remove spam messages for subscribers.</li>
+<li>How can we model the <strong>temporal behaviour of the authors</strong> in the mailing list?</li>
+</ol>
+<p>Further research objectives:</p>
+<ol class="arabic simple">
+<li>Formulation of a proper algorithm for the <strong>identification of popular authors</strong> in a given mailing list.</li>
+<li><strong>Degree distribution</strong> of the nodes and authors in the mailing list.</li>
+<li><strong>Mean path length analysis</strong></li>
+<li><strong>Community detection</strong>: Identification of the various communities of authors in the mailing list and assigning proper labels for these communities.</li>
+<li>Stability and growth of an egocentric neighbourhood.</li>
+<li>Identification of a pattern that leads to changes in marked observers across generations in a thread.</li>
+</ol>
+<p>We shall use Linux Kernel Mailing List (LKML) as the base case to form suitable hypothesis. After the hypotheses are formulated, we shall validate the hypotheses on other open mailing lists. This research can be divided into data collection, the analysis of threads and the author-centric analysis.</p>
+</div>
+<div class="section" id="a-list-of-research-questions">
+<h2>A List of Research Questions<a class="headerlink" href="#a-list-of-research-questions" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Why do mailing list subscribers put people in to CC, BCC instead of To?</li>
+<li>What is the Dunbar number (Refer: <a class="reference external" href="https://en.wikipedia.org/wiki/Dunbar's_number">Dunbar&#8217;s_number</a>) on LKML?</li>
+<li>What are the primary labels for each of the subscribers of the LKML?</li>
+<li>Is there a correlation between the number of authors and the length of a thread (either in time or the number of messages)?</li>
+<li>Each user can be thought of as a peer or a server. Servers arrive or depart with a high churn rate. A peer posts a question (ticket) and waits for service while the ticket is serviced by a server or sometimes self-serviced. If this is the case, what is the churn rate or diurnal activity and the message arrival and servicing characterization?</li>
+<li>Is there a correlation between the number of marked people in a node and the height of node? Does this relationship depend on the length of the entire thread?</li>
+</ol>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">What does MailingListParser plan to accomplish?</a><ul>
+<li><a class="reference internal" href="#overall-research-objectives">Overall Research Objectives</a></li>
+<li><a class="reference internal" href="#a-list-of-research-questions">A List of Research Questions</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="introduction.html"
+                        title="previous chapter">What is MailingListParser?</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="analysis_techniques.html"
+                        title="next chapter">Analysis Techniques</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/project_goals.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="analysis_techniques.html" title="Analysis Techniques"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="introduction.html" title="What is MailingListParser?"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">MailingListParser 0.1 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, Prasad Talasila,Achyudh Ram.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.
+    </div>
+  </body>
+</html>
