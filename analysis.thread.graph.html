@@ -6,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>analysis.thread.graph package &#8212; MailingListParser  documentation</title>
+    <title>analysis.thread.graph package &#8212; MailingListParser 0.1 documentation</title>
     
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '',
+        VERSION:     '0.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -24,16 +24,34 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-   
-  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
-  
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
-
+    <link rel="next" title="input package" href="input.html" />
+    <link rel="prev" title="analysis.thread package" href="analysis.thread.html" /> 
   </head>
   <body role="document">
-  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="input.html" title="input package"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="analysis.thread.html" title="analysis.thread package"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">MailingListParser 0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" >Code for Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="analysis.html" >analysis package</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="analysis.thread.html" accesskey="U">analysis.thread package</a> &#187;</li> 
+      </ul>
+    </div>  
 
     <div class="document">
       <div class="documentwrapper">
@@ -49,14 +67,14 @@
 <span id="analysis-thread-graph-edge-list-module"></span><h2>analysis.thread.graph.edge_list module<a class="headerlink" href="#module-analysis.thread.graph.edge_list" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="analysis.thread.graph.edge_list.generate_edge_list">
-<code class="descclassname">analysis.thread.graph.edge_list.</code><code class="descname">generate_edge_list</code><span class="sig-paren">(</span><em>nodelist_filename='graph_nodes.csv'</em>, <em>edgelist_filename='graph_edges.csv'</em>, <em>json_filename='clean_data.json'</em><span class="sig-paren">)</span><a class="headerlink" href="#analysis.thread.graph.edge_list.generate_edge_list" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">analysis.thread.graph.edge_list.</code><code class="descname">generate_edge_list</code><span class="sig-paren">(</span><em>nodelist_filename='graph_nodes.csv'</em>, <em>edgelist_filename='graph_edges.csv'</em>, <em>json_filename='clean_data.json'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/thread/graph/edge_list.html#generate_edge_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analysis.thread.graph.edge_list.generate_edge_list" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function generates a list of nodes and edges in the graphs from the JSON file and saves it as a CSV file.
 :param ref_toggle: If True, References attribute is used to make edges and if False, In-Reply-To is used.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="analysis.thread.graph.edge_list.generate_node_labels">
-<code class="descclassname">analysis.thread.graph.edge_list.</code><code class="descname">generate_node_labels</code><span class="sig-paren">(</span><em>nodelist_filename='graph_nodes.txt'</em>, <em>edgelist_filename='graph_edges.txt'</em>, <em>json_filename='clean_data.json'</em><span class="sig-paren">)</span><a class="headerlink" href="#analysis.thread.graph.edge_list.generate_node_labels" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">analysis.thread.graph.edge_list.</code><code class="descname">generate_node_labels</code><span class="sig-paren">(</span><em>nodelist_filename='graph_nodes.txt'</em>, <em>edgelist_filename='graph_edges.txt'</em>, <em>json_filename='clean_data.json'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/thread/graph/edge_list.html#generate_node_labels"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analysis.thread.graph.edge_list.generate_node_labels" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function generates a list of nodes and edges in the graphs from the JSON file and saves it as a CSV file.
 :param ref_toggle: If True, References attribute is used to make edges and if False, In-Reply-To is used.</p>
 </dd></dl>
@@ -86,13 +104,13 @@
 </ul>
 </li>
 </ul>
-<div class="relations">
-<h3>Related Topics</h3>
-<ul>
-  <li><a href="index.html">Documentation overview</a><ul>
-  </ul></li>
-</ul>
-</div>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="analysis.thread.html"
+                        title="previous chapter">analysis.thread package</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="input.html"
+                        title="next chapter">input package</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -114,20 +132,30 @@
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="footer">
-      &copy;2017, Prasad Talasila.
-      
-      |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.6</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.8</a>
-      
-      |
-      <a href="_sources/analysis.thread.graph.rst.txt"
-          rel="nofollow">Page source</a>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="input.html" title="input package"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="analysis.thread.html" title="analysis.thread package"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">MailingListParser 0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" >Code for Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="analysis.html" >analysis package</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="analysis.thread.html" >analysis.thread package</a> &#187;</li> 
+      </ul>
     </div>
-
-    
-
-    
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, Prasad Talasila,Achyudh Ram.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.
+    </div>
   </body>
 </html>
