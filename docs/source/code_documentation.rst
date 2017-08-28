@@ -1,38 +1,38 @@
 Documentation for the Code
 **************************
 
-.. automodule:: MailingListParser
+.. automodule:: Mailing-List-Network-Analyzer
 
 Input
 =================
 
-.. automodule:: MailingListParser.input
+.. automodule:: Mailing-List-Network-Analyzer.input
    :members:
 
 
 Author Analysis
 ==================
 
-.. automodule:: MailingListParser.analysis.author
+.. automodule:: Mailing-List-Network-Analyzer.analysis.author
    :members:
 
 
 Thread Analysis
 =================
 
-.. automodule:: MailingListParser.analysis.thread
+.. automodule:: Mailing-List-Network-Analyzer.analysis.thread
    :members:
 
 
 Utility
 ==============
 
-.. automodule:: MailingListParser.util
+.. automodule:: Mailing-List-Network-Analyzer.util
    :members:
 
 
 Deprecated
 ==============
 
-.. automodule:: MailingListParser.deprecated
+.. automodule:: Mailing-List-Network-Analyzer.deprecated
    :members:
