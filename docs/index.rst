@@ -13,8 +13,9 @@ Welcome to MailingListParser's documentation!
    introduction
    analysis_techniques
    project_goals
+   algos   
    modules
-	
+
 
 
 Indices and tables
