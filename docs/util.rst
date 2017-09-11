@@ -76,11 +76,3 @@ util.union_find module
     :undoc-members:
     :show-inheritance:
 
-
-Module contents
----------------
-
-.. automodule:: util
-    :members:
-    :undoc-members:
-    :show-inheritance:
