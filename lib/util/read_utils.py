@@ -19,7 +19,10 @@ def lines_per_n(f, n):
 def get_lone_author_threads(save_file=None, nodelist_filename='graph_nodes.csv', edgelist_filename='graph_edges.csv'):
     """
     This function returns the UID of all the nodes that belong to a thread that has only one author
+
     :param save_file: If True, the list of UIDs of nodes are saved to a text file
+    :param nodelist_filename: The name of the file containing the nodes
+    :param edgelist_filename: The name of the file containing the edges
     :return: A set containing the UID of all the nodes that belong to a thread that has a single author
     """
     discussion_graph = nx.DiGraph()
@@ -65,9 +68,8 @@ def get_lone_author_threads(save_file=None, nodelist_filename='graph_nodes.csv',
 
 
 def get_datetime_object(orig_time):
-    """
-    A function to convert a formatted string containing date and time from a local timezone to UTC, by taking into
-    consideration multiple formats of the input parameter and then return the corresponding datetime object.
+    """A function to convert a formatted string containing date and time from a local timezone to UTC, by taking into consideration multiple formats of the input parameter and then return the corresponding datetime object.
+
     :param orig_time: Formatted string containing a date and time from a local timezone
     :return: A datetime object corresponding to the input string in UTC
     """
@@ -113,6 +115,7 @@ def get_utc_time(orig_time):
     """
     A function to convert a formatted string containing date and time from a local timezone to UTC, by taking into
     consideration multiple formats of the input parameter
+
     :param orig_time: Formatted string containing a date and time from a local timezone
     :return: Formatted string containing the date and time in UTC
     """
@@ -160,7 +163,9 @@ def get_utc_time(orig_time):
 def get_messages_before(time_limit, nodelist_filename):
     """
     This function returns a set of Message-IDs that have arrived before the time limit passed as parameter.
+
     :param time_limit: A string formatted time stamp in one of the recognized formats.
+    :param nodelist_filename: The name of the file containing the nodes.
     :return: A set containing Message-IDs that have arrived before the time limit passed as parameter.
     """
     time_limit = get_datetime_object(time_limit)
