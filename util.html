@@ -43,7 +43,7 @@
           <a href="input.mbox.html" title="input.mbox package"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">MailingListParser 0.1 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="modules.html" accesskey="U">Code for Documentation</a> &#187;</li> 
+          <li class="nav-item nav-item-1"><a href="modules.html" accesskey="U">Documentation for the Code</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -70,14 +70,16 @@ generated are used in other modules like the generation and statistical analysis
 </div>
 <div class="section" id="module-util.custom_stopwords">
 <span id="util-custom-stopwords-module"></span><h2>util.custom_stopwords module<a class="headerlink" href="#module-util.custom_stopwords" title="Permalink to this headline">¶</a></h2>
-<p>All the words in these sets will have to be in lowercase.
-Add custom stopwords to the second</p>
+<p>This file contains a list of custom words for this project under custom_words and commonly used words under common_words</p>
 </div>
 <div class="section" id="util-graph-leaf-nodes-module">
 <h2>util.graph_leaf_nodes module<a class="headerlink" href="#util-graph-leaf-nodes-module" title="Permalink to this headline">¶</a></h2>
 </div>
 <div class="section" id="module-util.json_encoder">
 <span id="util-json-encoder-module"></span><h2>util.json_encoder module<a class="headerlink" href="#module-util.json_encoder" title="Permalink to this headline">¶</a></h2>
+<p>This class is used for pretty printing in a json file. Normal json behaviour is to print all the elements of a list
+on separate lines. Here we convert a list into a string of comma separated elements of the list. This helps containing
+the elements of the list in a single line.</p>
 <dl class="class">
 <dt id="util.json_encoder.MyEncoder">
 <em class="property">class </em><code class="descclassname">util.json_encoder.</code><code class="descname">MyEncoder</code><span class="sig-paren">(</span><em>*</em>, <em>skipkeys=False</em>, <em>ensure_ascii=True</em>, <em>check_circular=True</em>, <em>allow_nan=True</em>, <em>sort_keys=False</em>, <em>indent=None</em>, <em>separators=None</em>, <em>default=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/json_encoder.html#MyEncoder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.json_encoder.MyEncoder" title="Permalink to this definition">¶</a></dt>
@@ -103,19 +105,27 @@ Add custom stopwords to the second</p>
 <code class="descclassname">util.preprocessing_utils.</code><code class="descname">is_outlier</code><span class="sig-paren">(</span><em>points</em>, <em>thresh=3.5</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/preprocessing_utils.html#is_outlier"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.preprocessing_utils.is_outlier" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a boolean array with True if points are outliers and False
 otherwise.</p>
-<blockquote>
-<div><p>points : An numobservations by numdimensions array of observations
-thresh : The modified z-score to use as a threshold. Observations with</p>
-<blockquote>
-<div>a modified z-score (based on the median absolute deviation) greater
-than this value will be classified as outliers.</div></blockquote>
-</div></blockquote>
-<blockquote>
-<div>mask : A numobservations-length boolean array.</div></blockquote>
-<blockquote>
-<div>Boris Iglewicz and David Hoaglin (1993), &#8220;Volume 16: How to Detect and
-Handle Outliers&#8221;, The ASQC Basic References in Quality Control:
-Statistical Techniques, Edward F. Mykytka, Ph.D., Editor.</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>points</strong> &#8211; An numobservations by numdimensions array of observations</li>
+<li><strong>thresh</strong> &#8211; The modified z-score to use as a threshold. Observations with
+a modified z-score (based on the median absolute deviation) greater
+than this value will be classified as outliers.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A numobservations-length boolean array.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Reference: Boris Iglewicz and David Hoaglin (1993), &#8220;Volume 16: How to Detect and Handle Outliers&#8221;, The ASQC Basic References in Quality Control:Statistical Techniques, Edward F. Mykytka, Ph.D., Editor.</p>
+</div>
 </dd></dl>
 
 </div>
@@ -124,35 +134,77 @@ Statistical Techniques, Edward F. Mykytka, Ph.D., Editor.</div></blockquote>
 <dl class="function">
 <dt id="util.read_utils.get_datetime_object">
 <code class="descclassname">util.read_utils.</code><code class="descname">get_datetime_object</code><span class="sig-paren">(</span><em>orig_time</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/read_utils.html#get_datetime_object"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.read_utils.get_datetime_object" title="Permalink to this definition">¶</a></dt>
-<dd><p>A function to convert a formatted string containing date and time from a local timezone to UTC, by taking into
-consideration multiple formats of the input parameter and then return the corresponding datetime object.
-:param orig_time: Formatted string containing a date and time from a local timezone
-:return: A datetime object corresponding to the input string in UTC</p>
+<dd><p>A function to convert a formatted string containing date and time from a local timezone to UTC, by taking into consideration multiple formats of the input parameter and then return the corresponding datetime object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>orig_time</strong> &#8211; Formatted string containing a date and time from a local timezone</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A datetime object corresponding to the input string in UTC</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="util.read_utils.get_lone_author_threads">
 <code class="descclassname">util.read_utils.</code><code class="descname">get_lone_author_threads</code><span class="sig-paren">(</span><em>save_file=None</em>, <em>nodelist_filename='graph_nodes.csv'</em>, <em>edgelist_filename='graph_edges.csv'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/read_utils.html#get_lone_author_threads"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.read_utils.get_lone_author_threads" title="Permalink to this definition">¶</a></dt>
-<dd><p>This function returns the UID of all the nodes that belong to a thread that has only one author
-:param save_file: If True, the list of UIDs of nodes are saved to a text file
-:return: A set containing the UID of all the nodes that belong to a thread that has a single author</p>
+<dd><p>This function returns the UID of all the nodes that belong to a thread that has only one author</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>save_file</strong> &#8211; If True, the list of UIDs of nodes are saved to a text file</li>
+<li><strong>nodelist_filename</strong> &#8211; The name of the file containing the nodes</li>
+<li><strong>edgelist_filename</strong> &#8211; The name of the file containing the edges</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A set containing the UID of all the nodes that belong to a thread that has a single author</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="util.read_utils.get_messages_before">
 <code class="descclassname">util.read_utils.</code><code class="descname">get_messages_before</code><span class="sig-paren">(</span><em>time_limit</em>, <em>nodelist_filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/read_utils.html#get_messages_before"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.read_utils.get_messages_before" title="Permalink to this definition">¶</a></dt>
-<dd><p>This function returns a set of Message-IDs that have arrived before the time limit passed as parameter.
-:param time_limit: A string formatted time stamp in one of the recognized formats.
-:return: A set containing Message-IDs that have arrived before the time limit passed as parameter.</p>
+<dd><p>This function returns a set of Message-IDs that have arrived before the time limit passed as parameter.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>time_limit</strong> &#8211; A string formatted time stamp in one of the recognized formats.</li>
+<li><strong>nodelist_filename</strong> &#8211; The name of the file containing the nodes.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A set containing Message-IDs that have arrived before the time limit passed as parameter.</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="util.read_utils.get_utc_time">
 <code class="descclassname">util.read_utils.</code><code class="descname">get_utc_time</code><span class="sig-paren">(</span><em>orig_time</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/read_utils.html#get_utc_time"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.read_utils.get_utc_time" title="Permalink to this definition">¶</a></dt>
 <dd><p>A function to convert a formatted string containing date and time from a local timezone to UTC, by taking into
-consideration multiple formats of the input parameter
-:param orig_time: Formatted string containing a date and time from a local timezone
-:return: Formatted string containing the date and time in UTC</p>
+consideration multiple formats of the input parameter</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>orig_time</strong> &#8211; Formatted string containing a date and time from a local timezone</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Formatted string containing the date and time in UTC</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
@@ -218,9 +270,6 @@ Source: <a class="reference external" href="https://github.com/nryoung/algorithm
 
 </div>
 </div>
-<div class="section" id="module-util">
-<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-util" title="Permalink to this headline">¶</a></h2>
-</div>
 </div>
 
 
@@ -245,7 +294,6 @@ Source: <a class="reference external" href="https://github.com/nryoung/algorithm
 <li><a class="reference internal" href="#union-find-with-path-compression">Union Find with path compression</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#module-util">Module contents</a></li>
 </ul>
 </li>
 </ul>
@@ -287,7 +335,7 @@ Source: <a class="reference external" href="https://github.com/nryoung/algorithm
           <a href="input.mbox.html" title="input.mbox package"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">MailingListParser 0.1 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="modules.html" >Code for Documentation</a> &#187;</li> 
+          <li class="nav-item nav-item-1"><a href="modules.html" >Documentation for the Code</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

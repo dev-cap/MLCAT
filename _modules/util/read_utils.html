@@ -70,7 +70,10 @@
 <div class="viewcode-block" id="get_lone_author_threads"><a class="viewcode-back" href="../../util.html#util.read_utils.get_lone_author_threads">[docs]</a><span class="k">def</span> <span class="nf">get_lone_author_threads</span><span class="p">(</span><span class="n">save_file</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">nodelist_filename</span><span class="o">=</span><span class="s1">&#39;graph_nodes.csv&#39;</span><span class="p">,</span> <span class="n">edgelist_filename</span><span class="o">=</span><span class="s1">&#39;graph_edges.csv&#39;</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This function returns the UID of all the nodes that belong to a thread that has only one author</span>
+
 <span class="sd">    :param save_file: If True, the list of UIDs of nodes are saved to a text file</span>
+<span class="sd">    :param nodelist_filename: The name of the file containing the nodes</span>
+<span class="sd">    :param edgelist_filename: The name of the file containing the edges</span>
 <span class="sd">    :return: A set containing the UID of all the nodes that belong to a thread that has a single author</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">discussion_graph</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">()</span>
@@ -116,9 +119,8 @@
 
 
 <div class="viewcode-block" id="get_datetime_object"><a class="viewcode-back" href="../../util.html#util.read_utils.get_datetime_object">[docs]</a><span class="k">def</span> <span class="nf">get_datetime_object</span><span class="p">(</span><span class="n">orig_time</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    A function to convert a formatted string containing date and time from a local timezone to UTC, by taking into</span>
-<span class="sd">    consideration multiple formats of the input parameter and then return the corresponding datetime object.</span>
+    <span class="sd">&quot;&quot;&quot;A function to convert a formatted string containing date and time from a local timezone to UTC, by taking into consideration multiple formats of the input parameter and then return the corresponding datetime object.</span>
+
 <span class="sd">    :param orig_time: Formatted string containing a date and time from a local timezone</span>
 <span class="sd">    :return: A datetime object corresponding to the input string in UTC</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -164,6 +166,7 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A function to convert a formatted string containing date and time from a local timezone to UTC, by taking into</span>
 <span class="sd">    consideration multiple formats of the input parameter</span>
+
 <span class="sd">    :param orig_time: Formatted string containing a date and time from a local timezone</span>
 <span class="sd">    :return: Formatted string containing the date and time in UTC</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -211,7 +214,9 @@
 <div class="viewcode-block" id="get_messages_before"><a class="viewcode-back" href="../../util.html#util.read_utils.get_messages_before">[docs]</a><span class="k">def</span> <span class="nf">get_messages_before</span><span class="p">(</span><span class="n">time_limit</span><span class="p">,</span> <span class="n">nodelist_filename</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This function returns a set of Message-IDs that have arrived before the time limit passed as parameter.</span>
+
 <span class="sd">    :param time_limit: A string formatted time stamp in one of the recognized formats.</span>
+<span class="sd">    :param nodelist_filename: The name of the file containing the nodes.</span>
 <span class="sd">    :return: A set containing Message-IDs that have arrived before the time limit passed as parameter.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">time_limit</span> <span class="o">=</span> <span class="n">get_datetime_object</span><span class="p">(</span><span class="n">time_limit</span><span class="p">)</span>

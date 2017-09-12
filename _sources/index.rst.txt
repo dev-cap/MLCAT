@@ -11,10 +11,11 @@ Welcome to MailingListParser's documentation!
    :caption: Contents:
 
    introduction
-   project_goals
    analysis_techniques
+   project_goals
+   algos   
    modules
-	
+
 
 
 Indices and tables
