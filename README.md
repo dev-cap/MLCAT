@@ -22,7 +22,7 @@ MailingListParser uses [Sphinx Python Documentation Generator](http://www.sphinx
 
 The documentation can be found under 'docs/' whose updation has been made automatic by the a bash script which otherwise requires to run `make html` in the 'docs/' directory after every commit.
 
-You can view the documentation hosted on `gh-pages` [here](http://achyudh.xyz/Mailing-List-Network-Analyzer/).
+You can view the documentation hosted on `gh-pages` [here](http://prasadtalasila.github.io/MailingListParser/).
 
 ## Testing Framework
 
