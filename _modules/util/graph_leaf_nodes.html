@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>util.preprocessing_utils &#8212; MailingListParser 0.1 documentation</title>
+    <title>util.graph_leaf_nodes &#8212; MailingListParser 0.1 documentation</title>
     
     <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -48,32 +48,31 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <h1>Source code for util.preprocessing_utils</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+  <h1>Source code for util.graph_leaf_nodes</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">For each json object read, we add the message id into the list leaf_msgs and create an entry of the particular id in the map msg_ref_map. We then check if any non-leaf message ids are present in the list leaf_msgs by calling the function get_current_leaf_nodes.</span>
+<span class="sd">After going through the entire file, we then print the leaf message-ids and their references. This is stored in the file thread_paths.txt</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">from</span> <span class="nn">util.read_utils</span> <span class="k">import</span> <span class="n">lines_per_n</span>
+
+<span class="n">leaf_msgs</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># Keeps track of all those message ids that are leaf nodes</span>
+<span class="n">msg_ref_map</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># Map between message id of each mail to its references list</span>
 
 
-<div class="viewcode-block" id="is_outlier"><a class="viewcode-back" href="../../util.html#util.preprocessing_utils.is_outlier">[docs]</a><span class="k">def</span> <span class="nf">is_outlier</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">thresh</span><span class="o">=</span><span class="mf">3.5</span><span class="p">):</span>
+<div class="viewcode-block" id="get_current_leaf_nodes"><a class="viewcode-back" href="../../util.html#util.graph_leaf_nodes.get_current_leaf_nodes">[docs]</a><span class="k">def</span> <span class="nf">get_current_leaf_nodes</span><span class="p">(</span><span class="n">list1</span><span class="p">,</span> <span class="n">list2</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Returns a boolean array with True if points are outliers and False</span>
-<span class="sd">    otherwise.</span>
+<span class="sd">    Function to eliminate the non-leaf message-ids from the list of leaf message ids.</span>
 
-<span class="sd">    :param points: An numobservations by numdimensions array of observations</span>
-<span class="sd">    :param thresh: The modified z-score to use as a threshold. Observations with</span>
-<span class="sd">        a modified z-score (based on the median absolute deviation) greater</span>
-<span class="sd">        than this value will be classified as outliers.</span>
-<span class="sd">    :return: A numobservations-length boolean array.</span>
-<span class="sd">    .. note:: Reference: Boris Iglewicz and David Hoaglin (1993), &quot;Volume 16: How to Detect and Handle Outliers&quot;, The ASQC Basic References in Quality Control:Statistical Techniques, Edward F. Mykytka, Ph.D., Editor.</span>
+<span class="sd">    :param list1: List containing all nodes</span>
+<span class="sd">    :param list2: Reference list</span>
+<span class="sd">    :return: List without non-leaf nodes</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">points</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="n">points</span> <span class="o">=</span> <span class="n">points</span><span class="p">[:,</span><span class="kc">None</span><span class="p">]</span>
-    <span class="n">median</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-    <span class="n">diff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">points</span> <span class="o">-</span> <span class="n">median</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
-    <span class="n">diff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">diff</span><span class="p">)</span>
-    <span class="n">med_abs_deviation</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">diff</span><span class="p">)</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">list2</span><span class="p">)</span>
+    <span class="n">list3</span> <span class="o">=</span> <span class="p">[</span><span class="n">msg_id</span> <span class="k">for</span> <span class="n">msg_id</span> <span class="ow">in</span> <span class="n">list1</span> <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">msg_id</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">s</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">list3</span></div>
 
-    <span class="n">modified_z_score</span> <span class="o">=</span> <span class="mf">0.6745</span> <span class="o">*</span> <span class="n">diff</span> <span class="o">/</span> <span class="n">med_abs_deviation</span>
 
-    <span class="k">return</span> <span class="n">modified_z_score</span> <span class="o">&gt;</span> <span class="n">thresh</span></div>
 </pre></div>
 
           </div>

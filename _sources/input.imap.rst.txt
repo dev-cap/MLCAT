@@ -9,7 +9,6 @@ input.imap.connection module
 
 .. automodule:: input.imap.connection
     :members:
-    :undoc-members:
     :show-inheritance:
 
 input.imap.header module
