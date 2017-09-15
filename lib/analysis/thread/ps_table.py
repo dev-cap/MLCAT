@@ -3,15 +3,14 @@ from util.read import *
 import networkx as nx
 
 
-def generate_participant_size_table(ignore_lat=False, time_limit=None):
+def generate(ignore_lat=False, time_limit=None):
     """
 
     This function generate a table containing the number of mails in a thread and the corresponding aggregate count
     of the number of threads that have that number of mails in them, along with the total number of authors who have
     participated in such threads and the average number of authors. This table is then written to a CSV file.
     :param ignore_lat: If true, then lone author threads are ignored.
-    :param time_limit: All messages until this time are considered and all messages after this time are ignored. Time
-                       is specified as a string in one of the recognized formats.
+    :param time_limit: All messages until this time are considered and all messages after this time are ignored. Time is specified as a string in one of the recognized formats.
     """
     if time_limit is None:
         time_limit = time.strftime("%a, %d %b %Y %H:%M:%S %z")
@@ -100,5 +99,3 @@ def generate_participant_size_table(ignore_lat=False, time_limit=None):
                 tablewriter.writerow([nmails, row2, row1, format(round(row1/row2, 3), '.3f')])
             nmails += 1
         csvfile.close()
-
-generate_participant_size_table()

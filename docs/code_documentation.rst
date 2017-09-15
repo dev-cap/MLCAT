@@ -1,9 +1,6 @@
 Documentation for the Code
 **************************
 
-.. automodule:: lib
-
-
 Input
 =================
 

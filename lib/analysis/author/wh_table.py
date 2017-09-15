@@ -9,8 +9,7 @@ def generate_wh_table_authors(nodelist_filename, edgelist_filename, output_filen
     The table, which itself is temporarily stored in a two dimensional array, is then written into a CSV file. These
     tables are can be used to decipher the basic conversation structure.
     :param ignore_lat: If true, then lone author threads are ignored.
-    :param time_limit: All messages until this timne are considered and all messages after this time are ignored. Time
-                       is specified as a string in one of the recognized formats.
+    :param time_limit: All messages until this timne are considered and all messages after this time are ignored. Time is specified as a string in one of the recognized formats.
     """
     if time_limit is None:
         time_limit = time.strftime("%a, %d %b %Y %H:%M:%S %z")
