@@ -5,7 +5,7 @@ the entire mailing list.
 """
 import json
 import networkx as nx
-from util.read_utils import *
+from util.read import *
 
 
 def write_to_pajek(author_graph, filename="author_graph.net"):

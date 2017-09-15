@@ -17,7 +17,7 @@ from plotly.tools import FigureFactory as FF
 from scipy.cluster.hierarchy import dendrogram, linkage
 
 from analysis.author import generate_author_ranking
-from util.read_utils import *
+from util.read import *
 
 sys.setrecursionlimit(10000)
 

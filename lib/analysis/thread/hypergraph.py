@@ -5,8 +5,7 @@ hypergraph is then stored as a table to a CSV file, with the author column heade
 All the author columns are sorted left to right in the descending order of out degree, followed by in degree. The
 authors identified in this discussion thread are indexed in a separate file using the author_uid_map.py.
 """
-from util.read_utils import *
-from util.read_utils import lines_per_n
+from util.read import *
 import matplotlib.pyplot as plt
 import networkx as nx
 import json

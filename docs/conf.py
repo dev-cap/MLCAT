@@ -18,7 +18,7 @@
 #
 import os
 import sys
-sys.path.insert(0, os.path.abspath('./../lib'))
+sys.path.insert(0, os.path.abspath('./../lib/'))
 
 
 # -- General configuration ------------------------------------------------
@@ -133,8 +133,8 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'MailingListParser.tex', u'MailingListParser Documentation',
-     u'Prasad Talasila,Achyudh Ram', 'manual'),
+    (master_doc, 'MailingListParser.tex', 'MailingListParser Documentation',
+     'Prasad Talasila, Achyudh Ram', 'manual'),
 ]
 
 

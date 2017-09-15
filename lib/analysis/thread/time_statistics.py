@@ -10,7 +10,7 @@ Both these distributions can then be plotted as cumulative distribution function
 by this module.
 """
 import json
-from util.read_utils import *
+from util.read import *
 import os.path
 import numpy as np
 from scipy.optimize import curve_fit
