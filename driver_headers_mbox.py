@@ -1,7 +1,7 @@
 import os.path
 
-from input.check_headers import *
-from input.mbox.mbox_hdr import extract_mail_header
+from lib.input.check_headers import *
+from lib.input.mbox.mbox_hdr import extract_mail_header
 
 mailbox_list = [d for d in os.listdir('data') if os.path.isdir(os.path.join('data', d))]
 mailbox_list = ['lkml', 'opensuse', 'opensuse-bugs', 'opensuse-factory', 'opensuse-features', 'opensuse-kernel', 'sakai-devel']
