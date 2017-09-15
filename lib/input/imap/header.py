@@ -4,7 +4,7 @@ import json
 
 from input.imap.connection import open_connection
 from util.json_encoder import NoIndent, MyEncoder
-from util.read_utils import *
+from util.read import *
 
 
 def init_uid_map():

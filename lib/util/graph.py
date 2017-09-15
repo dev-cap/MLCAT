@@ -1,22 +1,25 @@
 import json
 from util.read_utils import lines_per_n
 
+"""
+This module has utility functions for handling graphs and for retriving auxiliary graph properties.
+"""
 
 # Function to eliminate the non-leaf message-ids from the list of leaf message ids.
 def get_current_leaf_nodes(list1, list2):
+    """
+    This function eliminates the non-leaf message-ids from the list of leaf message ids.
+    :param list1: List containing all nodes
+    :param list2: Reference list
+    :return: List without non-leaf nodes
+    """
     s = set(list2)
     list3 = [msg_id for msg_id in list1 if str(msg_id) not in s]
     return list3
 
 
 def get_leaf_nodes(write_to_file=True):
-    """
-    For each json object read, we add the message id into the list leaf_msgs and create an entry of the particular id in the map
-    msg_ref_map. We then check if any non-leaf message ids are present in the list leaf_msgs by calling the function get_current_leaf_nodes.
-    After going through the entire file, we then print the leaf message-ids and their references.
-    :param write_to_file: If true, results are written to thread_paths.txt (default=True)
-    :return: A list of all message ids that are leaf nodes
-    """
+
     leaf_msgs = []  # Keeps track of all those message ids that are leaf nodes
     msg_ref_map = {}  # Map between message id of each mail to its references list
 
