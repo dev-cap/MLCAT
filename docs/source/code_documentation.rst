@@ -1,38 +1,29 @@
 Documentation for the Code
 **************************
 
-.. automodule:: MailingListParser
-
 Input
 =================
 
-.. automodule:: MailingListParser.input
+.. automodule:: input
    :members:
 
 
-Author Analysis
+Analysis
 ==================
 
-.. automodule:: MailingListParser.analysis.author
+.. automodule:: analysis
    :members:
-
-
-Thread Analysis
-=================
-
-.. automodule:: MailingListParser.analysis.thread
-   :members:
-
+   
 
 Utility
 ==============
 
-.. automodule:: MailingListParser.util
+.. automodule:: util
    :members:
 
 
 Deprecated
 ==============
 
-.. automodule:: MailingListParser.deprecated
+.. automodule:: deprecated
    :members:
