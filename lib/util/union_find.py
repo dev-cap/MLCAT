@@ -1,6 +1,5 @@
 """
-    Union Find with path compression
-    --------------------------------
+    Union Find algorithm with path compression
     A disjoint-set data structure, also called union-find data structure
     implements two functions:
     union(A, B) - merge A's set with B's set
@@ -11,8 +10,7 @@
     attach the smaller tree to the root of the larger tree
     Time Complexity  :  O(a(n)), where a(n) is the inverse of the function
     n=f(x)=A(x,x) and A is the extremely fast-growing Ackermann function.
-    Author: NRYoung
-    Source: https://github.com/nryoung/algorithms/blob/master/algorithms/data_structures/union_find_with_path_compression.py
+    .. note:: Source: https://github.com/nryoung/algorithms/blob/master/algorithms/data_structures/union_find_with_path_compression.py
 """
 
 
