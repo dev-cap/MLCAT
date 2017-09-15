@@ -55,8 +55,6 @@ git commit -m "[Travis Commit] Autodoc Deploy to gh-pages | Caused by ${SHA}
 refer auto_commit_script: https://github.com/achyudhk/Mailing-List-Network-Analyzer/blob/$SOURCE_BRANCH/etc/deploy_docs.sh
 "
 
-#go to out/ directory and commit the gh-pages/ update
-cd out/
 #check the git repo context
 pwd
 echo repo=$SSH_REPO
