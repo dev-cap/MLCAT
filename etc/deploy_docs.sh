@@ -16,7 +16,7 @@ COMMIT_AUTHOR_EMAIL="achyudhk@gmail.com"
 
 function createDocs {
   cd docs && make html
-  cd .. &&  cp -r docs/build/html/* out/ 
+  cd .. &&  cp -r docs/_build/html/* out/ 
 }
 
 # Pull requests and commits to other branches shouldn't try to deploy, just build to verify
