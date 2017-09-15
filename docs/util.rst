@@ -4,7 +4,7 @@ util package
 Submodules
 ----------
 
-util.author_uid_map module
+util.author module
 --------------------------
 
 .. automodule:: util.author
@@ -20,7 +20,7 @@ util.custom_stopwords module
     :undoc-members:
     :show-inheritance:
 
-util.graph_leaf_nodes module
+util.graph module
 ----------------------------
 
 .. automodule:: util.graph
@@ -36,7 +36,7 @@ util.json_encoder module
     :undoc-members:
     :show-inheritance:
 
-util.preprocessing_utils module
+util.preprocess module
 -------------------------------
 
 .. automodule:: util.preprocess
@@ -44,7 +44,7 @@ util.preprocessing_utils module
     :undoc-members:
     :show-inheritance:
 
-util.read_utils module
+util.read module
 ----------------------
 
 .. automodule:: util.read
@@ -52,7 +52,7 @@ util.read_utils module
     :undoc-members:
     :show-inheritance:
 
-util.snaa_curve_fit_layout module
+util.layout module
 ---------------------------------
 
 .. automodule:: util.layout
