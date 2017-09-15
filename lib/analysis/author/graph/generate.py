@@ -8,6 +8,9 @@ from util.read_utils import *
 
 
 def write_to_pajek(author_graph, filename="author_graph.net"):
+    """
+
+    """
     # Write Pajek file compatible with the Infomap Community Detection module
     nx.write_pajek(author_graph, filename)
     lines_in_file= list()

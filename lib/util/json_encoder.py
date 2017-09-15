@@ -1,11 +1,9 @@
-import json
-
 """
 This class is used for pretty printing in a json file. Normal json behaviour is to print all the elements of a list
 on separate lines. Here we convert a list into a string of comma separated elements of the list. This helps containing
 the elements of the list in a single line.
 """
-
+import json
 
 class NoIndent(object):
     def __init__(self, value):

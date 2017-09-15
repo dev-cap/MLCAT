@@ -77,6 +77,11 @@ def generate_weekly_message_activity_timeline(json_data, filename):
 
 
 def generate_monthly_message_activity_timeline(json_data, filename):
+    """
+
+    :param json_data:
+    :return:
+    """	
     timeline_data = [0 for x in range(31*24)]
     for msg_uid, json_obj in json_data.items():
         bin_number = json_obj['Time'].hour + 24 * (json_obj['Time'].day - 1)
@@ -90,6 +95,11 @@ def generate_monthly_message_activity_timeline(json_data, filename):
 
 
 def generate_yearly_message_activity_timeline(json_data, filename):
+    """
+
+    :param json_data:
+    :return:
+    """
     timeline_data = [0 for x in range(366*24)]
     for msg_uid, json_obj in json_data.items():
         bin_number = json_obj['Time'].hour + 24 * (json_obj['Time'].timetuple().tm_yday - 1)
@@ -103,6 +113,11 @@ def generate_yearly_message_activity_timeline(json_data, filename):
 
 
 def generate_message_activity_heatmaps(clean_headers_filename, foldername, timeline=True):
+    """
+
+    :param
+    :return:
+    """
     # Time limit can be specified here in the form of a timestamp in one of the identifiable formats. All messages
     # that have arrived after time_ubound and before time_lbound will be ignored.
     time_ubound = None
