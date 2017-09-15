@@ -9,7 +9,7 @@
 
 set -e # Exit with nonzero exit code if anything fails
 
-SOURCE_BRANCH="master"
+SOURCE_BRANCH1="master"
 TARGET_BRANCH="gh-pages"
 ENCRYPTION_LABEL="fafbdc041e4b"
 COMMIT_AUTHOR_EMAIL="achyudhk@gmail.com"
@@ -20,7 +20,7 @@ function createDocs {
 }
 
 # Pull requests and commits to other branches shouldn't try to deploy, just build to verify
-if [ "$TRAVIS_PULL_REQUEST" != "false" -o "$TRAVIS_BRANCH" != "$SOURCE_BRANCH" ]; then
+if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
     echo "Skipping deploy; just doing a build."
     exit 0
 fi
@@ -69,7 +69,7 @@ echo "===show status of local branch==="
 git status
 
 # Now that we're all set up, we can push.
-git push https://${GH_TOKEN}@github.com/achyudhk/Mailing-List-Network-Analyzer.git $TARGET_BRANCH
+git push https://${GH_TOKEN}@github.com/${REPO_NAME} $TARGET_BRANCH
 
 
 ##References
