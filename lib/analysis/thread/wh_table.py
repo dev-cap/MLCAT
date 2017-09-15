@@ -1,5 +1,5 @@
 import csv
-from util.read_utils import *
+from util.read import *
 
 
 def generate_wh_table_threads(nodelist_filename, edgelist_filename, output_filename, ignore_lat=False, time_limit=None):

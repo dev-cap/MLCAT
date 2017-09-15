@@ -5,7 +5,7 @@ graphs depict thread-wise interaction of the authors for the entire mailing list
 in chronological order to help identify the flow of messages across authors.
 """
 import json
-from util.read_utils import *
+from util.read import *
 
 
 def add_to_multigraph(graph_obj, discussion_graph, json_data, nbunch, label_prefix=''):

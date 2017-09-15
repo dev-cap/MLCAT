@@ -6,7 +6,7 @@ respective z-scores.
 """
 import json
 from graph_tool.all import *
-from util.read_utils import *
+from util.read import *
 
 
 def detect_motifs(directed_graph, min_size, max_size):

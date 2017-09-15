@@ -4,7 +4,7 @@ one author to another if the former sent a message to the latter either in To or
 the entire mailing list.
 """
 import json
-from util.read_utils import *
+from util.read import *
 
 
 def generate_edge_list(author_nodelist_filename, author_edgelist_filename, nodelist_filename='graph_nodes.csv',

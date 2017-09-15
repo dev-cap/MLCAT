@@ -4,7 +4,7 @@ one author to another if the former sent a message to the latter either in To or
 the entire mailing list.
 """
 import json
-from util.read_utils import *
+from util.read import *
 
 
 def write_to_pajek(author_graph, filename="author_graph.net"):

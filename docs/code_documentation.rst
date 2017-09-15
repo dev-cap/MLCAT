@@ -7,35 +7,35 @@ Documentation for the Code
 Input
 =================
 
-.. automodule:: lib.input
+.. automodule:: input
    :members:
 
 
 Author Analysis
 ==================
 
-.. automodule:: lib.analysis.author
+.. automodule:: analysis.author
    :members:
 
 
 Thread Analysis
 =================
 
-.. automodule:: lib.analysis.thread
+.. automodule:: analysis.thread
    :members:
 
 
 Utility
 ==============
 
-.. automodule:: lib.util
+.. automodule:: util
    :members:
 
 
 Deprecated
 ==============
 
-.. automodule:: lib.deprecated
+.. automodule:: deprecated
    :members:
 
 
