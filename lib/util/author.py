@@ -1,6 +1,6 @@
 import json
 import re
-from util.read_utils import lines_per_n
+from util.read import lines_per_n
 
 
 def get_uid_map(write_to_file=True):

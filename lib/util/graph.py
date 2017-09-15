@@ -1,5 +1,5 @@
 import json
-from util.read_utils import lines_per_n
+from util.read import lines_per_n
 
 """
 This module has utility functions for handling graphs and for retriving auxiliary graph properties.
