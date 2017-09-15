@@ -9,6 +9,9 @@ from util.read_utils import *
 
 
 def add_to_multigraph(graph_obj, discussion_graph, json_data, nbunch, label_prefix=''):
+    """
+
+    """
     i = 0
     for node in sorted(nbunch):
         node_attr = json_data[node]
@@ -25,6 +28,9 @@ def add_to_multigraph(graph_obj, discussion_graph, json_data, nbunch, label_pref
 
 
 def author_interaction_multigraph(discussion_graph, json_data, limit=10):
+    """
+
+    """
     niter = 0
     for conn_subgraph in nx.weakly_connected_component_subgraphs(discussion_graph):
         interaction_graph = nx.MultiDiGraph()
@@ -39,6 +45,9 @@ def author_interaction_multigraph(discussion_graph, json_data, limit=10):
 
 
 def add_to_weighted_graph(graph_obj, discussion_graph, json_data, nbunch, node_enum=list()):
+    """
+
+    """
     for node in sorted(nbunch):
         node_attr = json_data[node]
         if node_attr['Cc'] is None:
@@ -62,6 +71,9 @@ def add_to_weighted_graph(graph_obj, discussion_graph, json_data, nbunch, node_e
 
 
 def author_interaction_weighted_graph(discussion_graph, json_data, limit=10):
+    """
+
+    """
     niter = 0
     for conn_subgraph in nx.weakly_connected_component_subgraphs(discussion_graph):
         interaction_graph = nx.DiGraph()

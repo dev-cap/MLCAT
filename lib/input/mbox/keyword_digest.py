@@ -12,6 +12,11 @@ from util.read_utils import *
 
 
 def get_top_authors(top_n, json_filename):
+    """
+
+    :param top_n:
+    :return:
+    """
     top_authors = set()
     top_authors_index = dict()
     author_scores = generate_author_ranking(json_filename, output_filename=None, active_score=2, passive_score=1, write_to_file=False)
@@ -26,6 +31,11 @@ def get_top_authors(top_n, json_filename):
 
 
 def save_sparse_csr(filename, array):
+    """
+
+    :param filename:
+    :return:
+    """
     np.savez(filename,data = array.data ,indices=array.indices,
              indptr =array.indptr, shape=array.shape )
 
@@ -82,6 +92,7 @@ def get_message_body(message):
 
 def generate_keyword_digest(mbox_filename, output_filename, author_uid_filename, json_filename, top_n = None, console_output=True):
     """
+
     From the .MBOX file, this function extracts the email content is extracted using two predefined classes
     available in the Python Standard Library: Mailbox and Message. Feature vectors are created for all the authors
     by obtaining meaningful words from the mail content, after removing the stop words, using NLTK libraries.
