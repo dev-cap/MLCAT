@@ -8,6 +8,7 @@ This module has utility functions for handling graphs and for retriving auxiliar
 def get_current_leaf_nodes(list1, list2):
     """
     This function eliminates the non-leaf message-ids from the list of leaf message ids.
+    
     :param list1: List containing all nodes
     :param list2: Reference list
     :return: List without non-leaf nodes
@@ -20,6 +21,7 @@ def get_current_leaf_nodes(list1, list2):
 def get_leaf_nodes(write_to_file=True):
     """
     This function is used to compute the message-ids of leaf nodes in the thread graph.
+
     :param write_to_file: If true, writes a list of leaf nodes to graph_leaf_nodes.csv (default = True)
     :return: List of message-ids of leaf nodes
     """
