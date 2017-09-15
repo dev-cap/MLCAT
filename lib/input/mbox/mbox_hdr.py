@@ -1,7 +1,7 @@
 import mailbox
 import json
 import datetime
-from util.read_utils import *
+from util.read import *
 
 
 def extract_mail_header(mbox_filename, json_filename='headers.json', thread_uid_filename='thread_uid_map.json', author_uid_filename='author_uid_map.json'):

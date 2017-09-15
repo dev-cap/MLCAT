@@ -1,10 +1,10 @@
-from analysis.author.curve_fitting import generate_crt_curve_fits
-from analysis.author.ranking import generate_author_ranking
-from analysis.author.time_statistics import conversation_refresh_times
-from analysis.author.wh_table import generate_wh_table_authors
-from analysis.thread.hypergraph import generate_hyperedge_distribution
-from input.mbox.keyword_clustering import generate_kmeans_clustering
-from input.mbox.keyword_digest import generate_keyword_digest
+from lib.analysis.author.curve_fitting import generate_crt_curve_fits
+from lib.analysis.author.ranking import generate_author_ranking
+from lib.analysis.author.time_statistics import conversation_refresh_times
+from lib.analysis.author.wh_table import generate_wh_table_authors
+from lib.analysis.thread.hypergraph import generate_hyperedge_distribution
+from lib.input.mbox.keyword_clustering import generate_kmeans_clustering
+from lib.input.mbox.keyword_digest import generate_keyword_digest
 
 mailbox_list = ['lkml', 'opensuse-kernel', 'opensuse-features', 'opensuse', 'opensuse-bugs', 'opensuse-factory', 'sakai-devel']
 mailbox_list = ['sakai-devel', 'lkml', 'opensuse', 'opensuse-bugs']

@@ -1,5 +1,5 @@
 import json
-from util.read_utils import lines_per_n
+from util.read import lines_per_n
 
 
 def remove_invalid_references(input_json_filename, output_json_filename, ref_toggle=False):

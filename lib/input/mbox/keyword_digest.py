@@ -8,7 +8,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 
 from analysis.author import generate_author_ranking
 from util import custom_stopwords
-from util.read_utils import *
+from util.read import *
 
 
 def get_top_authors(top_n, json_filename):

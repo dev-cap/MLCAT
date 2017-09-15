@@ -37,4 +37,4 @@ Run `pip install -r requirements.txt` in the root directory to install these dep
 
 ## License
 
-MailingListParser is available under the [MIT License](https://github.com/prasadtalasila/MailingListParser/tree/master/LISENCE.txt)
+MailingListParser is available under the [MIT License](https://github.com/prasadtalasila/MailingListParser/tree/master/LICENCE.txt)
