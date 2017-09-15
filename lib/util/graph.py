@@ -5,7 +5,6 @@ from util.read_utils import lines_per_n
 This module has utility functions for handling graphs and for retriving auxiliary graph properties.
 """
 
-# Function to eliminate the non-leaf message-ids from the list of leaf message ids.
 def get_current_leaf_nodes(list1, list2):
     """
     This function eliminates the non-leaf message-ids from the list of leaf message ids.
@@ -19,7 +18,11 @@ def get_current_leaf_nodes(list1, list2):
 
 
 def get_leaf_nodes(write_to_file=True):
-
+    """
+    This function is used to compute the message-ids of leaf nodes in the thread graph.
+    :param write_to_file: If true, writes a list of leaf nodes to graph_leaf_nodes.csv (default = True)
+    :return: List of message-ids of leaf nodes
+    """
     leaf_msgs = []  # Keeps track of all those message ids that are leaf nodes
     msg_ref_map = {}  # Map between message id of each mail to its references list
 

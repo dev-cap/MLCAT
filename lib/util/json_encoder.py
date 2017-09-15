@@ -10,12 +10,13 @@ class NoIndent(object):
         self.value = value
 
     def __repr__(self):
-        # Checks if the value of the object passed is of type list.
+        """
+        This function converts the elements of the list into strings and perform a join on them to a comma-separated string containing all the elements.
+        """
         if not isinstance(self.value, list):
             return repr(self.value)
         else:
             string_list = []
-            # Convert the elements of the list into strings and perform a join on them to a string containing all the elements (comma separated)
             for x in self.value:
                 string_list.append(str(x))
 
@@ -24,6 +25,8 @@ class NoIndent(object):
 
 class MyEncoder(json.JSONEncoder):
     def default(self, obj):
-        # Only for objects of the NoIndent class is the custom separation used. Else we use the default represenation provided by json.
+        """
+        For objects of the NoIndent class, custom separation is used. Otherwise the default represenation provided by JSON.
+        """
         return (repr(obj) if isinstance(obj, NoIndent) else
                 json.JSONEncoder.default(self, obj))
