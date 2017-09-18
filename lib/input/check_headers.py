@@ -5,7 +5,7 @@ import json
 from input.imap.connection import open_connection
 
 from input.imap.header import get_mail_header
-from util.read_utils import lines_per_n
+from util.read import lines_per_n
 
 
 def get_unavailable_uid():

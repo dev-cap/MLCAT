@@ -1,8 +1,7 @@
-Algorithms for Parsing Mailing Lists.
+Algorithms for Parsing Mailing Lists
 =====================================
 
 This section shows the function calls to Fetch Headers from IMAP Server which can be run by executing the driver file - fetch_headers.py
-
 
 1. check_headers.check_validity()
     - Returns last_uid_read

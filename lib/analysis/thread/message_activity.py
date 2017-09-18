@@ -1,6 +1,6 @@
 import plotly as ply
 import plotly.graph_objs as plygo
-from util.read_utils import *
+from util.read import *
 import json
 
 

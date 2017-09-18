@@ -4,10 +4,10 @@ util package
 Submodules
 ----------
 
-util.author_uid_map module
+util.author module
 --------------------------
 
-.. automodule:: util.author_uid_map
+.. automodule:: util.author
     :members:
     :undoc-members:
     :show-inheritance:
@@ -20,10 +20,10 @@ util.custom_stopwords module
     :undoc-members:
     :show-inheritance:
 
-util.graph_leaf_nodes module
+util.graph module
 ----------------------------
 
-.. automodule:: util.graph_leaf_nodes
+.. automodule:: util.graph
     :members:
     :undoc-members:
     :show-inheritance:
@@ -36,34 +36,26 @@ util.json_encoder module
     :undoc-members:
     :show-inheritance:
 
-util.preprocessing_utils module
+util.preprocess module
 -------------------------------
 
-.. automodule:: util.preprocessing_utils
+.. automodule:: util.preprocess
     :members:
     :undoc-members:
     :show-inheritance:
 
-util.read_utils module
+util.read module
 ----------------------
 
-.. automodule:: util.read_utils
+.. automodule:: util.read
     :members:
     :undoc-members:
     :show-inheritance:
 
-util.snaa_curve_fit_layout module
+util.layout module
 ---------------------------------
 
-.. automodule:: util.snaa_curve_fit_layout
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-util.thread_graph_nx module
----------------------------
-
-.. automodule:: util.thread_graph_nx
+.. automodule:: util.layout
     :members:
     :undoc-members:
     :show-inheritance:

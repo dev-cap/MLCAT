@@ -27,4 +27,5 @@ ratings:
 exclude_paths:
 - data/
 - lib/deprecated/
+- lib/util/layout.py
 - docs/

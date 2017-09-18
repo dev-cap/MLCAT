@@ -1,5 +1,5 @@
 import json
-from util.read_utils import lines_per_n
+from util.read import lines_per_n
 
 
 def generate_edge_list(nodelist_filename='graph_nodes.csv', edgelist_filename='graph_edges.csv', json_filename='clean_data.json'):
