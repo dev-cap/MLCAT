@@ -9,7 +9,7 @@
 
 set -e # Exit with nonzero exit code if anything fails
 
-SOURCE_BRANCH1="master"
+SOURCE_BRANCH1="development"
 TARGET_BRANCH="gh-pages"
 ENCRYPTION_LABEL="fafbdc041e4b"
 COMMIT_AUTHOR_EMAIL="achyudhk@gmail.com"
@@ -20,7 +20,7 @@ function createDocs {
 }
 
 # Pull requests and commits to other branches shouldn't try to deploy, just build to verify
-if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
+if [ "$TRAVIS_PULL_REQUEST" != "false" -o "$TRAVIS_BRANCH" != "$SOURCE_BRANCH"]; then
     echo "Skipping deploy; just doing a build."
     exit 0
 fi
@@ -47,6 +47,11 @@ createDocs
 cd out
 git config user.name "Travis CI"
 git config user.email "$COMMIT_AUTHOR_EMAIL"
+
+if [ -z `git diff --exit-code` ]; then
+    echo "No changes to the output on this push; exiting."
+    exit 0
+fi
 
 # Commit the "changes", i.e. the new version.
 # The delta will show diffs between new and old versions.
