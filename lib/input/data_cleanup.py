@@ -3,14 +3,6 @@ from util.read import lines_per_n
 
 
 def remove_invalid_references(input_json_filename, output_json_filename, ref_toggle=False):
-    """
-
-    This function is used to remove headers associated with invalid references.
-
-    :param input_json_filename: The json file containing all the references.
-    :param output_json_filename: The output json without invalid references.
-    :param ref_toggle: If true, gets the reference list from 'References' attribute.
-    """
 
     # The "unspecified_ref" list is used to keep track of all those mails that have '0' in their reference list.
     # If any mail has any of the element in this list in its list of references, we can eliminate them as well

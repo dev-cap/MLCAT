@@ -9,14 +9,10 @@ def extract_mail_header(mbox_filename, json_filename='headers.json', thread_uid_
 
     From the .MBOX file, this function extracts the header information is extracted using two predefined classes
     available in the Python Standard Library: Mailbox and Message, for accessing and manipulating on-disk mailboxes
-    and the messages they contain respectively. The headers are then saved to a JSON file. an unique Message-ID is
-    provided to each message in the .MBOX file in the ascending order of their arrival times. The mapping between
-    the UIDs and Message-IDs are stored in another JSON file.
-
-    :param mbox_filename: Contains the absolue or relative address of the file to be opened.
-    :param json_filename: The JSON file in which the extracted headers are stored.
-    :param thread_uid_filename: Contains a mapping between threads and UIDs.
-    :param author_uid_filename: Contains a mapping between authors and UIDs.
+    and the messages they contain respectively. The headers are then saved to a JSOn file. an unique Message-ID is
+    provided to each message in the .MBOX file in the ascending order of their arrival times. The The mapping between
+    the UIDs and Message-IDs are stored in another JSON file
+    :param mbox_filename: Contains the absolue or relative address of the file to be opened
     """
     print("Reading messages from MBOX file...")
     mailbox_obj = mailbox.mbox(mbox_filename)
