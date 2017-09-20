@@ -10,9 +10,7 @@ from util.read import lines_per_n
 
 def get_unavailable_uid():
     """
-
     This function returns a list of UIDs that are not available in the IMAP server
-
     :return: List containing the UIDs not available in the IMAP server
     """
     imaplib._MAXLINE = 800000
@@ -53,13 +51,9 @@ last_uid_read = 0
 
 def check_validity(check_unavailable_uid='False', json_header_filename='headers.json'):
     """
-
     This function checks for and prints duplicate, missing, and invalid objects in the "headers.json" file.
     This function can be run first to generate a list of duplicate, missing, or invalid objects' UIDs which
     can then be used to add or remove their entries from the JSON file.
-
-    :param check_unavailable_uid: If true, prints the unavailable and unwanted uids
-    :param json_header_filename: The header file to be parsed
     :return: Last UID that was checked by the function.
     """
     previous_uid = 0
@@ -126,12 +120,9 @@ def check_validity(check_unavailable_uid='False', json_header_filename='headers.
 
 def remove_unwanted_headers(to_remove=unwanted_uid, json_header_filename='headers.json'):
     """
-
     This function removes all the UIDs specified in the to_remove parameter. By default, it removes all the unwanted
     entries in the JSON file, i.e. the list of UIDs of mails that are not forwarded from LKML subscription.
-
-    :param to_remove: A list of UIDs that need to be removed. Default value is the list of unwanted mails' UIDs.
-    :param json_header_filename: The header file from which unwanted entries are removed.
+    :param to_remove: A list of UIDs that need to be removed. Default value is the list of unwanted mails' UIDs
     """
     if len(to_remove) > 0:
         print("Removing unwanted headers...")
@@ -152,12 +143,9 @@ def remove_unwanted_headers(to_remove=unwanted_uid, json_header_filename='header
 
 def remove_duplicate_headers(to_remove=duplicate_uid, json_header_filename='headers.json'):
     """
-
     This function removes all the duplicate entries of the UIDs specified in the to_remove parameter. By default,
     it removes all the duplicate entries in the JSON file.
-
     :param to_remove: A list of UIDs that need to be removed. Default value is the list of duplicate mails' UIDs.
-    :param json_header_filename: The header file from which duplicate entries are removed.
     """
     # The "read_uid" set is used to keep track of all the UIDs that have been read from the JSON file.
     # In case a duplicate exists, it would be read twice and hence would fail the set membership test.
@@ -183,12 +171,9 @@ def remove_duplicate_headers(to_remove=duplicate_uid, json_header_filename='head
 
 def add_missing_headers(to_add=missing_uid, unwanted_uid_filename="unwanted_uid.txt"):
     """
-
     This function adds the mails that have been missed out, considering the fact that UIDs are consecutive.
     If a mail that is missing in the JSON file is not available or has been deleted, this function ignores that UID.
-
     :param to_add: A list of UIDs that need to be added. Default value is the list of missing mails' UIDs.
-    :param unwanted_uid_filename: The file containing unwanted uids
     """
     # To prevent replacement of mails that are not forwarded from the LKML subscription:
     with open(unwanted_uid_filename, 'r') as unw_file:
@@ -204,12 +189,9 @@ def add_missing_headers(to_add=missing_uid, unwanted_uid_filename="unwanted_uid.
 
 def replace_invalid_headers(to_replace=invalid_uid, json_header_filename="headers.json"):
     """
-
     This function removes the mail headers that have insufficient attributes and fetches those headers again.
     If an attribute is missing in the original mail header or if the mail has been deleted, this function ignores that UID.
-
     :param to_replace: A list of UIDs that need to be replaced. Default value is the list of invalid mails' UIDs.
-    :param json_header_filename: The json file containing the headers.
     """
     if len(to_replace) > 0:
         print("Replacing invalid headers...")
@@ -231,15 +213,12 @@ def replace_invalid_headers(to_replace=invalid_uid, json_header_filename="header
 
 def write_uid_map(from_index=1, to_index=last_uid_read, uid_map_filename="thread_uid_map.json"):
     """
-
     To ensure that references are correctly recorded in the JSON file such that there are no references to mails that
     do not exist and to ease the processing of headers, a map with the string in the Message-Id field of the header to
     the UID of the mail is required. This function fetches the headers from the IMAP server and adds the required
     pairs of Message_ID and UID to the JSON file.
-
     :param from_index: Fetches headers from this UID onwards.
     :param to_index: Fetches headers till this UID (non inclusive).
-    :param uid_map_filename: The JSON file where the Message_ID-UID mapping is stored.
 
     """
     with open(uid_map_filename, 'r') as map_file:

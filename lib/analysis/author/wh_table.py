@@ -146,3 +146,4 @@ def generate_wh_table_authors(nodelist_filename, edgelist_filename, output_filen
             row_height += 1
             total += subtotal
         tablewriter.writerow(["Total:", total])
+   
