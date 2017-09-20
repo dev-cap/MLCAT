@@ -15,12 +15,15 @@ from util.read import *
 def get_top_authors(top_n, json_filename):
     """
 
-    
-    :return:Top authors and indices
+    Gets the top n authors based on the ranking generated from generate_author_ranking in analysis.author.ranking
+
+    :param top_n: The number of top authors by rank, to be returned.
+    :param json_filename: The JSON file from which author scores are generated.
+    :return: Top authors and indices
     """
     top_authors = set()
     top_authors_index = dict()
-    author_scores = generate_author_ranking(json_filename, output_filename=None, active_score=2, passive_score=1, write_to_file=False)
+    author_scores = ranking.generate_author_ranking(json_filename, output_filename=None, active_score=2, passive_score=1, write_to_file=False)
     index = 0
     for email_addr, author_score in author_scores:
         index += 1
@@ -32,15 +35,19 @@ def get_top_authors(top_n, json_filename):
 
 
 def save_sparse_csr(filename, array):
+    """
+    This function writes a numpy matrix to a file in a sparse format.
+    """
     np.savez(filename,data = array.data ,indices=array.indices,
              indptr =array.indptr, shape=array.shape )
 
 
 def get_message_body(message):
     """
+    Gets the message body of the message.
 
-    :param message:
-    :return:Message Body
+    :param message: The message whose body is to be extracted.
+    :return: Message Body
     """
     msg_body = None
     if message.is_multipart():
@@ -97,10 +104,11 @@ def generate_kmeans_clustering(mbox_filename, output_filename, author_uid_filena
     all the authors and the column set contains the authors. If a term does not appear in a document, the corresponding
     matrix entry would be zero. The resulting matrix is called term-document matrix. Then tf-idf analysis is performed
     on the term-document matrix. Finally the top-10 words of each author is listed by their weight values.
-    :param mbox_filename: Contains the absolute or relative address of the MBOX file to be opened
-    :return: Term Document Matrix: The columns of the matrix are the users and the rows of the matrix are the keywords.
     Each entry corresponds to the tf-idf normalized coefficient of the keyword for a user. If a keyword is not present
     in the top-10 keywords of a user, then the corresponding matrix entry would be zero. Also returns the feature names.
+
+    :param mbox_filename: Contains the absolute or relative address of the MBOX file to be opened.
+    :return: Term Document Matrix: The columns of the matrix are the users and the rows of the matrix are the keywords.
     """
     english_stopwords = set(stopwords.words('english')) | custom_stopwords.common_words | custom_stopwords.custom_words
     email_re = re.compile(r'[\w\.-]+@[\w\.-]+')
