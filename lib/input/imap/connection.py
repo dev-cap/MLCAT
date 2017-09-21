@@ -14,6 +14,8 @@ def open_connection(verbose=False):
     Returns the connection object used in establishing IMAP connection to mail server.
     Takes as argument boolen value which is used to determine whether function works in
     verbose mode or not.
+    
+    :param verbose: Displays a detailed log if true.
     """
 
     # Reading from config file
