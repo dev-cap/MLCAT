@@ -44,7 +44,7 @@ Analysis of Threads
 ###################
 The analysis of the threads in the mailing list utilizes the graph_nodes.csv, graph_edges.csv and clean_data.json files generated during the data collection process. The graph_generate_dot.py and graph_generate_gexf.py modules generate the graph files in GEXF, DOT and PNG formats, which are the used for further analysis and for verification of results on a thread level basis. The wh_table_threads.py module generates a width height table for the authors graph and saves it as a CSV file. The width height table is a representation of the number of nodes in the graph that have a given height and a given number of children in a tabular form. This table can further be used for non-parametric estimation. The time_statistics_threads.py module generates a frequency distribution of the inter-arrival times between nodes in threads and another distribution of the length of threads.
 
-_**A note on ignoring lone author threads:**_ Many of the analysis modules allow for ignoring threads that have only a single author. This is preferable as such threads don't correspond to interactions between individuals and more often than not are patches. If another author joins the thread, then it becomes a conversation between multiple individuals and the thread is no longer ignored in the analysis. Further, this allows for comparisons of the results of the analysis between the cases where such threads are ignored or taken into consideration.
+**A note on ignoring lone author threads**: Many of the analysis modules allow for ignoring threads that have only a single author. This is preferable as such threads don't correspond to interactions between individuals and more often than not are patches. If another author joins the thread, then it becomes a conversation between multiple individuals and the thread is no longer ignored in the analysis. Further, this allows for comparisons of the results of the analysis between the cases where such threads are ignored or taken into consideration.
 
 The analysis was centered on the following topics:
 1. **thread width-height table:** we need to perform frequency interpretation of this table with 1% and 5% significance cutoffs; we can also try the non-parametric estimation / kernel density functions on the frequency data to summarize the data into a standard form.
@@ -201,10 +201,11 @@ For unweighted graphs, the clustering of a node u is the fraction of possible tr
 Conclusions
 ===========
 1. A typical discussion thread can span 3 generations (with 1 Standard Deviation(s)) and 2 authors participating (with 0.5 Standard Deviation(s)) in the discussion. The following are the 95th and 99th percentile thread lengths:
- - Ignoring threads that have only a single author:
+
+ - Ignoring threads that have only a single author: 
     - 95th Percentile Thread Length: 1238550.0 secs. or 344.04 hrs.
     - 99th Percentile Thread Length: 3603957.0 secs. or 1001.01 hrs.
- - Including threads that have only a single author:
+ - Including threads that have only a single author: 
     - 95th Percentile Thread Length: 1812083.0 secs. or 503.36 hrs.
     - 99th Percentile Thread Length: 4674019.0 secs. or 1298.34 hrs.
  - Thus, by ignoring the threads that have only a single author, it takes 21 days for 95% of the threads in the LKML to end and 54 days for 99% of the threads to end.
