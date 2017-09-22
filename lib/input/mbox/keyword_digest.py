@@ -13,9 +13,11 @@ from util.read import *
 
 def get_top_authors(top_n, json_filename):
     """
+    Gets the top n authors based on the ranking generated from generate_author_ranking in analysis.author.ranking
 
-    :param top_n:
-    :return:
+    :param top_n: The number of top authors to be returned.
+    :param json_filename: The JSON file from which author scores are generated.
+    :return: Top authors and their indices
     """
     top_authors = set()
     top_authors_index = dict()
@@ -32,9 +34,10 @@ def get_top_authors(top_n, json_filename):
 
 def save_sparse_csr(filename, array):
     """
+    This function writes a numpy matrix to a file,given as a parameter, in a sparse format.
 
-    :param filename:
-    :return:
+    :param filename: The file to store the matrix.
+    :param array: The numpy array.
     """
     np.savez(filename,data = array.data ,indices=array.indices,
              indptr =array.indptr, shape=array.shape )
@@ -42,9 +45,10 @@ def save_sparse_csr(filename, array):
 
 def get_message_body(message):
     """
+    Gets the message body of the message passed as a parameter.
 
-    :param message:
-    :return:
+    :param message: The message whose body is to be extracted.
+    :return: The message body from the message.
     """
     msg_body = None
     if message.is_multipart():
@@ -92,7 +96,6 @@ def get_message_body(message):
 
 def generate_keyword_digest(mbox_filename, output_filename, author_uid_filename, json_filename, top_n = None, console_output=True):
     """
-
     From the .MBOX file, this function extracts the email content is extracted using two predefined classes
     available in the Python Standard Library: Mailbox and Message. Feature vectors are created for all the authors
     by obtaining meaningful words from the mail content, after removing the stop words, using NLTK libraries.
@@ -100,11 +103,11 @@ def generate_keyword_digest(mbox_filename, output_filename, author_uid_filename,
     the corresponding authors. A matrix is created out of these word lists such that row set is the union of terms of
     all the authors and the column set contains the authors. If a term does not appear in a document, the corresponding
     matrix entry would be zero. The resulting matrix is called term-document matrix. Then tf-idf analysis is performed
-    on the term-document matrix. Finally the top-10 words of each author is listed by their weight values.
+    on the term-document matrix. Finally the top-10 words of each author is listed by their weight values.Each entry corresponds to the tf-idf normalized coefficient of the keyword for a user. If a keyword is not present
+    in the top-10 keywords of a user, then the corresponding matrix entry would be zero. Also returns the feature names.
+
     :param mbox_filename: Contains the absolute or relative address of the MBOX file to be opened
     :return: Term Document Matrix: The columns of the matrix are the users and the rows of the matrix are the keywords.
-    Each entry corresponds to the tf-idf normalized coefficient of the keyword for a user. If a keyword is not present
-    in the top-10 keywords of a user, then the corresponding matrix entry would be zero. Also returns the feature names.
     """
     english_stopwords = set(stopwords.words('english')) | custom_stopwords.common_words | custom_stopwords.custom_words
     email_re = re.compile(r'[\w\.-]+@[\w\.-]+')
@@ -228,4 +231,4 @@ def generate_keyword_digest(mbox_filename, output_filename, author_uid_filename,
 
         return top_authors_index, term_document_matrix, feature_names
 
-# generate_keyword_digest("lkml.mbox")
+    # generate_keyword_digest("lkml.mbox")

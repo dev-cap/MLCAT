@@ -12,6 +12,7 @@ def init_uid_map():
     To ensure that references are correctly recorded in the JSON file such that there are no references to mails that
     do not exist and to ease the processing of headers, a map with the string in the Message-Id field of the header to
     the UID of the mail is required. This function reads the header.json file and adds required entries to the map.
+
     :return: A map with the string in the Message-Id field of the header to the UID of the mail
     """
     print("Initializing UID map...")
@@ -24,9 +25,9 @@ def init_uid_map():
 def get_mail_header(to_get, range_=True):
     """
     This function fetches the emails from the IMAP server as per the parameters passed.
+    
     :param to_get: List of UIDs of the mails to get. Default value is 2000.
-    :param range_: If true, fetches all emails from the first element in to_get, till the newest mail.
-    If false, fetches only the emails with the UIDs present in to_get. Default value is true.
+    :param range_: If true, fetches all emails from the first element in to_get, till the newest mail. If false, fetches only the emails with the UIDs present in to_get. Default value is true.
     """
     # This is used to map the string in the Message-Id field of the header to the UID of the mail.
     # By doing so we ease the further processing of information.
