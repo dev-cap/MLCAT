@@ -1,7 +1,7 @@
 # Mailing List Network Analyzer
 
-[![Build Status](https://travis-ci.org/prasadtalasila/MailingListParser.svg?branch=development)](https://travis-ci.org/prasadtalasila/MailingListParser) 
-[![Code Climate](https://codeclimate.com/github/prasadtalasila/MailingListParser/badges/gpa.svg)](https://codeclimate.com/github/prasadtalasila/MailingListParser) 
+[![Build Status](https://travis-ci.org/prasadtalasila/MailingListParser.svg?branch=development)](https://travis-ci.org/prasadtalasila/MailingListParser)
+[![Code Climate](https://codeclimate.com/github/prasadtalasila/MailingListParser/badges/gpa.svg)](https://codeclimate.com/github/prasadtalasila/MailingListParser)
 [![Requirements Status](https://requires.io/github/prasadtalasila/MailingListParser/requirements.svg?branch=master)](https://requires.io/github/prasadtalasila/MailingListParser/requirements/?branch=master)
 
 > Parsing mailing lists to detect communication patterns.
@@ -26,14 +26,14 @@ You can view the documentation hosted on `gh-pages` [here](http://prasadtalasila
 
 ## Testing Framework
 
-Presently, MailingListParser has various end-to-end implemented which reside in the [test directory](https://github.com/prasadtalasila/MailingListParser/tree/development/test/). We use py.test as the unit test framework and you can get a comprehensive idea of the various use cases of each of the modules from the corresponding tests.
+Presently, MailingListParser has various end-to-end tests implemented which reside in the [test directory](https://github.com/prasadtalasila/MailingListParser/tree/development/test/). We use py.test as the unit test framework and you can get a comprehensive idea of the various use cases of each of the modules from the corresponding tests.
 
 ![Conversation Characteristics](https://raw.githubusercontent.com/achyudhk/Mailing-List-Network-Analyzer/development/data/sakai-devel/plots/conversation_chars.png)
 
 ## Installation
 
-MailingListParser depends on various third-party libraries which are listed in [requirements.txt](https://github.com/prasadtalasila/MailingListParser/blob/development/requirements.txt). 
-Run `pip install -r requirements.txt` in the root directory to install these dependencies.
+MailingListParser depends on various third-party libraries which are listed in [requirements.txt](https://github.com/prasadtalasila/MailingListParser/blob/development/requirements.txt).
+Run `bash etc/install_package_dependencies.sh` in the project root directory to install these dependencies.
 
 ## License
 

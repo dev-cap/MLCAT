@@ -4,9 +4,11 @@ from util.read import *
 
 def generate_wh_table_threads(nodelist_filename, edgelist_filename, output_filename, ignore_lat=False, time_limit=None):
     """
+    
     Generate the thread width height table, which is a representation of the number of nodes in the graph that have a
     given height and a given number of children in a tabular form. This table provides an aggregate statistical view of
     all the discussion threads and is temporarily stored in a two dimensional array then written into a CSV file.
+
     :param ignore_lat: If true, then lone author threads are ignored.
     :param time_limit: All messages until this time are considered and all messages after this time are ignored. Time
                        is specified as a string in one of the recognized formats.

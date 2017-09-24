@@ -2,19 +2,17 @@ language: python
 python:
   - "3.5"
 # command to install dependencies
-install: "pip install -r requirements.txt"
+install: "pip3 install -r requirements.txt"
 
 # command to run tests
-script: 
+script:
   - py.test -v --color=yes
   - bash etc/deploy_docs.sh
-branches:
-  only:
-  - master
-  - development
 notifications:
   email:
     recipients:
       - achyudhk@gmail.com
+      - tsrkp@goa.bits-pilani.ac.in
+      - f20150052@goa.bits-pilani.ac.in
     on_success: change
     on_failure: always
