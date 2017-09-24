@@ -48,18 +48,17 @@ This section shows the function calls to Fetch Headers from IMAP Server which ca
 
     6.1 imap_hdr.init_uid_map()
         - Returns a map with the string in the Message-Id field of the header to the UID of the mail is required
-        - The mapping is required to ensure that references are correctly recorded in the JSON file such that there 
-        are no references to mails that do not exist and to ease the processing of headers
+        - The mapping is required to ensure that references are correctly recorded in the JSON file such that there are no references to mails that do not exist and to ease the processing of headers.
 
     6.2 imap_conn.open_connection()
         - Function to establish connection to the mail server and login to user account using IMAP4 protocol.
         - Returns the connection object used in establishing IMAP connection to mail server.
 
     6.3 imap_hdr.date_to_utc()
-        - Converts a formatted string containing date and time from a local timezone to UTC
+        - Converts a formatted string containing date and time from a local timezone to UTC.
 
     6.4 encoder.NoIndent()
-        - Converts a list into a string of comma separated elements of the list for pretty printing
+        - Converts a list into a string of comma separated elements of the list for pretty printing.
 
 7. data_cleanup.remove_invalid_references()
 
