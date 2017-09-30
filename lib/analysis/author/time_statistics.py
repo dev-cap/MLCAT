@@ -164,7 +164,7 @@ def conversation_refresh_times(headers_filename, nodelist_filename, edgelist_fil
         if not os.path.exists(foldername):
             os.makedirs(foldername)
 
-        with open(foldername + "conversation_refresh_times.csv", mode='w') as dist_file:
+        with open(foldername + "/conversation_refresh_times.csv", mode='w') as dist_file:
             dist_file.write("From Address;To Address;Conv. Refresh Time\n")
             for from_addr, to_address, crtime in crt:
                 if crtime > 9:
@@ -188,11 +188,11 @@ def conversation_refresh_times(headers_filename, nodelist_filename, edgelist_fil
             axes.set_xlim([0, max(x)])
             axes.set_ylim([0, max(y)])
             plt.plot(x, y, linestyle='--', color='b', label="Data")
-            plt.savefig(foldername + 'conversation_refresh_times.png')
+            plt.savefig(foldername + '/conversation_refresh_times.png')
             x_range = np.linspace(min(x), max(x), 500)
             plt.plot(x_range, a/x_range + b/(x_range**2) + c, 'r-', label="Fitted Curve")
             plt.legend()
-            plt.savefig(foldername + 'conversation_refresh_times_inv.png')
+            plt.savefig(foldername + '/conversation_refresh_times_inv.png')
             plt.close()
         return None
 

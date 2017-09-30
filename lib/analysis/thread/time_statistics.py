@@ -17,10 +17,21 @@ from scipy.optimize import curve_fit
 import matplotlib.pyplot as plt
 
 def inv_func(x, a, b, c):
+    """
+
+    The model function used for curve fitting.
+    """
     return a/x + b/(x**2) + c
 
 
 def thread_length_distribution(discussion_graph, foldername):
+    """
+    Generates distribution of thread lengths and stores it in conversation_length.csv
+
+    :param discussion_graph: Graph for which thread length distribution is generated.
+    :param foldername: The mailbox folder.
+    :return: A list of Thread lengths in the discussion graph.
+    """
     if not os.path.exists(foldername):
         os.makedirs(foldername)
     thread_lengths = list()
@@ -44,6 +55,14 @@ def thread_length_distribution(discussion_graph, foldername):
 
 
 def response_time(discussion_graph, json_data, foldername):
+    """
+    Calculate and store response times from the discussion graph to response_time.csv.
+
+    :param discussion_graph:  Graph for which thread length distribution is generated.
+    :param json_data:  The JSON data used to extract the thread attributes.
+    :param foldername: The mailbox folder.
+    :return: List of response times for the discussion graph.
+    """
     response_times = list()
     if not os.path.exists(foldername):
         os.makedirs(foldername)
@@ -58,8 +77,19 @@ def response_time(discussion_graph, json_data, foldername):
 
 
 def generate_time_stats_threads(nodelist_filename, edgelist_filename, clean_headers_filename, foldername, time_lbound=None, time_ubound=None, plot=False):
-    # Time limit can be specified as a parameter in the form of a timestamp in one of the identifiable formats and all
-    # messages that have arrived before/after this timestamp will be ignored.
+    """
+    Generates and plots statistics for inter-arrival of consecutive messages and distribution of length of each disccussion thread.
+
+    :param nodelist_filename: The csv file containing the nodes.
+    :param edgelist_filename: The csv file containing the edges.
+    :param clean_headers_filename: The JSON file containing the cleaned headers.
+    :param foldername: The mailbox folder.
+    :param time_lbound: Time limit lower bound can be specified here in the form of a timestamp in one of the identifiable formats
+            and all messages that have arrived before this timestamp will be ignored.
+    :param time_ubound: Time limit upper bound can be specified here in the form of a timestamp in one of the identifiable formats
+            and all messages that have arrived after this timestamp will be ignored.
+    :param plot: Plot thread based time statistics if True.
+    """
 
     # If true, then messages that belong to threads that have only a single author are ignored.
     ignore_lat = False
