@@ -5,9 +5,10 @@ from lib.analysis.author.wh_table import generate_wh_table_authors
 from lib.analysis.thread.hypergraph import generate_hyperedge_distribution
 from lib.input.mbox.keyword_clustering import generate_kmeans_clustering
 from lib.input.mbox.keyword_digest import generate_keyword_digest
+from lib.analysis.author.community import vertex_clustering
 
 mailbox_list = ['lkml', 'opensuse-kernel', 'opensuse-features', 'opensuse', 'opensuse-bugs', 'opensuse-factory', 'sakai-devel']
-mailbox_list = ['sakai-devel', 'lkml', 'opensuse', 'opensuse-bugs']
+mailbox_list = ['opensuse']
 
 for mailbox in mailbox_list:
     # Define directories
@@ -20,6 +21,8 @@ for mailbox in mailbox_list:
     author_uid_filename = foldername + '/json/author_uid_map.json'
 
     print("Processing Mailbox:", mailbox)
+
+    vertex_clustering(headers_filename, nodelist_filename, edgelist_filename, foldername)
     generate_hyperedge_distribution(nodelist_filename, edgelist_filename, headers_filename, foldername)
     generate_keyword_digest(mbox_filename, output_filename=foldername+"/author_keyword_digest.txt", author_uid_filename=author_uid_filename,
                             json_filename=headers_filename, top_n=250, console_output=False)
