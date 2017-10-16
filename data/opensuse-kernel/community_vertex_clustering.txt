@@ -1,0 +1,33 @@
+Clustering with 100 elements and 3 clusters
+[0] jeffm@suse.com, opensuse-kernel@opensuse.org, gregkh@suse.de,
+    jblunck@suse.de, aj@suse.de, oneukum@suse.de, ak@suse.de, matz@suse.de,
+    jbeulich@novell.com, jengelh@computergmbh.de, bwalle@suse.de,
+    martin@mail.martinm-76.dk, hare@suse.de, jack@suse.cz, meissner@suse.de,
+    agruen@suse.de, jkosina@suse.cz, mkossmann_ml1@gmx.de, trenn@suse.de,
+    jeffm@suse.de, mmarek@suse.cz, gjn@gjn.priv.at, jdelvare@suse.de,
+    jbenc@suse.cz, tiwai@suse.de, teheo@suse.de, schwab@suse.de,
+    jbohac@suse.cz, hpj@urpla.net, doiggl@velocitynet.com.au, opensuse-
+    factory@opensuse.org, coolo@suse.de, awafaa@opensuse.org, matt@genesi-
+    usa.com, rob.opensuse.linux@googlemail.com, tonyj@suse.de, wl@gnu.org,
+    JBeulich@novell.com, aj@novell.com, mrmazda@earthlink.net,
+    jengelh@medozas.de, stefan.seyfried@googlemail.com,
+    Larry.Finger@lwfinger.net, 0.bugs.only.0@gmail.com, jslaby@suse.cz,
+    greg.freemyer@gmail.com, bruno@ioda-net.ch, bphilips@suse.de,
+    comes@naic.edu, mhocko@suse.cz, agraf@suse.de, idoenmez@suse.de,
+    blchupin@iinet.net.au, crrodriguez@opensuse.org, aj@suse.com,
+    dsterba@suse.cz, JBeulich@suse.com, opensuse-arm@opensuse.org,
+    afaerber@suse.de, mkubecek@suse.cz, guillaume.gardet@free.fr,
+    olaf@aepfle.de, carlos.e.r@opensuse.org, gregkh@linux.com, dirk@dmllr.de,
+    arvidjaar@gmail.com, suse@tlinx.org, matwey.kornilov@gmail.com,
+    jschmid@suse.com, lyndat3@your-mail.com
+[1] linux-kernel@vger.kernel.org, pavel@ucw.cz, mjg59@srcf.ucam.org,
+    rjw@sisk.pl, jlee@suse.com, len.brown@intel.com, linux-pm@vger.kernel.org,
+    jwboyer@redhat.com, gregkh@linuxfoundation.org, vojtech@suse.cz,
+    JKosina@suse.com, GLin@suse.com, joeyli.kernel@gmail.com, linux-
+    efi@vger.kernel.org, rusty@rustcorp.com.au, linux-crypto@vger.kernel.org,
+    linux-security-module@vger.kernel.org, matt.fleming@intel.com,
+    james.bottomley@hansenpartnership.com, davem@davemloft.net,
+    dhowells@redhat.com, hpa@zytor.com, vgoyal@redhat.com
+[2] richard.weinberger@gmail.com, greg@kroah.com, torvalds@linux-
+    foundation.org, davej@redhat.com, david@lang.hm, bp@amd64.org,
+    rostedt@goodmis.org
