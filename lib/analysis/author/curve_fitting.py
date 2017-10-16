@@ -52,7 +52,7 @@ def generate_crt_curve_fits(foldername):
     plt.legend()
     plt.ylabel('pdf')
     plt.xlabel('time (in secs)')
-    plt.savefig(foldername+'conversation_refresh_times.png')
+    plt.savefig(foldername+'/conversation_refresh_times.png')
     plt.close()
     return popt, rms
 
