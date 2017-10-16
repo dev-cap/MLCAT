@@ -68,7 +68,8 @@ def get_lone_author_threads(save_file=None, nodelist_filename='graph_nodes.csv',
 
 
 def get_datetime_object(orig_time):
-    """A function to convert a formatted string containing date and time from a local timezone to UTC, by taking into consideration multiple formats of the input parameter and then return the corresponding datetime object.
+    """
+    A function to convert a formatted string containing date and time from a local timezone to UTC, by taking into consideration multiple formats of the input parameter and then return the corresponding datetime object.
 
     :param orig_time: Formatted string containing a date and time from a local timezone
     :return: A datetime object corresponding to the input string in UTC
