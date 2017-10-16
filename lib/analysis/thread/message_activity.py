@@ -6,9 +6,10 @@ import json
 
 def generate_weekly_message_activity_heatmap(json_data, filename):
     """
+    Generate weekly message activity heatmap from JSON data.
 
-    :param json_data:
-    :return:
+    :param json_data: Data for generating the heatmap.
+    :param filename: Heatmap file name.
     """
     heatmap_data = [[0 for x in range(48)] for x in range(7)]
     for msg_uid, json_obj in json_data.items():
@@ -24,9 +25,10 @@ def generate_weekly_message_activity_heatmap(json_data, filename):
 
 def generate_monthly_message_activity_heatmap(json_data, filename):
     """
+    Generate monthly message activity heatmap from JSON data.
 
-    :param json_data:
-    :return:
+    :param json_data: Data for generating the heatmap.
+    :param filename: Heatmap file name.
     """
     heatmap_data = [[0 for x in range(48)] for x in range(12)]
     for msg_uid, json_obj in json_data.items():
@@ -42,9 +44,10 @@ def generate_monthly_message_activity_heatmap(json_data, filename):
 
 def generate_daily_message_activity_timeline(json_data, filename):
     """
+    Generate daily message activity timeline from JSON data.
 
-    :param json_data:
-    :return:
+    :param json_data: Data for generating the timeline.
+    :param filename: Timeline file name.
     """
     timeline_data = [0 for x in range(48)]
     for msg_uid, json_obj in json_data.items():
@@ -60,9 +63,10 @@ def generate_daily_message_activity_timeline(json_data, filename):
 
 def generate_weekly_message_activity_timeline(json_data, filename):
     """
+    Generate weekly message activity timeline from JSON data.
 
-    :param json_data:
-    :return:
+    :param json_data: Data for generating the timeline.
+    :param filename: Timeline file name.
     """
     timeline_data = [0 for x in range(7*24)]
     for msg_uid, json_obj in json_data.items():
@@ -78,9 +82,10 @@ def generate_weekly_message_activity_timeline(json_data, filename):
 
 def generate_monthly_message_activity_timeline(json_data, filename):
     """
+    Generate monthly message activity timeline from JSON data.
 
-    :param json_data:
-    :return:
+    :param json_data: Data for generating the timeline.
+    :param filename: Timeline file name.
     """	
     timeline_data = [0 for x in range(31*24)]
     for msg_uid, json_obj in json_data.items():
@@ -96,9 +101,10 @@ def generate_monthly_message_activity_timeline(json_data, filename):
 
 def generate_yearly_message_activity_timeline(json_data, filename):
     """
+    Generate yearly message activity timeline from JSON data.
 
-    :param json_data:
-    :return:
+    :param json_data: Data for generating the timeline.
+    :param filename: Timeline file name.
     """
     timeline_data = [0 for x in range(366*24)]
     for msg_uid, json_obj in json_data.items():
@@ -114,9 +120,11 @@ def generate_yearly_message_activity_timeline(json_data, filename):
 
 def generate_message_activity_heatmaps(clean_headers_filename, foldername, timeline=True):
     """
+    Extract header information and call functions to generate various timelines or heatmaps.
 
-    :param
-    :return:
+    :param clean_headers_filename: The JSON file containing cleaned headers.
+    :param foldername: The MBOX folder.
+    :param timeline: True for generating timelines,False for heatmaps.
     """
     # Time limit can be specified here in the form of a timestamp in one of the identifiable formats. All messages
     # that have arrived after time_ubound and before time_lbound will be ignored.
