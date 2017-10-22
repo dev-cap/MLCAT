@@ -9,7 +9,11 @@ from util.read import *
 
 def write_to_pajek(author_graph, filename="author_graph.net"):
     """
-
+    
+    Write the networkx graph in Pajek format to author_graph.net
+    
+    :param author_graph: Networkx graph.
+    :param filename: Write to Pajek file compatible with the Infomap Community Detection module.
     """
     # Write Pajek file compatible with the Infomap Community Detection module
     nx.write_pajek(author_graph, filename)
@@ -32,6 +36,10 @@ def write_to_pajek(author_graph, filename="author_graph.net"):
 
 
 def author_interaction():
+    """
+
+    Prints the number of strongly connected components,weekly connected components, number of nodes and edges from the author graph.
+    """
     # Time limit can be specified here in the form of a timestamp in one of the identifiable formats and all messages
     # that have arrived after this timestamp will be ignored.
     time_limit = None

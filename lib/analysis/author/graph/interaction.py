@@ -10,7 +10,13 @@ from util.read import *
 
 def add_to_multigraph(graph_obj, discussion_graph, json_data, nbunch, label_prefix=''):
     """
+    Add multiple edges to the MultiDiGraph object recursively.
 
+    :param graph_obj: Object for a directed graph with mulitple edges.
+    :param discussion_graph: A directed graph constructed from nodes and edges csv files.
+    :param json_data: JSON header file.
+    :param nbunch: A container of nodes. The container will be iterated through once.
+    :param label_prefix: Chronological prefixes.
     """
     i = 0
     for node in sorted(nbunch):
@@ -29,7 +35,11 @@ def add_to_multigraph(graph_obj, discussion_graph, json_data, nbunch, label_pref
 
 def author_interaction_multigraph(discussion_graph, json_data, limit=10):
     """
+    Generate graphs in PNG format to show author interaction through multiple edges.
 
+    :param discussion_graph: A directed graph constructed from nodes and edges csv files.
+    :param json_data: JSON header file.
+    :param limit: Number of connected subgraphs to be considered.
     """
     niter = 0
     for conn_subgraph in nx.weakly_connected_component_subgraphs(discussion_graph):
@@ -46,7 +56,13 @@ def author_interaction_multigraph(discussion_graph, json_data, limit=10):
 
 def add_to_weighted_graph(graph_obj, discussion_graph, json_data, nbunch, node_enum=list()):
     """
+    Add weighted edges to the DiGraph object recursively.
 
+    :param graph_obj: Object for a directed graph with mulitple edges.
+    :param discussion_graph: A directed graph constructed from nodes and edges csv files.
+    :param json_data: JSON header file.
+    :param nbunch: A container of nodes. The container will be iterated through once.
+    :param node_enum: Enumerator to store unique senders and receipents.
     """
     for node in sorted(nbunch):
         node_attr = json_data[node]
@@ -72,7 +88,11 @@ def add_to_weighted_graph(graph_obj, discussion_graph, json_data, nbunch, node_e
 
 def author_interaction_weighted_graph(discussion_graph, json_data, limit=10):
     """
+    Generate graphs in PNG format to show author interaction through weighted edges.
 
+    :param discussion_graph: A directed graph constructed from nodes and edges csv files.
+    :param json_data: JSON header file.
+    :param limit: Number of connected subgraphs to be considered.
     """
     niter = 0
     for conn_subgraph in nx.weakly_connected_component_subgraphs(discussion_graph):
@@ -88,6 +108,11 @@ def author_interaction_weighted_graph(discussion_graph, json_data, limit=10):
 
 
 def weighted_multigraph():
+    """
+
+    Calls other functions to generate graphs that show the interaction between authors either through multiple edges or
+    through edge weights.
+    """
     # Time limit can be specified here in the form of a timestamp in one of the identifiable formats and all messages
     # that have arrived after this timestamp will be ignored.
     time_limit = None
