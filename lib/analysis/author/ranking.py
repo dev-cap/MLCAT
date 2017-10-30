@@ -5,10 +5,11 @@ import json
 def get(json_filename, output_filename, active_score, passive_score, write_to_file=True):
     """
 
-    :param json_data:
-    :param active_score:
-    :param passive_score:
-    :return: Sorted author scores
+    :param json_data: The JSON file containing the headers.
+    :param output_filename: Stores authors' email address,score and rank.
+    :param active_score: Score for direct mail receipents.
+    :param passive_score: Score for receipents through CC.
+    :return: Sorted author scores.
     """
 
     # Time limit can be specified here in the form of a timestamp in one of the identifiable formats. All messages

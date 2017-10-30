@@ -7,15 +7,27 @@ import matplotlib.pyplot as plt
 
 
 def inv_func(x, a, b, c):
+    """
+
+    The model function used for curve fitting.
+    """
     return a/x + b/(x**2) + c
 
 
 def conversation_refresh_times(headers_filename, nodelist_filename, edgelist_filename, foldername, time_ubound = None, time_lbound = None, plot=False):
     """
+    
 
-    :param json_data:
-    :param discussion_graph:
-    :return:
+    :param headers_filename: The JSON file containing the headers.
+    :param nodelist_filename: The csv file containing the nodes.
+    :param edgelist_filename: The csv file containing the edges.
+    :param foldername: The mailbox folder.
+    :param time_ubound: Time limit upper bound can be specified here in the form of a timestamp in one of the identifiable formats
+            and all messages that have arrived after this timestamp will be ignored.
+    :param time_lbound: Time limit lower bound can be specified here in the form of a timestamp in one of the identifiable formats
+            and all messages that have arrived before this timestamp will be ignored.
+    :param plot: Plot thread based time statistics if True.
+    :return: None if successfully plotted, else 'No messages!'.
     """
     # Time limit can be specified here in the form of a timestamp in one of the identifiable formats. All messages
     # that have arrived after time_ubound and before time_lbound will be ignored.
