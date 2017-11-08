@@ -6,7 +6,7 @@ from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 from sklearn.feature_extraction.text import TfidfVectorizer
 
-from analysis.author import ranking
+from analysis.author.ranking import generate_author_ranking
 from util import custom_stopwords
 from util.read import *
 

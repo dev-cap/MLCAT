@@ -28,7 +28,7 @@ def write_matrix(json_data, tree_filename="infomap/output/author_graph.tree"):
     """
     top_authors = set()
     top_authors_data = dict()
-    author_scores = ranking.get(active_score=2, passive_score=1, write_to_file=False)
+    author_scores = ranking.generate_author_ranking(active_score=2, passive_score=1, write_to_file=False)
     index = 0
     for email_addr, author_score in author_scores:
         index += 1
@@ -221,7 +221,7 @@ def vertex_clustering(json_filename, nodelist_filename, edgelist_filename, folde
     in which case the numbers will be treated as weights.
     """
     top_authors = set()
-    author_scores = ranking.get(json_filename, None, active_score=2, passive_score=1, write_to_file=False)
+    author_scores = ranking.generate_author_ranking(json_filename, None, active_score=2, passive_score=1, write_to_file=False)
     index = 0
     for email_addr, author_score in author_scores:
         index += 1
