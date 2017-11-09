@@ -2,7 +2,7 @@ from util.read import *
 import json
 
 
-def generate_author_ranking(json_filename, output_filename, active_score, passive_score, write_to_file=True):
+def get(json_filename, output_filename, active_score, passive_score, write_to_file=True):
     """
 
     :param json_data: The JSON file containing the headers.
