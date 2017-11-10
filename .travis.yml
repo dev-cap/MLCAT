@@ -16,3 +16,10 @@ notifications:
       - f20150052@goa.bits-pilani.ac.in
     on_success: change
     on_failure: always
+
+branches:
+  only:
+  - master
+  - development
+
+
