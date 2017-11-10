@@ -101,3 +101,4 @@ def author_interaction():
 	print("No. of Strongly Connected Components:", nx.number_strongly_connected_components(author_graph))
 	print("Nodes:", nx.number_of_nodes(author_graph))
 	print("Edges:", nx.number_of_edges(author_graph))
+

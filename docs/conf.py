@@ -134,7 +134,7 @@ latex_elements = {
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
     (master_doc, 'MailingListParser.tex', 'MailingListParser Documentation',
-     'Prasad, Achyudh RPrasad Talasila, Achyudh Ram', 'manual'),
+     'Prasadd Talasila, Achyudh Ram', 'manual'),
 ]
 
 
