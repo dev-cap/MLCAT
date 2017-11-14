@@ -5,8 +5,7 @@ hypergraph is then stored as a table to a CSV file, with the author column heade
 All the author columns are sorted left to right in the descending order of out degree, followed by in degree. The
 authors identified in this discussion thread are indexed in a separate file using the author_uid_map.py.
 """
-from util.read_utils import *
-from util.read_utils import lines_per_n
+from util.read import *
 import matplotlib.pyplot as plt
 import networkx as nx
 import json
@@ -15,7 +14,28 @@ import csv
 
 
 class MessageNode:
+    """
+    Models message information as a message node.
+
+    :param msg_id: Unique message id.
+    :param height: Height at which the node is present.
+    :param parent_id: Id of the parent node.
+    :param time: Time at which the message was sent.
+    :param from_addr: Message author.
+    :param to_addr: Message receiver.
+    :param cc_addr: Message recever.
+    """
     def __init__(self, msg_id=0, height=-1, parent_id=0, time=None, from_addr=None, to_addr=None, cc_addr=None):
+        """
+
+        :param msg_id: Unique message id.
+        :param height: Height at which the node is present.
+        :param parent_id: Id of the parent node.
+        :param time: Time at which the message was sent.
+        :param from_addr: Message author.
+        :param to_addr: Message receiver.
+        :param cc_addr: Message recever.
+        """
         self.msg_id = msg_id
         self.height = height
         self.parent_id = parent_id
@@ -29,6 +49,17 @@ class MessageNode:
 
 
 def add_thread_nodes(thread_authors, nbunch, parent_id, curr_height, json_data, thread_nodes, conn_subgraph):
+    """
+    Adds thread nodes of type MessageNode and thread authors recursively from the JSON data.
+
+    :param thread_authors: A set to store author threads.
+    :param nbunch: Stores nodes and contains the origin node initially.
+    :param parent_id: Parent ID of each node, None initially.
+    :param curr_height: Indicates the height of the current node, 0 when the function is called.
+    :param json_data: The JSON data used to extract the thread attributes.
+    :param thread_nodes: A list containing the nodes of type MessageNode.
+    :param conn_subgraph: Weakly connected component subgraph from the discussion graph.
+    """
     for node in nbunch:
         next_nbunch = list()
         node_attr = json_data[int(node)]
@@ -43,6 +74,11 @@ def add_thread_nodes(thread_authors, nbunch, parent_id, curr_height, json_data, 
 
 
 def generate_hyperedges():
+    """
+
+    Generates hyperedges from the discussion graph obtained from the nodes and edges stored in graph_nodes.csv and graph_edges.csv.
+    All email header information can be represented as one hyperedge of a hypergraph.
+    """
     discussion_graph = nx.DiGraph()
     json_data = dict()
     email_re = re.compile(r'[\w\.-]+@[\w\.-]+')
@@ -153,7 +189,12 @@ def generate_hyperedges():
 
 def generate_hyperedge_distribution(nodelist_filename, edgelist_filename, clean_headers_filename, foldername, time_limit=None, ignore_lat=False):
     """
+    Generate the distribution of hyperedges for messages in a certain time limit, stores it as hyperedge_distribution.csv based on edge frequency and generates a diagram stored in plots.
 
+    :param nodelist_filename: The csv file containing the nodes.
+    :param edgelist_filename: The csv file containing the edges.
+    :param clean_headers_filename: The JSON file containing the cleaned headers.
+    :param foldername: The mailbox folder.
     :param ignore_lat: If true, then messages that belong to threads that have only a single author are ignored.
     :param time_limit: Time limit can be specified here in the form of a timestamp in one of the identifiable formats
             and all messages that have arrived after this timestamp will be ignored.

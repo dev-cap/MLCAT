@@ -1,5 +1,5 @@
 import csv
-from util.read_utils import *
+from util.read import *
 
 
 def generate_wh_table_authors(nodelist_filename, edgelist_filename, output_filename, ignore_lat=False, time_limit=None):
@@ -8,9 +8,12 @@ def generate_wh_table_authors(nodelist_filename, edgelist_filename, output_filen
     authors is a representation of the number of total and new authors in a thread aggregated at a given generation.
     The table, which itself is temporarily stored in a two dimensional array, is then written into a CSV file. These
     tables are can be used to decipher the basic conversation structure.
+
+    :param nodelist_filename: The csv file containing the nodes.
+    :param edgelist_filename: The csv file containing the edges.
+    :param output_filename: Stores the width-height table values.
     :param ignore_lat: If true, then lone author threads are ignored.
-    :param time_limit: All messages until this timne are considered and all messages after this time are ignored. Time
-                       is specified as a string in one of the recognized formats.
+    :param time_limit: All messages until this time are considered and all messages after this time are ignored. Time is specified as a string in one of the recognized formats.
     """
     if time_limit is None:
         time_limit = time.strftime("%a, %d %b %Y %H:%M:%S %z")

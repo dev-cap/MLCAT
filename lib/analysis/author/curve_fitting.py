@@ -5,14 +5,19 @@ from scipy.optimize import curve_fit
 plt.rcParams['font.size'] = 14
 
 def inv_func(x, a, b, c):
-    return a/x + b/(x**2) + c
+	"""
+	The model function used for curve fitting.
 
+	"""
+	return a/x + b/(x**2) + c
+	
 
 def generate_crt_dist(csv_filename):
     """
+    Generates distribution for conversation refresh times from a csv.
 
     :param csv_filename: The csv filename as a parameter
-    :return: CRT distribution
+    :return: Conversation Refresh Times(CRT) as a distribution.
     """
     crt_list = list()
     with open(csv_filename) as csv_file:
@@ -33,9 +38,11 @@ def generate_crt_dist(csv_filename):
 
 def generate_crt_curve_fits(foldername):
     """
+    Generates curve fits for conversation refresh times distribution and saves it as a PNG.
 
     :param foldername: Folder name as a parameter
-    :return:
+    :return popt: An array containging optimal values for the parameters.
+    :return rms: Mean squared error.
     """
     x, y = generate_crt_dist(foldername+'conversation_refresh_times.csv')
     popt, pcov = curve_fit(inv_func, x, y)
@@ -52,13 +59,14 @@ def generate_crt_curve_fits(foldername):
     plt.legend()
     plt.ylabel('pdf')
     plt.xlabel('time (in secs)')
-    plt.savefig(foldername+'conversation_refresh_times.png')
+    plt.savefig(foldername+'/conversation_refresh_times.png')
     plt.close()
     return popt, rms
 
 
 def generate_cl_dist(csv_filename):
     """
+    Generates distribution for conversation lengths from a csv.
 
     :param csv_filename: The csv filename as a parameter
     :return: Conversation Length (CL) as a distribution
@@ -81,9 +89,11 @@ def generate_cl_dist(csv_filename):
 
 def generate_cl_curve_fits(foldername):
     """
+    Generates curve fits for conversation length distribution and saves it as a PNG.
 
     :param foldername: Folder name as a parameter
-    :return:
+    :return popt: An array containging optimal values for the parameters.
+    :return rms: Mean squared error.
     """
     x, y = generate_cl_dist(foldername+'conversation_length.csv')
     try:
@@ -104,16 +114,17 @@ def generate_cl_curve_fits(foldername):
     plt.legend()
     plt.ylabel('pdf')
     plt.xlabel('time (in secs)')
-    plt.savefig(foldername+'conversation_length.png')
+    plt.savefig(foldername+'/conversation_length.png')
     plt.close()
     return popt, rms
 
 
 def generate_rt_dist(csv_filename):
     """
+    Generates distribution for refresh times from a csv.
 
     :param csv_filename: The csv filename as a parameter
-    :return: Response Time (RT) as a distribution
+    :return: Refresh Times(RT) as a distribution.
     """
     rt_list = list()
     with open(csv_filename) as csv_file:
@@ -133,9 +144,11 @@ def generate_rt_dist(csv_filename):
 
 def generate_rt_curve_fits(foldername):
     """
+    Generates curve fits for refresh times distribution and saves it as a PNG.
 
     :param foldername: Folder name as a parameter
-    :return:
+    :return popt: An array containging optimal values for the parameters.
+    :return rms: Mean squared error.
     """
     x, y = generate_rt_dist(foldername+'response_time.csv')
     try:
@@ -156,6 +169,6 @@ def generate_rt_curve_fits(foldername):
     plt.legend()
     plt.ylabel('pdf')
     plt.xlabel('time (in secs)')
-    plt.savefig(foldername+'response_time.png')
+    plt.savefig(foldername+'/response_time.png')
     plt.close()
     return popt, rms

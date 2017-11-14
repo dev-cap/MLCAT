@@ -1,11 +1,14 @@
 import json
-from util.read_utils import lines_per_n
+from util.read import lines_per_n
 
 
 def generate_edge_list(nodelist_filename='graph_nodes.csv', edgelist_filename='graph_edges.csv', json_filename='clean_data.json'):
     """
     This function generates a list of nodes and edges in the graphs from the JSON file and saves it as a CSV file.
-    :param ref_toggle: If True, References attribute is used to make edges and if False, In-Reply-To is used.
+
+    :param nodelist_filename: csv file to store the graph nodes.
+    :param edgelist_filename: csv file to store the graph edges.
+    :param json_filename: The JSON file containing the cleaned headers.
     """
     # The following set stores all the mail UIDs and the corresponding time as a semi-colon separated string
     nodes = set()
@@ -37,8 +40,12 @@ def generate_edge_list(nodelist_filename='graph_nodes.csv', edgelist_filename='g
 
 def generate_node_labels(nodelist_filename='graph_nodes.txt', edgelist_filename='graph_edges.txt', json_filename='clean_data.json'):
     """
-    This function generates a list of nodes and edges in the graphs from the JSON file and saves it as a CSV file.
-    :param ref_toggle: If True, References attribute is used to make edges and if False, In-Reply-To is used.
+
+    This function generates a list of nodes and edges in the graphs from the JSON file and saves it as a TXT file.
+
+    :param nodelist_filename: txt file to store the graph nodes.
+    :param edgelist_filename: txt file to store the graph edges.
+    :param json_filename: The JSON file containing the cleaned headers.
     """
     # The following set stores all the mail UIDs and the corresponding time as a semi-colon separated string
     nodes = set()

@@ -6,7 +6,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 
 from input.mbox.keyword_digest import get_message_body
 from util import custom_stopwords
-from util.read_utils import *
+from util.read import *
 
 
 def get_author_clustering_infomap(tree_filename="infomap/output/"+"author_graph.tree"):

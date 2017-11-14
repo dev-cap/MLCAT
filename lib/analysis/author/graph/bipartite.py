@@ -5,7 +5,7 @@ message sent by the author. A directed edge would be drawn from message to all t
 A projection of this bipartite graph is then generated.
 """
 import json
-from util.read_utils import *
+from util.read import *
 
 
 def msg_author_bipartite_graph(threadwise=False, ignore_lat=True, time_limit=None):
@@ -15,7 +15,6 @@ def msg_author_bipartite_graph(threadwise=False, ignore_lat=True, time_limit=Non
     :param ignore_lat: If true, then messages that belong to threads that have only a single author are ignored.
     :param time_limit: Time limit can be specified here in the form of a timestamp in one of the identifiable formats
             and all messages that have arrived after this timestamp will be ignored.
-    :return:
     """
     email_re = re.compile(r'[\w\.-]+@[\w\.-]+')
     json_data = dict()

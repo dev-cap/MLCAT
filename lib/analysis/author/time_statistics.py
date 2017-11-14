@@ -1,4 +1,4 @@
-from util.read_utils import *
+from util.read import *
 import json
 import os.path
 import numpy as np
@@ -7,15 +7,27 @@ import matplotlib.pyplot as plt
 
 
 def inv_func(x, a, b, c):
+    """
+
+    The model function used for curve fitting.
+    """
     return a/x + b/(x**2) + c
 
 
 def conversation_refresh_times(headers_filename, nodelist_filename, edgelist_filename, foldername, time_ubound = None, time_lbound = None, plot=False):
     """
+    
 
-    :param json_data:
-    :param discussion_graph:
-    :return:
+    :param headers_filename: The JSON file containing the headers.
+    :param nodelist_filename: The csv file containing the nodes.
+    :param edgelist_filename: The csv file containing the edges.
+    :param foldername: The mailbox folder.
+    :param time_ubound: Time limit upper bound can be specified here in the form of a timestamp in one of the identifiable formats
+            and all messages that have arrived after this timestamp will be ignored.
+    :param time_lbound: Time limit lower bound can be specified here in the form of a timestamp in one of the identifiable formats
+            and all messages that have arrived before this timestamp will be ignored.
+    :param plot: Plot thread based time statistics if True.
+    :return: None if successfully plotted, else 'No messages!'.
     """
     # Time limit can be specified here in the form of a timestamp in one of the identifiable formats. All messages
     # that have arrived after time_ubound and before time_lbound will be ignored.
@@ -164,7 +176,7 @@ def conversation_refresh_times(headers_filename, nodelist_filename, edgelist_fil
         if not os.path.exists(foldername):
             os.makedirs(foldername)
 
-        with open(foldername + "conversation_refresh_times.csv", mode='w') as dist_file:
+        with open(foldername + "/conversation_refresh_times.csv", mode='w') as dist_file:
             dist_file.write("From Address;To Address;Conv. Refresh Time\n")
             for from_addr, to_address, crtime in crt:
                 if crtime > 9:
@@ -188,11 +200,11 @@ def conversation_refresh_times(headers_filename, nodelist_filename, edgelist_fil
             axes.set_xlim([0, max(x)])
             axes.set_ylim([0, max(y)])
             plt.plot(x, y, linestyle='--', color='b', label="Data")
-            plt.savefig(foldername + 'conversation_refresh_times.png')
+            plt.savefig(foldername + '/conversation_refresh_times.png')
             x_range = np.linspace(min(x), max(x), 500)
             plt.plot(x_range, a/x_range + b/(x_range**2) + c, 'r-', label="Fitted Curve")
             plt.legend()
-            plt.savefig(foldername + 'conversation_refresh_times_inv.png')
+            plt.savefig(foldername + '/conversation_refresh_times_inv.png')
             plt.close()
         return None
 
