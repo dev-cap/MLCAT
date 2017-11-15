@@ -1,5 +1,5 @@
 from lib.analysis.author.curve_fitting import generate_crt_curve_fits
-from lib.analysis.author.ranking import get
+from lib.analysis.author import ranking
 from lib.analysis.author.time_statistics import conversation_refresh_times
 from lib.analysis.author.wh_table import generate_wh_table_authors
 from lib.analysis.thread.hypergraph import generate_hyperedge_distribution
@@ -26,7 +26,7 @@ for mailbox in mailbox_list:
     generate_hyperedge_distribution(nodelist_filename, edgelist_filename, headers_filename, foldername)
     generate_keyword_digest(mbox_filename, output_filename=foldername+"/author_keyword_digest.txt", author_uid_filename=author_uid_filename,
                             json_filename=headers_filename, top_n=250, console_output=False)
-    get(headers_filename, output_filename=foldername+"/tables/author_ranking.csv", active_score=2, passive_score=1)
+    ranking.get(headers_filename, output_filename=foldername+"/tables/author_ranking.csv", active_score=2, passive_score=1)
     generate_wh_table_authors(nodelist_filename, edgelist_filename, foldername+'/tables/wh_table_authors.csv')
     conversation_refresh_times(headers_filename, nodelist_filename, edgelist_filename, foldername, plot=True)
     generate_kmeans_clustering(mbox_filename, author_uid_filename=author_uid_filename, json_filename=headers_filename,

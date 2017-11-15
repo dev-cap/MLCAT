@@ -7,7 +7,7 @@ from nltk.stem import WordNetLemmatizer
 from sklearn.cluster import KMeans
 from sklearn.feature_extraction.text import TfidfVectorizer
 
-from analysis.author.ranking import get
+from analysis.author import ranking
 from util import custom_stopwords
 from util.read import *
 
@@ -22,7 +22,7 @@ def get_top_authors(top_n, json_filename):
 	"""
 	top_authors = set()
 	top_authors_index = dict()
-	author_scores = get(json_filename, output_filename=None, active_score=2, passive_score=1, write_to_file=False)
+	author_scores = ranking.get(json_filename, output_filename=None, active_score=2, passive_score=1, write_to_file=False)
 	index = 0
 	for email_addr, author_score in author_scores:
 		index += 1
