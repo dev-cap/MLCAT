@@ -1,9 +1,9 @@
-from lib.analysis.author import generate_cl_curve_fits, generate_rt_curve_fits
-from lib.analysis.thread import generate_time_stats_threads
+from lib.analysis.author.curve_fitting import generate_cl_curve_fits, generate_rt_curve_fits
+from lib.analysis.thread.time_statistics import generate_time_stats_threads
 
 # mailbox_list = [d for d in os.listdir('data') if os.path.isdir(os.path.join('data', d))]
 mailbox_list = ['lkml', 'opensuse', 'opensuse-bugs', 'opensuse-factory', 'opensuse-features', 'opensuse-kernel', 'sakai-devel']
-mailbox_list = ['sakai-devel', 'lkml', 'opensuse', 'opensuse-bugs']
+mailbox_list = ['opensuse-kernel']
 
 
 for mailbox in mailbox_list:
