@@ -54,4 +54,5 @@ sudo apt-get install -y libxml2-dev libigraph0-dev
 
 # Install python packages
 cd "$PROJECT_PATH"
+cd ..
 sudo -H pip3 install -r requirements.txt
