@@ -28,7 +28,7 @@ for mailbox in mailbox_list:
                             json_filename=headers_filename, top_n=250, console_output=False)
     ranking.get(headers_filename, output_filename=foldername+"/tables/author_ranking.csv", active_score=2, passive_score=1)
     generate_wh_table_authors(nodelist_filename, edgelist_filename, foldername+'/tables/wh_table_authors.csv')
-    conversation_refresh_times(headers_filename, nodelist_filename, edgelist_filename, foldername, plot=True)
+    conversation_refresh_times(headers_filename, nodelist_filename, edgelist_filename, foldername+'plots', plot=True)
     generate_kmeans_clustering(mbox_filename, author_uid_filename=author_uid_filename, json_filename=headers_filename,
                                output_filename=foldername+"/json/kmeans_clustering.json", top_n=250)
 

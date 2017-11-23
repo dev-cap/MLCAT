@@ -9,7 +9,7 @@
 
 set -e # Exit with nonzero exit code if anything fails
 
-SOURCE_BRANCH1="development"
+SOURCE_BRANCH="development"
 TARGET_BRANCH="gh-pages"
 ENCRYPTION_LABEL="fafbdc041e4b"
 COMMIT_AUTHOR_EMAIL="achyudhk@gmail.com"
