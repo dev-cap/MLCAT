@@ -33,7 +33,8 @@ Presently, MailingListParser has various end-to-end tests implemented which resi
 ## Installation
 
 MailingListParser depends on various third-party libraries which are listed in [requirements.txt](https://github.com/prasadtalasila/MailingListParser/blob/development/requirements.txt).
-Run `pip3 install -r requirements.txt` in the project root directory to install these dependencies.
+The libraries in `requirements.txt` along with other dependencies are installed using [install_package_dependencies.sh](https://github.com/prasadtalasila/MailingListParser/blob/development/etc/install_package_dependencies.sh) 
+Run `cd etc && bash install_package_dependencies.sh` in the project root directory to install these dependencies.
 
 ## License
 

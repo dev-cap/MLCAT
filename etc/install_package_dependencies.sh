@@ -35,9 +35,6 @@ sudo apt-get install -y --allow-unauthenticated python3-graph-tool
 pip3 install --upgrade pip
 sudo -H pip3 install --upgrade pip
 
-# Install NetworkX
-sudo -H pip3 install networkx==1.11
-
 # Install Infomap Community Detection
 sudo apt-get install -y swig
 mkdir Infomap
@@ -49,13 +46,13 @@ cd examples/python
 make python3
 python3 example-networkx.py
 
-# Install PyGraphViz
-sudo -H pip3 install pygraphviz
+# For installation(pip) of PyGraphViz
+sudo apt-get install graphviz libgraphviz-dev pkg-config
 
-# Install Python-iGraph
-sudo apt-get install -y libxml2-dev
-sudo -H pip3 install python-igraph
+# For installation(pip) Python-iGraph
+sudo apt-get install -y libxml2-dev libigraph0-dev
 
 # Install python packages
 cd "$PROJECT_PATH"
+cd ..
 sudo -H pip3 install -r requirements.txt
