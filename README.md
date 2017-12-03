@@ -1,7 +1,8 @@
 # MailingListParser
 
 [![Build Status](https://travis-ci.org/prasadtalasila/MailingListParser.svg?branch=development)](https://travis-ci.org/prasadtalasila/MailingListParser)
-[![Code Climate](https://codeclimate.com/github/prasadtalasila/MailingListParser/badges/gpa.svg)](https://codeclimate.com/github/prasadtalasila/MailingListParser)
+[![Maintainability](https://api.codeclimate.com/v1/badges/f1d7947c8a62338544dd/maintainability)](https://codeclimate.com/github/prasadtalasila/MailingListParser/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/f1d7947c8a62338544dd/test_coverage)](https://codeclimate.com/github/prasadtalasila/MailingListParser/test_coverage)
 [![Requirements Status](https://requires.io/github/prasadtalasila/MailingListParser/requirements.svg?branch=master)](https://requires.io/github/prasadtalasila/MailingListParser/requirements/?branch=master)
 
 > Parsing mailing lists to detect communication patterns.
@@ -38,4 +39,4 @@ Run `cd etc && bash install_package_dependencies.sh` in the project root directo
 
 ## License
 
-MailingListParser is available under the [MIT License](https://github.com/prasadtalasila/MailingListParser/tree/master/LISENCE.txt)
+MailingListParser is available under the [GPL 3.0 License](https://github.com/prasadtalasila/MailingListParser/tree/master/LISENCE.txt)
