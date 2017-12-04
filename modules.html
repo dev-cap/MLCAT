@@ -1,20 +1,17 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>Documentation for the Code &#8212; MailingListParser 0.1 documentation</title>
-    
+    <title>Documentation for the Code &#8212; MailingListParser 0.1.2 documentation</title>
     <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.1',
+        VERSION:     '0.1.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -24,13 +21,13 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Overview of Project Modules" href="overview_modules.html" />
-    <link rel="prev" title="Algorithms for Parsing Mailing Lists." href="algos.html" /> 
+    <link rel="prev" title="Algorithms for Parsing Mailing Lists" href="algos.html" /> 
   </head>
-  <body role="document">
+  <body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -44,9 +41,9 @@
           <a href="overview_modules.html" title="Overview of Project Modules"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="algos.html" title="Algorithms for Parsing Mailing Lists."
+          <a href="algos.html" title="Algorithms for Parsing Mailing Lists"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">MailingListParser 0.1 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">MailingListParser 0.1.2 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -101,8 +98,8 @@
 <li class="toctree-l4"><a class="reference internal" href="analysis.thread.html#subpackages">Subpackages</a></li>
 <li class="toctree-l4"><a class="reference internal" href="analysis.thread.html#submodules">Submodules</a></li>
 <li class="toctree-l4"><a class="reference internal" href="analysis.thread.html#module-analysis.thread.hypergraph">analysis.thread.hypergraph module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="analysis.thread.html#analysis-thread-message-activity-module">analysis.thread.message_activity module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="analysis.thread.html#analysis-thread-ps-table-module">analysis.thread.ps_table module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="analysis.thread.html#module-analysis.thread.message_activity">analysis.thread.message_activity module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="analysis.thread.html#module-analysis.thread.ps_table">analysis.thread.ps_table module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="analysis.thread.html#module-analysis.thread.time_statistics">analysis.thread.time_statistics module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="analysis.thread.html#module-analysis.thread.wh_table">analysis.thread.wh_table module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="analysis.thread.html#module-analysis.thread">Module contents</a></li>
@@ -124,8 +121,8 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="input.mbox.html">input.mbox package</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="input.mbox.html#submodules">Submodules</a></li>
-<li class="toctree-l4"><a class="reference internal" href="input.mbox.html#input-mbox-keyword-clustering-module">input.mbox.keyword_clustering module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="input.mbox.html#input-mbox-keyword-digest-module">input.mbox.keyword_digest module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="input.mbox.html#module-input.mbox.keyword_clustering">input.mbox.keyword_clustering module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="input.mbox.html#module-input.mbox.keyword_digest">input.mbox.keyword_digest module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="input.mbox.html#module-input.mbox.mbox_hdr">input.mbox.mbox_hdr module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="input.mbox.html#module-input.mbox">Module contents</a></li>
 </ul>
@@ -140,18 +137,14 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="util.html">Utility</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="util.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="util.html#module-util.author_uid_map">util.author_uid_map module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="util.html#module-util.author">util.author module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="util.html#module-util.custom_stopwords">util.custom_stopwords module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="util.html#util-graph-leaf-nodes-module">util.graph_leaf_nodes module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="util.html#module-util.graph">util.graph module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="util.html#module-util.json_encoder">util.json_encoder module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="util.html#module-util.preprocessing_utils">util.preprocessing_utils module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="util.html#module-util.read_utils">util.read_utils module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="util.html#util-snaa-curve-fit-layout-module">util.snaa_curve_fit_layout module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="util.html#util-thread-graph-nx-module">util.thread_graph_nx module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="util.html#module-util.union_find">util.union_find module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="util.html#union-find-with-path-compression">Union Find with path compression</a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="util.html#module-util.preprocess">util.preprocess module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="util.html#module-util.read">util.read module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="util.html#module-util.layout">util.layout module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="util.html#module-util.union_find">util.union_find module</a></li>
 </ul>
 </li>
 </ul>
@@ -166,7 +159,7 @@
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
   <p class="topless"><a href="algos.html"
-                        title="previous chapter">Algorithms for Parsing Mailing Lists.</a></p>
+                        title="previous chapter">Algorithms for Parsing Mailing Lists</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="overview_modules.html"
                         title="next chapter">Overview of Project Modules</a></p>
@@ -204,14 +197,14 @@
           <a href="overview_modules.html" title="Overview of Project Modules"
              >next</a> |</li>
         <li class="right" >
-          <a href="algos.html" title="Algorithms for Parsing Mailing Lists."
+          <a href="algos.html" title="Algorithms for Parsing Mailing Lists"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">MailingListParser 0.1 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">MailingListParser 0.1.2 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2017, Prasad Talasila,Achyudh Ram.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.
+        &#169; Copyright 2015-2017, Prasad Talasila, Achyudh Ram, Yash Pungaliya.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.
     </div>
   </body>
 </html>

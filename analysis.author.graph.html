@@ -1,20 +1,17 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>analysis.author.graph package &#8212; MailingListParser 0.1 documentation</title>
-    
+    <title>analysis.author.graph package &#8212; MailingListParser 0.1.2 documentation</title>
     <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.1',
+        VERSION:     '0.1.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -24,13 +21,13 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="analysis.thread package" href="analysis.thread.html" />
     <link rel="prev" title="analysis.author package" href="analysis.author.html" /> 
   </head>
-  <body role="document">
+  <body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -46,7 +43,7 @@
         <li class="right" >
           <a href="analysis.author.html" title="analysis.author package"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">MailingListParser 0.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">MailingListParser 0.1.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="modules.html" >Documentation for the Code</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="analysis.html" >analysis package</a> &#187;</li>
           <li class="nav-item nav-item-3"><a href="analysis.author.html" accesskey="U">analysis.author package</a> &#187;</li> 
@@ -63,8 +60,99 @@
 <div class="section" id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
 </div>
-<div class="section" id="analysis-author-graph-author-interaction-module">
-<h2>analysis.author.graph.author_interaction module<a class="headerlink" href="#analysis-author-graph-author-interaction-module" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-analysis.author.graph.interaction">
+<span id="analysis-author-graph-author-interaction-module"></span><h2>analysis.author.graph.author_interaction module<a class="headerlink" href="#module-analysis.author.graph.interaction" title="Permalink to this headline">¶</a></h2>
+<p>This module is used to generate graphs that show the interaction between authors either through multiple edges or
+through edge weights. There is an edge from one author to another if the former sent a message to the latter. These
+graphs depict thread-wise interaction of the authors for the entire mailing list and these interactions are labelled
+in chronological order to help identify the flow of messages across authors.</p>
+<dl class="function">
+<dt id="analysis.author.graph.interaction.add_to_multigraph">
+<code class="descclassname">analysis.author.graph.interaction.</code><code class="descname">add_to_multigraph</code><span class="sig-paren">(</span><em>graph_obj</em>, <em>discussion_graph</em>, <em>json_data</em>, <em>nbunch</em>, <em>label_prefix=''</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/author/graph/interaction.html#add_to_multigraph"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analysis.author.graph.interaction.add_to_multigraph" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add multiple edges to the MultiDiGraph object recursively.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>graph_obj</strong> – Object for a directed graph with mulitple edges.</li>
+<li><strong>discussion_graph</strong> – A directed graph constructed from nodes and edges csv files.</li>
+<li><strong>json_data</strong> – JSON header file.</li>
+<li><strong>nbunch</strong> – A container of nodes. The container will be iterated through once.</li>
+<li><strong>label_prefix</strong> – Chronological prefixes.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="analysis.author.graph.interaction.add_to_weighted_graph">
+<code class="descclassname">analysis.author.graph.interaction.</code><code class="descname">add_to_weighted_graph</code><span class="sig-paren">(</span><em>graph_obj</em>, <em>discussion_graph</em>, <em>json_data</em>, <em>nbunch</em>, <em>node_enum=[]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/author/graph/interaction.html#add_to_weighted_graph"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analysis.author.graph.interaction.add_to_weighted_graph" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add weighted edges to the DiGraph object recursively.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>graph_obj</strong> – Object for a directed graph with mulitple edges.</li>
+<li><strong>discussion_graph</strong> – A directed graph constructed from nodes and edges csv files.</li>
+<li><strong>json_data</strong> – JSON header file.</li>
+<li><strong>nbunch</strong> – A container of nodes. The container will be iterated through once.</li>
+<li><strong>node_enum</strong> – Enumerator to store unique senders and receipents.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="analysis.author.graph.interaction.author_interaction_multigraph">
+<code class="descclassname">analysis.author.graph.interaction.</code><code class="descname">author_interaction_multigraph</code><span class="sig-paren">(</span><em>discussion_graph</em>, <em>json_data</em>, <em>limit=10</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/author/graph/interaction.html#author_interaction_multigraph"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analysis.author.graph.interaction.author_interaction_multigraph" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate graphs in PNG format to show author interaction through multiple edges.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>discussion_graph</strong> – A directed graph constructed from nodes and edges csv files.</li>
+<li><strong>json_data</strong> – JSON header file.</li>
+<li><strong>limit</strong> – Number of connected subgraphs to be considered.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="analysis.author.graph.interaction.author_interaction_weighted_graph">
+<code class="descclassname">analysis.author.graph.interaction.</code><code class="descname">author_interaction_weighted_graph</code><span class="sig-paren">(</span><em>discussion_graph</em>, <em>json_data</em>, <em>limit=10</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/author/graph/interaction.html#author_interaction_weighted_graph"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analysis.author.graph.interaction.author_interaction_weighted_graph" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate graphs in PNG format to show author interaction through weighted edges.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>discussion_graph</strong> – A directed graph constructed from nodes and edges csv files.</li>
+<li><strong>json_data</strong> – JSON header file.</li>
+<li><strong>limit</strong> – Number of connected subgraphs to be considered.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="analysis.author.graph.interaction.weighted_multigraph">
+<code class="descclassname">analysis.author.graph.interaction.</code><code class="descname">weighted_multigraph</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/author/graph/interaction.html#weighted_multigraph"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analysis.author.graph.interaction.weighted_multigraph" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calls other functions to generate graphs that show the interaction between authors either through multiple edges or
+through edge weights.</p>
+</dd></dl>
+
 </div>
 <div class="section" id="module-analysis.author.graph.bipartite">
 <span id="analysis-author-graph-bipartite-module"></span><h2>analysis.author.graph.bipartite module<a class="headerlink" href="#module-analysis.author.graph.bipartite" title="Permalink to this headline">¶</a></h2>
@@ -79,15 +167,12 @@ A projection of this bipartite graph is then generated.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>threadwise</strong> &#8211; If true, a bipartite graph is generated for each thread individually.</li>
-<li><strong>ignore_lat</strong> &#8211; If true, then messages that belong to threads that have only a single author are ignored.</li>
-<li><strong>time_limit</strong> &#8211; Time limit can be specified here in the form of a timestamp in one of the identifiable formats
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>threadwise</strong> – If true, a bipartite graph is generated for each thread individually.</li>
+<li><strong>ignore_lat</strong> – If true, then messages that belong to threads that have only a single author are ignored.</li>
+<li><strong>time_limit</strong> – Time limit can be specified here in the form of a timestamp in one of the identifiable formats
 and all messages that have arrived after this timestamp will be ignored.</li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
 </td>
 </tr>
 </tbody>
@@ -95,8 +180,35 @@ and all messages that have arrived after this timestamp will be ignored.</li>
 </dd></dl>
 
 </div>
-<div class="section" id="analysis-author-graph-generate-module">
-<h2>analysis.author.graph.generate module<a class="headerlink" href="#analysis-author-graph-generate-module" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-analysis.author.graph.generate">
+<span id="analysis-author-graph-generate-module"></span><h2>analysis.author.graph.generate module<a class="headerlink" href="#module-analysis.author.graph.generate" title="Permalink to this headline">¶</a></h2>
+<p>This module is used to  graphs that show the interaction between authors in the mailing list. There is an edge from
+one author to another if the former sent a message to the latter either in To or by marking in CC. These graphs are for
+the entire mailing list.</p>
+<dl class="function">
+<dt id="analysis.author.graph.generate.author_interaction">
+<code class="descclassname">analysis.author.graph.generate.</code><code class="descname">author_interaction</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/author/graph/generate.html#author_interaction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analysis.author.graph.generate.author_interaction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints the number of strongly connected components,weekly connected components, number of nodes and edges from the author graph.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="analysis.author.graph.generate.write_to_pajek">
+<code class="descclassname">analysis.author.graph.generate.</code><code class="descname">write_to_pajek</code><span class="sig-paren">(</span><em>author_graph</em>, <em>filename='author_graph.net'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/author/graph/generate.html#write_to_pajek"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analysis.author.graph.generate.write_to_pajek" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write the networkx graph in Pajek format to author_graph.net</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>author_graph</strong> – Networkx graph.</li>
+<li><strong>filename</strong> – Write to Pajek file compatible with the Infomap Community Detection module.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
 <div class="section" id="module-analysis.author.graph">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-analysis.author.graph" title="Permalink to this headline">¶</a></h2>
@@ -113,9 +225,9 @@ and all messages that have arrived after this timestamp will be ignored.</li>
   <ul>
 <li><a class="reference internal" href="#">analysis.author.graph package</a><ul>
 <li><a class="reference internal" href="#submodules">Submodules</a></li>
-<li><a class="reference internal" href="#analysis-author-graph-author-interaction-module">analysis.author.graph.author_interaction module</a></li>
+<li><a class="reference internal" href="#module-analysis.author.graph.interaction">analysis.author.graph.author_interaction module</a></li>
 <li><a class="reference internal" href="#module-analysis.author.graph.bipartite">analysis.author.graph.bipartite module</a></li>
-<li><a class="reference internal" href="#analysis-author-graph-generate-module">analysis.author.graph.generate module</a></li>
+<li><a class="reference internal" href="#module-analysis.author.graph.generate">analysis.author.graph.generate module</a></li>
 <li><a class="reference internal" href="#module-analysis.author.graph">Module contents</a></li>
 </ul>
 </li>
@@ -163,15 +275,15 @@ and all messages that have arrived after this timestamp will be ignored.</li>
         <li class="right" >
           <a href="analysis.author.html" title="analysis.author package"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">MailingListParser 0.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">MailingListParser 0.1.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="modules.html" >Documentation for the Code</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="analysis.html" >analysis package</a> &#187;</li>
           <li class="nav-item nav-item-3"><a href="analysis.author.html" >analysis.author package</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2017, Prasad Talasila,Achyudh Ram.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.
+        &#169; Copyright 2015-2017, Prasad Talasila, Achyudh Ram, Yash Pungaliya.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.
     </div>
   </body>
 </html>

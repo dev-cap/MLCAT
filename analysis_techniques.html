@@ -1,20 +1,17 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>Analysis Techniques &#8212; MailingListParser 0.1 documentation</title>
-    
+    <title>Analysis Techniques &#8212; MailingListParser 0.1.2 documentation</title>
     <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.1',
+        VERSION:     '0.1.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -24,13 +21,13 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="What does MailingListParser plan to accomplish?" href="project_goals.html" />
     <link rel="prev" title="What is MailingListParser?" href="introduction.html" /> 
   </head>
-  <body role="document">
+  <body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -46,7 +43,7 @@
         <li class="right" >
           <a href="introduction.html" title="What is MailingListParser?"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">MailingListParser 0.1 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">MailingListParser 0.1.2 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -62,11 +59,11 @@
 <h2>Data Preprocessing<a class="headerlink" href="#data-preprocessing" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="data-collection-methodology-for-imap">
 <h3>Data Collection Methodology for IMAP<a class="headerlink" href="#data-collection-methodology-for-imap" title="Permalink to this headline">¶</a></h3>
-<p>From the email stream of the mailing list that has been cleaned from spam, the RFC 822 mail headers are extracted and the From, To, CC, Message-ID, In-Reply-To and the time-stamp fields are saved to a JSON file (&#8220;headers.json&#8221;) using the <strong>imap_hdr.py</strong> and <strong>imap_conn.py</strong> modules. The mapping between the UIDs and Message-IDs are stored in another JSON file (&#8220;thread_uid_map.json&#8221;) in order to facilitate the reconstruction of the threads from the Reference or In-Reply-To fields. Since we have access to the mails after the time of subscription to the mailing list, if any of the mails contain a reference to mails before subscription (in the form of a 0 in its list of references), then they represent some sort of incomplete information and cannot be included for analysis. The JSON file is cleaned to remove such orphaned children nodes using the <strong>&#8220;data_cleanup.py&#8221;</strong> module and saved to clean_data.json.</p>
+<p>From the email stream of the mailing list that has been cleaned from spam, the RFC 822 mail headers are extracted and the From, To, CC, Message-ID, In-Reply-To and the time-stamp fields are saved to a JSON file (“headers.json”) using the <strong>imap_hdr.py</strong> and <strong>imap_conn.py</strong> modules. The mapping between the UIDs and Message-IDs are stored in another JSON file (“thread_uid_map.json”) in order to facilitate the reconstruction of the threads from the Reference or In-Reply-To fields. Since we have access to the mails after the time of subscription to the mailing list, if any of the mails contain a reference to mails before subscription (in the form of a 0 in its list of references), then they represent some sort of incomplete information and cannot be included for analysis. The JSON file is cleaned to remove such orphaned children nodes using the <strong>“data_cleanup.py”</strong> module and saved to clean_data.json.</p>
 </div>
 <div class="section" id="data-collection-methodology-for-mbox">
 <h3>Data Collection Methodology for MBOX<a class="headerlink" href="#data-collection-methodology-for-mbox" title="Permalink to this headline">¶</a></h3>
-<p>From the .MBOX file, the header information is extracted using two predefined classes available in the Python Standard Library: Mailbox and Message, for accessing and manipulating on-disk mailboxes and the messages they contain respectively. Mailbox offers a dictionary-like mapping from keys to message and messages can be a string or a file and that contain an RFC 2822-compliant message, which is read and parsed. The messages are parsed and the header information containing the fields From, To, CC, Message-ID, In-Reply-To, Reference and Time is extracted for each message in the .MBOX file using the <strong>mbox_hdr.py</strong> module and is then saved to a JSON file (&#8220;headers.json&#8221;). The Reference and In-Reply-To fields are used to reconstruct the thread and they point to either a Message_ID or to 0 (referring to a mail not present in the mailbox file). Hence an unique Message-ID is provided to each message in the .MBOX file in the ascending order of their arrival times. The The mapping between the UIDs and Message-IDs are stored in another JSON file (&#8220;thread_uid_map.json&#8221;) in order to facilitate the reconstruction of the threads. The JSON file is then cleaned to remove orphaned children nodes using the <strong>&#8220;data_cleanup.py&#8221;</strong> module and saved to clean_data.json in a process that is similar to the one used for headers fetched directly from the IMAP servers.</p>
+<p>From the .MBOX file, the header information is extracted using two predefined classes available in the Python Standard Library: Mailbox and Message, for accessing and manipulating on-disk mailboxes and the messages they contain respectively. Mailbox offers a dictionary-like mapping from keys to message and messages can be a string or a file and that contain an RFC 2822-compliant message, which is read and parsed. The messages are parsed and the header information containing the fields From, To, CC, Message-ID, In-Reply-To, Reference and Time is extracted for each message in the .MBOX file using the <strong>mbox_hdr.py</strong> module and is then saved to a JSON file (“headers.json”). The Reference and In-Reply-To fields are used to reconstruct the thread and they point to either a Message_ID or to 0 (referring to a mail not present in the mailbox file). Hence an unique Message-ID is provided to each message in the .MBOX file in the ascending order of their arrival times. The The mapping between the UIDs and Message-IDs are stored in another JSON file (“thread_uid_map.json”) in order to facilitate the reconstruction of the threads. The JSON file is then cleaned to remove orphaned children nodes using the <strong>“data_cleanup.py”</strong> module and saved to clean_data.json in a process that is similar to the one used for headers fetched directly from the IMAP servers.</p>
 </div>
 </div>
 <div class="section" id="concepts">
@@ -93,7 +90,7 @@
 <div class="section" id="analysis-of-threads">
 <h3>Analysis of Threads<a class="headerlink" href="#analysis-of-threads" title="Permalink to this headline">¶</a></h3>
 <p>The analysis of the threads in the mailing list utilizes the graph_nodes.csv, graph_edges.csv and clean_data.json files generated during the data collection process. The graph_generate_dot.py and graph_generate_gexf.py modules generate the graph files in GEXF, DOT and PNG formats, which are the used for further analysis and for verification of results on a thread level basis. The wh_table_threads.py module generates a width height table for the authors graph and saves it as a CSV file. The width height table is a representation of the number of nodes in the graph that have a given height and a given number of children in a tabular form. This table can further be used for non-parametric estimation. The time_statistics_threads.py module generates a frequency distribution of the inter-arrival times between nodes in threads and another distribution of the length of threads.</p>
-<p>_**A note on ignoring lone author threads:<a href="#id1"><span class="problematic" id="id2">**</span></a>_ Many of the analysis modules allow for ignoring threads that have only a single author. This is preferable as such threads don&#8217;t correspond to interactions between individuals and more often than not are patches. If another author joins the thread, then it becomes a conversation between multiple individuals and the thread is no longer ignored in the analysis. Further, this allows for comparisons of the results of the analysis between the cases where such threads are ignored or taken into consideration.</p>
+<p><strong>A note on ignoring lone author threads</strong>: Many of the analysis modules allow for ignoring threads that have only a single author. This is preferable as such threads don’t correspond to interactions between individuals and more often than not are patches. If another author joins the thread, then it becomes a conversation between multiple individuals and the thread is no longer ignored in the analysis. Further, this allows for comparisons of the results of the analysis between the cases where such threads are ignored or taken into consideration.</p>
 <p>The analysis was centered on the following topics:
 1. <strong>thread width-height table:</strong> we need to perform frequency interpretation of this table with 1% and 5% significance cutoffs; we can also try the non-parametric estimation / kernel density functions on the frequency data to summarize the data into a standard form.
 2. <strong>thread length analysis</strong>
@@ -109,7 +106,7 @@ A few questions that we can ask on this framework are:
 <div class="section" id="analysis-of-author-interactions">
 <h3>Analysis of Author Interactions<a class="headerlink" href="#analysis-of-author-interactions" title="Permalink to this headline">¶</a></h3>
 <p>The author-centric analysis primarily uses clean_data.json for referring to the To, CC, and From fields as indexed by the graph_nodes.csv and graph_edges.csv files. The analysis of the temporal behaviour of the authors is done on an author_centric temporal multigraph or a weighted graph depending on the requirements. These graphs are generated by the graph_generate_authors.py module. This graph is also used to generate a width height table for the authors which is a representation of the number of total and new authors in a thread aggregated at a given generation. The participant_size table is also generated which is a series between the number of mails in a thread and the corresponding number of authors who have participated in that thread. There seems to be a correlation between the number of authors participating in a discussion and the number of generations in (length of) a discussion thread.</p>
-<p>We can take three kinds of graphs for any temporal graph. They are: aggregate graph, time window graph, probabilistic edge decay (PED) graph. All three of these must be tried on the authors&#8217; interaction graph. Another interesting aspect of this graph is to find the natural recurrence cycle for the graph. Once the graphs are created, we can find the following network properties:
+<p>We can take three kinds of graphs for any temporal graph. They are: aggregate graph, time window graph, probabilistic edge decay (PED) graph. All three of these must be tried on the authors’ interaction graph. Another interesting aspect of this graph is to find the natural recurrence cycle for the graph. Once the graphs are created, we can find the following network properties:
 1. Degree distribution
 1. Popular authors
 1. Mean path length and other relevant centrality measures
@@ -215,7 +212,7 @@ The following heatmap shows the weekly message activity:</p>
 </div>
 <div class="section" id="clustering-coefficients-of-the-authors">
 <h4>7. Clustering Coefficients of the Authors<a class="headerlink" href="#clustering-coefficients-of-the-authors" title="Permalink to this headline">¶</a></h4>
-<p>For unweighted graphs, the clustering of a node u is the fraction of possible triangles through that node that exist, and  for weighted graphs, the clustering is defined as the geometric average of the subgraph edge weights. Clustering coefficients for the author&#8217;s network was generated using the clustering module of the NetworkX package.</p>
+<p>For unweighted graphs, the clustering of a node u is the fraction of possible triangles through that node that exist, and  for weighted graphs, the clustering is defined as the geometric average of the subgraph edge weights. Clustering coefficients for the author’s network was generated using the clustering module of the NetworkX package.</p>
 </div>
 </div>
 </div>
@@ -352,12 +349,12 @@ The following heatmap shows the weekly message activity:</p>
         <li class="right" >
           <a href="introduction.html" title="What is MailingListParser?"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">MailingListParser 0.1 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">MailingListParser 0.1.2 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2017, Prasad Talasila,Achyudh Ram.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.
+        &#169; Copyright 2015-2017, Prasad Talasila, Achyudh Ram, Yash Pungaliya.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.
     </div>
   </body>
 </html>

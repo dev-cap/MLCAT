@@ -1,20 +1,17 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>input.mbox.mbox_hdr &#8212; MailingListParser 0.1 documentation</title>
-    
+    <title>input.mbox.mbox_hdr &#8212; MailingListParser 0.1.2 documentation</title>
     <link rel="stylesheet" href="../../../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
-        VERSION:     '0.1',
+        VERSION:     '0.1.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -24,11 +21,11 @@
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
   </head>
-  <body role="document">
+  <body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -38,7 +35,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">MailingListParser 0.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">MailingListParser 0.1.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>  
@@ -52,18 +49,21 @@
 <span></span><span class="kn">import</span> <span class="nn">mailbox</span>
 <span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">import</span> <span class="nn">datetime</span>
-<span class="kn">from</span> <span class="nn">util.read_utils</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">util.read</span> <span class="k">import</span> <span class="o">*</span>
 
 
 <div class="viewcode-block" id="extract_mail_header"><a class="viewcode-back" href="../../../input.mbox.html#input.mbox.mbox_hdr.extract_mail_header">[docs]</a><span class="k">def</span> <span class="nf">extract_mail_header</span><span class="p">(</span><span class="n">mbox_filename</span><span class="p">,</span> <span class="n">json_filename</span><span class="o">=</span><span class="s1">&#39;headers.json&#39;</span><span class="p">,</span> <span class="n">thread_uid_filename</span><span class="o">=</span><span class="s1">&#39;thread_uid_map.json&#39;</span><span class="p">,</span> <span class="n">author_uid_filename</span><span class="o">=</span><span class="s1">&#39;author_uid_map.json&#39;</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-
 <span class="sd">    From the .MBOX file, this function extracts the header information is extracted using two predefined classes</span>
 <span class="sd">    available in the Python Standard Library: Mailbox and Message, for accessing and manipulating on-disk mailboxes</span>
-<span class="sd">    and the messages they contain respectively. The headers are then saved to a JSOn file. an unique Message-ID is</span>
-<span class="sd">    provided to each message in the .MBOX file in the ascending order of their arrival times. The The mapping between</span>
-<span class="sd">    the UIDs and Message-IDs are stored in another JSON file</span>
-<span class="sd">    :param mbox_filename: Contains the absolue or relative address of the file to be opened</span>
+<span class="sd">    and the messages they contain respectively. The headers are then saved to a JSON file. an unique Message-ID is</span>
+<span class="sd">    provided to each message in the .MBOX file in the ascending order of their arrival times. The mapping between</span>
+<span class="sd">    the UIDs and Message-IDs are stored in another JSON file.</span>
+<span class="sd">    </span>
+<span class="sd">    :param mbox_filename: Contains the absolue or relative address of the file to be opened.</span>
+<span class="sd">    :param json_filename: The JSON file in which the extracted headers are stored.</span>
+<span class="sd">    :param thread_uid_filename: Contains a mapping between threads and UIDs.</span>
+<span class="sd">    :param author_uid_filename: Contains a mapping between authors and UIDs.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Reading messages from MBOX file...&quot;</span><span class="p">)</span>
     <span class="n">mailbox_obj</span> <span class="o">=</span> <span class="n">mailbox</span><span class="o">.</span><span class="n">mbox</span><span class="p">(</span><span class="n">mbox_filename</span><span class="p">)</span>
@@ -140,7 +140,6 @@
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">author_uid_filename</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">map_file</span><span class="p">:</span>
         <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">author_uid_map</span><span class="p">,</span> <span class="n">map_file</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
         <span class="n">map_file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
-
 </pre></div>
 
           </div>
@@ -171,13 +170,13 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">MailingListParser 0.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">MailingListParser 0.1.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2017, Prasad Talasila,Achyudh Ram.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.
+        &#169; Copyright 2015-2017, Prasad Talasila, Achyudh Ram, Yash Pungaliya.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.
     </div>
   </body>
 </html>

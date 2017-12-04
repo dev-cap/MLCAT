@@ -1,20 +1,17 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>input.imap.header &#8212; MailingListParser 0.1 documentation</title>
-    
+    <title>input.imap.header &#8212; MailingListParser 0.1.2 documentation</title>
     <link rel="stylesheet" href="../../../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
-        VERSION:     '0.1',
+        VERSION:     '0.1.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -24,11 +21,11 @@
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
   </head>
-  <body role="document">
+  <body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -38,7 +35,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">MailingListParser 0.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">MailingListParser 0.1.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>  
@@ -55,7 +52,7 @@
 
 <span class="kn">from</span> <span class="nn">input.imap.connection</span> <span class="k">import</span> <span class="n">open_connection</span>
 <span class="kn">from</span> <span class="nn">util.json_encoder</span> <span class="k">import</span> <span class="n">NoIndent</span><span class="p">,</span> <span class="n">MyEncoder</span>
-<span class="kn">from</span> <span class="nn">util.read_utils</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">util.read</span> <span class="k">import</span> <span class="o">*</span>
 
 
 <div class="viewcode-block" id="init_uid_map"><a class="viewcode-back" href="../../../input.imap.html#input.imap.header.init_uid_map">[docs]</a><span class="k">def</span> <span class="nf">init_uid_map</span><span class="p">():</span>
@@ -63,6 +60,7 @@
 <span class="sd">    To ensure that references are correctly recorded in the JSON file such that there are no references to mails that</span>
 <span class="sd">    do not exist and to ease the processing of headers, a map with the string in the Message-Id field of the header to</span>
 <span class="sd">    the UID of the mail is required. This function reads the header.json file and adds required entries to the map.</span>
+
 <span class="sd">    :return: A map with the string in the Message-Id field of the header to the UID of the mail</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Initializing UID map...&quot;</span><span class="p">)</span>
@@ -75,9 +73,9 @@
 <div class="viewcode-block" id="get_mail_header"><a class="viewcode-back" href="../../../input.imap.html#input.imap.header.get_mail_header">[docs]</a><span class="k">def</span> <span class="nf">get_mail_header</span><span class="p">(</span><span class="n">to_get</span><span class="p">,</span> <span class="n">range_</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This function fetches the emails from the IMAP server as per the parameters passed.</span>
+<span class="sd">    </span>
 <span class="sd">    :param to_get: List of UIDs of the mails to get. Default value is 2000.</span>
-<span class="sd">    :param range_: If true, fetches all emails from the first element in to_get, till the newest mail.</span>
-<span class="sd">    If false, fetches only the emails with the UIDs present in to_get. Default value is true.</span>
+<span class="sd">    :param range_: If true, fetches all emails from the first element in to_get, till the newest mail. If false, fetches only the emails with the UIDs present in to_get. Default value is true.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># This is used to map the string in the Message-Id field of the header to the UID of the mail.</span>
     <span class="c1"># By doing so we ease the further processing of information.</span>
@@ -237,13 +235,13 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">MailingListParser 0.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">MailingListParser 0.1.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2017, Prasad Talasila,Achyudh Ram.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.
+        &#169; Copyright 2015-2017, Prasad Talasila, Achyudh Ram, Yash Pungaliya.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.
     </div>
   </body>
 </html>

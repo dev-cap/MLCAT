@@ -1,20 +1,17 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>analysis.thread.hypergraph &#8212; MailingListParser 0.1 documentation</title>
-    
+    <title>analysis.thread.hypergraph &#8212; MailingListParser 0.1.2 documentation</title>
     <link rel="stylesheet" href="../../../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
-        VERSION:     '0.1',
+        VERSION:     '0.1.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -24,11 +21,11 @@
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
   </head>
-  <body role="document">
+  <body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -38,7 +35,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">MailingListParser 0.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">MailingListParser 0.1.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>  
@@ -56,8 +53,7 @@
 <span class="sd">All the author columns are sorted left to right in the descending order of out degree, followed by in degree. The</span>
 <span class="sd">authors identified in this discussion thread are indexed in a separate file using the author_uid_map.py.</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">from</span> <span class="nn">util.read_utils</span> <span class="k">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">util.read_utils</span> <span class="k">import</span> <span class="n">lines_per_n</span>
+<span class="kn">from</span> <span class="nn">util.read</span> <span class="k">import</span> <span class="o">*</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">networkx</span> <span class="k">as</span> <span class="nn">nx</span>
 <span class="kn">import</span> <span class="nn">json</span>
@@ -66,7 +62,28 @@
 
 
 <div class="viewcode-block" id="MessageNode"><a class="viewcode-back" href="../../../analysis.thread.html#analysis.thread.hypergraph.MessageNode">[docs]</a><span class="k">class</span> <span class="nc">MessageNode</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Models message information as a message node.</span>
+
+<span class="sd">    :param msg_id: Unique message id.</span>
+<span class="sd">    :param height: Height at which the node is present.</span>
+<span class="sd">    :param parent_id: Id of the parent node.</span>
+<span class="sd">    :param time: Time at which the message was sent.</span>
+<span class="sd">    :param from_addr: Message author.</span>
+<span class="sd">    :param to_addr: Message receiver.</span>
+<span class="sd">    :param cc_addr: Message recever.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg_id</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">height</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">parent_id</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">from_addr</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">to_addr</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cc_addr</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :param msg_id: Unique message id.</span>
+<span class="sd">        :param height: Height at which the node is present.</span>
+<span class="sd">        :param parent_id: Id of the parent node.</span>
+<span class="sd">        :param time: Time at which the message was sent.</span>
+<span class="sd">        :param from_addr: Message author.</span>
+<span class="sd">        :param to_addr: Message receiver.</span>
+<span class="sd">        :param cc_addr: Message recever.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">msg_id</span> <span class="o">=</span> <span class="n">msg_id</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">=</span> <span class="n">height</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parent_id</span> <span class="o">=</span> <span class="n">parent_id</span>
@@ -80,6 +97,17 @@
 
 
 <div class="viewcode-block" id="add_thread_nodes"><a class="viewcode-back" href="../../../analysis.thread.html#analysis.thread.hypergraph.add_thread_nodes">[docs]</a><span class="k">def</span> <span class="nf">add_thread_nodes</span><span class="p">(</span><span class="n">thread_authors</span><span class="p">,</span> <span class="n">nbunch</span><span class="p">,</span> <span class="n">parent_id</span><span class="p">,</span> <span class="n">curr_height</span><span class="p">,</span> <span class="n">json_data</span><span class="p">,</span> <span class="n">thread_nodes</span><span class="p">,</span> <span class="n">conn_subgraph</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Adds thread nodes of type MessageNode and thread authors recursively from the JSON data.</span>
+
+<span class="sd">    :param thread_authors: A set to store author threads.</span>
+<span class="sd">    :param nbunch: Stores nodes and contains the origin node initially.</span>
+<span class="sd">    :param parent_id: Parent ID of each node, None initially.</span>
+<span class="sd">    :param curr_height: Indicates the height of the current node, 0 when the function is called.</span>
+<span class="sd">    :param json_data: The JSON data used to extract the thread attributes.</span>
+<span class="sd">    :param thread_nodes: A list containing the nodes of type MessageNode.</span>
+<span class="sd">    :param conn_subgraph: Weakly connected component subgraph from the discussion graph.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">nbunch</span><span class="p">:</span>
         <span class="n">next_nbunch</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
         <span class="n">node_attr</span> <span class="o">=</span> <span class="n">json_data</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">node</span><span class="p">)]</span>
@@ -94,6 +122,11 @@
 
 
 <div class="viewcode-block" id="generate_hyperedges"><a class="viewcode-back" href="../../../analysis.thread.html#analysis.thread.hypergraph.generate_hyperedges">[docs]</a><span class="k">def</span> <span class="nf">generate_hyperedges</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    Generates hyperedges from the discussion graph obtained from the nodes and edges stored in graph_nodes.csv and graph_edges.csv.</span>
+<span class="sd">    All email header information can be represented as one hyperedge of a hypergraph.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">discussion_graph</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">()</span>
     <span class="n">json_data</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
     <span class="n">email_re</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;[\w\.-]+@[\w\.-]+&#39;</span><span class="p">)</span>
@@ -204,7 +237,12 @@
 
 <div class="viewcode-block" id="generate_hyperedge_distribution"><a class="viewcode-back" href="../../../analysis.thread.html#analysis.thread.hypergraph.generate_hyperedge_distribution">[docs]</a><span class="k">def</span> <span class="nf">generate_hyperedge_distribution</span><span class="p">(</span><span class="n">nodelist_filename</span><span class="p">,</span> <span class="n">edgelist_filename</span><span class="p">,</span> <span class="n">clean_headers_filename</span><span class="p">,</span> <span class="n">foldername</span><span class="p">,</span> <span class="n">time_limit</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ignore_lat</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generate the distribution of hyperedges for messages in a certain time limit, stores it as hyperedge_distribution.csv based on edge frequency and generates a diagram stored in plots.</span>
 
+<span class="sd">    :param nodelist_filename: The csv file containing the nodes.</span>
+<span class="sd">    :param edgelist_filename: The csv file containing the edges.</span>
+<span class="sd">    :param clean_headers_filename: The JSON file containing the cleaned headers.</span>
+<span class="sd">    :param foldername: The mailbox folder.</span>
 <span class="sd">    :param ignore_lat: If true, then messages that belong to threads that have only a single author are ignored.</span>
 <span class="sd">    :param time_limit: Time limit can be specified here in the form of a timestamp in one of the identifiable formats</span>
 <span class="sd">            and all messages that have arrived after this timestamp will be ignored.</span>
@@ -363,13 +401,13 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">MailingListParser 0.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">MailingListParser 0.1.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2017, Prasad Talasila,Achyudh Ram.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.
+        &#169; Copyright 2015-2017, Prasad Talasila, Achyudh Ram, Yash Pungaliya.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.
     </div>
   </body>
 </html>

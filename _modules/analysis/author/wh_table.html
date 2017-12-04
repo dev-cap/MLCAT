@@ -1,20 +1,17 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>analysis.author.wh_table &#8212; MailingListParser 0.1 documentation</title>
-    
+    <title>analysis.author.wh_table &#8212; MailingListParser 0.1.2 documentation</title>
     <link rel="stylesheet" href="../../../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
-        VERSION:     '0.1',
+        VERSION:     '0.1.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -24,11 +21,11 @@
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
   </head>
-  <body role="document">
+  <body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -38,7 +35,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">MailingListParser 0.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">MailingListParser 0.1.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>  
@@ -50,7 +47,7 @@
             
   <h1>Source code for analysis.author.wh_table</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">csv</span>
-<span class="kn">from</span> <span class="nn">util.read_utils</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">util.read</span> <span class="k">import</span> <span class="o">*</span>
 
 
 <div class="viewcode-block" id="generate_wh_table_authors"><a class="viewcode-back" href="../../../analysis.author.html#analysis.author.wh_table.generate_wh_table_authors">[docs]</a><span class="k">def</span> <span class="nf">generate_wh_table_authors</span><span class="p">(</span><span class="n">nodelist_filename</span><span class="p">,</span> <span class="n">edgelist_filename</span><span class="p">,</span> <span class="n">output_filename</span><span class="p">,</span> <span class="n">ignore_lat</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">time_limit</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -59,9 +56,12 @@
 <span class="sd">    authors is a representation of the number of total and new authors in a thread aggregated at a given generation.</span>
 <span class="sd">    The table, which itself is temporarily stored in a two dimensional array, is then written into a CSV file. These</span>
 <span class="sd">    tables are can be used to decipher the basic conversation structure.</span>
+
+<span class="sd">    :param nodelist_filename: The csv file containing the nodes.</span>
+<span class="sd">    :param edgelist_filename: The csv file containing the edges.</span>
+<span class="sd">    :param output_filename: Stores the width-height table values.</span>
 <span class="sd">    :param ignore_lat: If true, then lone author threads are ignored.</span>
-<span class="sd">    :param time_limit: All messages until this timne are considered and all messages after this time are ignored. Time</span>
-<span class="sd">                       is specified as a string in one of the recognized formats.</span>
+<span class="sd">    :param time_limit: All messages until this time are considered and all messages after this time are ignored. Time is specified as a string in one of the recognized formats.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">time_limit</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">time_limit</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%a, </span><span class="si">%d</span><span class="s2"> %b %Y %H:%M:%S %z&quot;</span><span class="p">)</span>
@@ -229,13 +229,13 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">MailingListParser 0.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">MailingListParser 0.1.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2017, Prasad Talasila,Achyudh Ram.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.
+        &#169; Copyright 2015-2017, Prasad Talasila, Achyudh Ram, Yash Pungaliya.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.
     </div>
   </body>
 </html>

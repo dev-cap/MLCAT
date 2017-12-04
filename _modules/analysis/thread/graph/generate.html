@@ -1,0 +1,162 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>analysis.thread.graph.generate &#8212; MailingListParser 0.1.2 documentation</title>
+    <link rel="stylesheet" href="../../../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../../',
+        VERSION:     '0.1.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">MailingListParser 0.1.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for analysis.thread.graph.generate</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">networkx</span> <span class="k">as</span> <span class="nn">nx</span>
+<span class="kn">from</span> <span class="nn">networkx.drawing.nx_agraph</span> <span class="k">import</span> <span class="o">*</span>
+
+<div class="viewcode-block" id="digraph"><a class="viewcode-back" href="../../../../analysis.thread.graph.html#analysis.thread.graph.generate.digraph">[docs]</a><span class="k">def</span> <span class="nf">digraph</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This function is used to generate a thread-wise view of the entire mailing list by saving the a graph representing the</span>
+<span class="sd">    messages in a thread as a tree using the References and In-Reply-TO fields from the mail headers. The thread graphs are</span>
+<span class="sd">    then saved to GEXF, DOT and PNG formats. All authors of a thread are identified and each author is given a unique color.</span>
+<span class="sd">    All messages sent by this author get the same color.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">discussion_graph</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">()</span>
+    <span class="n">color_list</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;#ff0000&quot;</span><span class="p">,</span> <span class="s2">&quot;#005555&quot;</span><span class="p">,</span> <span class="s2">&quot;#b0b0ff&quot;</span><span class="p">,</span> <span class="s2">&quot;#e4e400&quot;</span><span class="p">,</span> <span class="s2">&quot;#0000ff&quot;</span><span class="p">,</span> <span class="s2">&quot;#ff00ff&quot;</span><span class="p">,</span> <span class="s2">&quot;#b000b0&quot;</span><span class="p">,</span> <span class="s2">&quot;#870087&quot;</span><span class="p">,</span> <span class="s2">&quot;#baba00&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;#878700&quot;</span><span class="p">,</span> <span class="s2">&quot;#545400&quot;</span><span class="p">,</span> <span class="s2">&quot;#00ff00&quot;</span><span class="p">,</span> <span class="s2">&quot;#8484ff&quot;</span><span class="p">,</span> <span class="s2">&quot;#b00000&quot;</span><span class="p">,</span> <span class="s2">&quot;#870000&quot;</span><span class="p">,</span> <span class="s2">&quot;#550000&quot;</span><span class="p">,</span> <span class="s2">&quot;#00b0b0&quot;</span><span class="p">,</span> <span class="s2">&quot;#008787&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;#4949ff&quot;</span><span class="p">,</span> <span class="s2">&quot;#550055&quot;</span><span class="p">,</span> <span class="s2">&quot;#bababa&quot;</span><span class="p">,</span> <span class="s2">&quot;#878787&quot;</span><span class="p">,</span> <span class="s2">&quot;#00b000&quot;</span><span class="p">,</span> <span class="s2">&quot;#008700&quot;</span><span class="p">,</span> <span class="s2">&quot;#005500&quot;</span><span class="p">,</span> <span class="s2">&quot;#00ffff&quot;</span><span class="p">]</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;graph_nodes.csv&quot;</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">node_file</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">pair</span> <span class="ow">in</span> <span class="n">node_file</span><span class="p">:</span>
+            <span class="n">node</span> <span class="o">=</span> <span class="n">pair</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;;&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+            <span class="n">discussion_graph</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">node</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">time</span><span class="o">=</span><span class="n">node</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">(),</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#ffffff&quot;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">,</span> <span class="n">sender</span><span class="o">=</span><span class="n">node</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+        <span class="n">node_file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Nodes added.&quot;</span><span class="p">)</span>
+
+    <span class="c1"># node_list = discussion_graph.nodes()</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;graph_edges.csv&quot;</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">edge_file</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">pair</span> <span class="ow">in</span> <span class="n">edge_file</span><span class="p">:</span>
+            <span class="n">edge</span> <span class="o">=</span> <span class="n">pair</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;;&#39;</span><span class="p">)</span>
+            <span class="n">edge</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">edge</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">discussion_graph</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">edge</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="s1">&#39;sender&#39;</span><span class="p">]</span>
+                <span class="n">discussion_graph</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">edge</span><span class="p">[</span><span class="mi">1</span><span class="p">]][</span><span class="s1">&#39;sender&#39;</span><span class="p">]</span>
+                <span class="n">discussion_graph</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="o">*</span><span class="n">edge</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                <span class="k">pass</span>
+        <span class="n">edge_file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Edges added.&quot;</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No. of Nodes: &quot;</span><span class="p">,</span> <span class="n">nx</span><span class="o">.</span><span class="n">number_of_nodes</span><span class="p">(</span><span class="n">discussion_graph</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No. of Edges: &quot;</span><span class="p">,</span> <span class="n">nx</span><span class="o">.</span><span class="n">number_of_edges</span><span class="p">(</span><span class="n">discussion_graph</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No. of Weakly Connected Components: &quot;</span><span class="p">,</span> <span class="n">nx</span><span class="o">.</span><span class="n">number_weakly_connected_components</span><span class="p">(</span><span class="n">discussion_graph</span><span class="p">))</span>
+
+    <span class="c1"># Uncomment the lines below to save the graph as a GEXF file</span>
+    <span class="c1"># nx.write_gexf(discussion_graph, &quot;gexf/master_disc_graph.gexf&quot;)</span>
+    <span class="c1"># print(&quot;GEXF file generated.&quot;)</span>
+
+    <span class="c1"># Uncomment the lines below to read the graph from a GEXF file</span>
+    <span class="c1"># discussion_graph = nx.read_gexf(&quot;gexf/master_disc_graph.gexf&quot;, node_type=int)</span>
+    <span class="c1"># print(&quot;Graph loaded from GEXF file.&quot;)</span>
+
+    <span class="k">for</span> <span class="n">conn_subgraph</span> <span class="ow">in</span> <span class="n">nx</span><span class="o">.</span><span class="n">weakly_connected_component_subgraphs</span><span class="p">(</span><span class="n">discussion_graph</span><span class="p">):</span>
+        <span class="n">sender_color_map</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">node_list</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">conn_subgraph</span><span class="o">.</span><span class="n">nodes</span><span class="p">()]</span>
+        <span class="c1"># Comment the respective lines below to only save in the required formats</span>
+        <span class="n">nx</span><span class="o">.</span><span class="n">write_gexf</span><span class="p">(</span><span class="n">conn_subgraph</span><span class="p">,</span> <span class="s1">&#39;gexf/&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">node_list</span><span class="p">))</span><span class="o">+</span><span class="s1">&#39;.gexf&#39;</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">node_uid</span> <span class="ow">in</span> <span class="n">conn_subgraph</span><span class="o">.</span><span class="n">nodes</span><span class="p">():</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">conn_subgraph</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">node_uid</span><span class="p">][</span><span class="s1">&#39;sender&#39;</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sender_color_map</span><span class="p">:</span>
+                    <span class="n">conn_subgraph</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">node_uid</span><span class="p">][</span><span class="s1">&#39;color&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">color_list</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">sender_color_map</span><span class="p">)</span> <span class="o">%</span> <span class="mi">26</span><span class="p">]</span>
+                    <span class="c1">#print(conn_subgraph.node[node_uid][&#39;color&#39;])</span>
+                    <span class="n">sender_color_map</span><span class="p">[</span><span class="n">conn_subgraph</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">node_uid</span><span class="p">][</span><span class="s1">&#39;sender&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">color_list</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">sender_color_map</span><span class="p">)</span> <span class="o">%</span> <span class="mi">26</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">conn_subgraph</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">node_uid</span><span class="p">][</span><span class="s1">&#39;color&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sender_color_map</span><span class="p">[</span><span class="n">conn_subgraph</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">node_uid</span><span class="p">][</span><span class="s1">&#39;sender&#39;</span><span class="p">]]</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">n1</span><span class="p">,</span><span class="n">attr</span> <span class="ow">in</span> <span class="n">conn_subgraph</span><span class="o">.</span><span class="n">nodes</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="n">n1</span><span class="p">,</span> <span class="n">attr</span><span class="p">)</span>
+
+        <span class="n">g1</span> <span class="o">=</span> <span class="n">to_agraph</span><span class="p">(</span><span class="n">conn_subgraph</span><span class="p">)</span>
+        <span class="n">adj_list1</span> <span class="o">=</span> <span class="n">conn_subgraph</span><span class="o">.</span><span class="n">adjacency_list</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">neighbour</span> <span class="ow">in</span> <span class="n">adj_list1</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">neighbour</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">g1</span><span class="o">.</span><span class="n">add_subgraph</span><span class="p">([</span><span class="n">neighbour</span><span class="p">],</span> <span class="n">rank</span><span class="o">=</span><span class="s1">&#39;same&#39;</span><span class="p">)</span>
+        <span class="n">g1</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="s1">&#39;png/&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">node_list</span><span class="p">))</span><span class="o">+</span><span class="s1">&#39;.png&#39;</span><span class="p">,</span> <span class="n">prog</span><span class="o">=</span><span class="s1">&#39;dot&#39;</span><span class="p">)</span>
+        <span class="n">g1</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="s1">&#39;dot/&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">node_list</span><span class="p">))</span><span class="o">+</span><span class="s1">&#39;.dot&#39;</span><span class="p">,</span> <span class="n">prog</span><span class="o">=</span><span class="s1">&#39;dot&#39;</span><span class="p">)</span></div>
+
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">MailingListParser 0.1.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2015-2017, Prasad Talasila, Achyudh Ram, Yash Pungaliya.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.
+    </div>
+  </body>
+</html>

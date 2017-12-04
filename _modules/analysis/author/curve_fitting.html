@@ -1,20 +1,17 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>analysis.author.curve_fitting &#8212; MailingListParser 0.1 documentation</title>
-    
+    <title>analysis.author.curve_fitting &#8212; MailingListParser 0.1.2 documentation</title>
     <link rel="stylesheet" href="../../../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
-        VERSION:     '0.1',
+        VERSION:     '0.1.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -24,11 +21,11 @@
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
   </head>
-  <body role="document">
+  <body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -38,7 +35,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">MailingListParser 0.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">MailingListParser 0.1.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>  
@@ -56,14 +53,19 @@
 <span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;font.size&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">14</span>
 
 <div class="viewcode-block" id="inv_func"><a class="viewcode-back" href="../../../analysis.author.html#analysis.author.curve_fitting.inv_func">[docs]</a><span class="k">def</span> <span class="nf">inv_func</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">a</span><span class="o">/</span><span class="n">x</span> <span class="o">+</span> <span class="n">b</span><span class="o">/</span><span class="p">(</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">c</span></div>
+	<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">	The model function used for curve fitting.</span>
 
+<span class="sd">	&quot;&quot;&quot;</span>
+	<span class="k">return</span> <span class="n">a</span><span class="o">/</span><span class="n">x</span> <span class="o">+</span> <span class="n">b</span><span class="o">/</span><span class="p">(</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">c</span></div>
+	
 
 <div class="viewcode-block" id="generate_crt_dist"><a class="viewcode-back" href="../../../analysis.author.html#analysis.author.curve_fitting.generate_crt_dist">[docs]</a><span class="k">def</span> <span class="nf">generate_crt_dist</span><span class="p">(</span><span class="n">csv_filename</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generates distribution for conversation refresh times from a csv.</span>
 
 <span class="sd">    :param csv_filename: The csv filename as a parameter</span>
-<span class="sd">    :return: CRT distribution</span>
+<span class="sd">    :return: Conversation Refresh Times(CRT) as a distribution.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">crt_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">csv_filename</span><span class="p">)</span> <span class="k">as</span> <span class="n">csv_file</span><span class="p">:</span>
@@ -84,9 +86,11 @@
 
 <div class="viewcode-block" id="generate_crt_curve_fits"><a class="viewcode-back" href="../../../analysis.author.html#analysis.author.curve_fitting.generate_crt_curve_fits">[docs]</a><span class="k">def</span> <span class="nf">generate_crt_curve_fits</span><span class="p">(</span><span class="n">foldername</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generates curve fits for conversation refresh times distribution and saves it as a PNG.</span>
 
 <span class="sd">    :param foldername: Folder name as a parameter</span>
-<span class="sd">    :return:</span>
+<span class="sd">    :return popt: An array containging optimal values for the parameters.</span>
+<span class="sd">    :return rms: Mean squared error.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">generate_crt_dist</span><span class="p">(</span><span class="n">foldername</span><span class="o">+</span><span class="s1">&#39;conversation_refresh_times.csv&#39;</span><span class="p">)</span>
     <span class="n">popt</span><span class="p">,</span> <span class="n">pcov</span> <span class="o">=</span> <span class="n">curve_fit</span><span class="p">(</span><span class="n">inv_func</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
@@ -103,13 +107,14 @@
     <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;pdf&#39;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;time (in secs)&#39;</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">foldername</span><span class="o">+</span><span class="s1">&#39;conversation_refresh_times.png&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">foldername</span><span class="o">+</span><span class="s1">&#39;/conversation_refresh_times.png&#39;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">popt</span><span class="p">,</span> <span class="n">rms</span></div>
 
 
 <div class="viewcode-block" id="generate_cl_dist"><a class="viewcode-back" href="../../../analysis.author.html#analysis.author.curve_fitting.generate_cl_dist">[docs]</a><span class="k">def</span> <span class="nf">generate_cl_dist</span><span class="p">(</span><span class="n">csv_filename</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generates distribution for conversation lengths from a csv.</span>
 
 <span class="sd">    :param csv_filename: The csv filename as a parameter</span>
 <span class="sd">    :return: Conversation Length (CL) as a distribution</span>
@@ -132,9 +137,11 @@
 
 <div class="viewcode-block" id="generate_cl_curve_fits"><a class="viewcode-back" href="../../../analysis.author.html#analysis.author.curve_fitting.generate_cl_curve_fits">[docs]</a><span class="k">def</span> <span class="nf">generate_cl_curve_fits</span><span class="p">(</span><span class="n">foldername</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generates curve fits for conversation length distribution and saves it as a PNG.</span>
 
 <span class="sd">    :param foldername: Folder name as a parameter</span>
-<span class="sd">    :return:</span>
+<span class="sd">    :return popt: An array containging optimal values for the parameters.</span>
+<span class="sd">    :return rms: Mean squared error.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">generate_cl_dist</span><span class="p">(</span><span class="n">foldername</span><span class="o">+</span><span class="s1">&#39;conversation_length.csv&#39;</span><span class="p">)</span>
     <span class="k">try</span><span class="p">:</span>
@@ -155,16 +162,17 @@
     <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;pdf&#39;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;time (in secs)&#39;</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">foldername</span><span class="o">+</span><span class="s1">&#39;conversation_length.png&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">foldername</span><span class="o">+</span><span class="s1">&#39;/conversation_length.png&#39;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">popt</span><span class="p">,</span> <span class="n">rms</span></div>
 
 
 <div class="viewcode-block" id="generate_rt_dist"><a class="viewcode-back" href="../../../analysis.author.html#analysis.author.curve_fitting.generate_rt_dist">[docs]</a><span class="k">def</span> <span class="nf">generate_rt_dist</span><span class="p">(</span><span class="n">csv_filename</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generates distribution for refresh times from a csv.</span>
 
 <span class="sd">    :param csv_filename: The csv filename as a parameter</span>
-<span class="sd">    :return: Response Time (RT) as a distribution</span>
+<span class="sd">    :return: Refresh Times(RT) as a distribution.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">rt_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">csv_filename</span><span class="p">)</span> <span class="k">as</span> <span class="n">csv_file</span><span class="p">:</span>
@@ -184,9 +192,11 @@
 
 <div class="viewcode-block" id="generate_rt_curve_fits"><a class="viewcode-back" href="../../../analysis.author.html#analysis.author.curve_fitting.generate_rt_curve_fits">[docs]</a><span class="k">def</span> <span class="nf">generate_rt_curve_fits</span><span class="p">(</span><span class="n">foldername</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generates curve fits for refresh times distribution and saves it as a PNG.</span>
 
 <span class="sd">    :param foldername: Folder name as a parameter</span>
-<span class="sd">    :return:</span>
+<span class="sd">    :return popt: An array containging optimal values for the parameters.</span>
+<span class="sd">    :return rms: Mean squared error.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">generate_rt_dist</span><span class="p">(</span><span class="n">foldername</span><span class="o">+</span><span class="s1">&#39;response_time.csv&#39;</span><span class="p">)</span>
     <span class="k">try</span><span class="p">:</span>
@@ -207,7 +217,7 @@
     <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;pdf&#39;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;time (in secs)&#39;</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">foldername</span><span class="o">+</span><span class="s1">&#39;response_time.png&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">foldername</span><span class="o">+</span><span class="s1">&#39;/response_time.png&#39;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">popt</span><span class="p">,</span> <span class="n">rms</span></div>
 </pre></div>
@@ -240,13 +250,13 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">MailingListParser 0.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">MailingListParser 0.1.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2017, Prasad Talasila,Achyudh Ram.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.
+        &#169; Copyright 2015-2017, Prasad Talasila, Achyudh Ram, Yash Pungaliya.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.
     </div>
   </body>
 </html>

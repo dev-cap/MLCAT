@@ -1,20 +1,17 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>analysis.author package &#8212; MailingListParser 0.1 documentation</title>
-    
+    <title>analysis.author package &#8212; MailingListParser 0.1.2 documentation</title>
     <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.1',
+        VERSION:     '0.1.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -24,13 +21,13 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="analysis.author.graph package" href="analysis.author.graph.html" />
     <link rel="prev" title="analysis package" href="analysis.html" /> 
   </head>
-  <body role="document">
+  <body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -46,7 +43,7 @@
         <li class="right" >
           <a href="analysis.html" title="analysis package"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">MailingListParser 0.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">MailingListParser 0.1.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="modules.html" >Documentation for the Code</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="analysis.html" accesskey="U">analysis package</a> &#187;</li> 
       </ul>
@@ -65,9 +62,9 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="analysis.author.graph.html">analysis.author.graph package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="analysis.author.graph.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="analysis.author.graph.html#analysis-author-graph-author-interaction-module">analysis.author.graph.author_interaction module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="analysis.author.graph.html#module-analysis.author.graph.interaction">analysis.author.graph.author_interaction module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="analysis.author.graph.html#module-analysis.author.graph.bipartite">analysis.author.graph.bipartite module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="analysis.author.graph.html#analysis-author-graph-generate-module">analysis.author.graph.generate module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="analysis.author.graph.html#module-analysis.author.graph.generate">analysis.author.graph.generate module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="analysis.author.graph.html#module-analysis.author.graph">Module contents</a></li>
 </ul>
 </li>
@@ -82,13 +79,16 @@
 <dl class="function">
 <dt id="analysis.author.curve_fitting.generate_cl_curve_fits">
 <code class="descclassname">analysis.author.curve_fitting.</code><code class="descname">generate_cl_curve_fits</code><span class="sig-paren">(</span><em>foldername</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/author/curve_fitting.html#generate_cl_curve_fits"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analysis.author.curve_fitting.generate_cl_curve_fits" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
+<dd><p>Generates curve fits for conversation length distribution and saves it as a PNG.</p>
+<table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>foldername</strong> &#8211; Folder name as a parameter</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>foldername</strong> – Folder name as a parameter</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"></td>
+<tr class="field-even field"><th class="field-name">Return popt:</th><td class="field-body">An array containging optimal values for the parameters.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return rms:</th><td class="field-body">Mean squared error.</td>
 </tr>
 </tbody>
 </table>
@@ -97,11 +97,12 @@
 <dl class="function">
 <dt id="analysis.author.curve_fitting.generate_cl_dist">
 <code class="descclassname">analysis.author.curve_fitting.</code><code class="descname">generate_cl_dist</code><span class="sig-paren">(</span><em>csv_filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/author/curve_fitting.html#generate_cl_dist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analysis.author.curve_fitting.generate_cl_dist" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
+<dd><p>Generates distribution for conversation lengths from a csv.</p>
+<table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>csv_filename</strong> &#8211; The csv filename as a parameter</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>csv_filename</strong> – The csv filename as a parameter</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Conversation Length (CL) as a distribution</td>
 </tr>
@@ -112,13 +113,16 @@
 <dl class="function">
 <dt id="analysis.author.curve_fitting.generate_crt_curve_fits">
 <code class="descclassname">analysis.author.curve_fitting.</code><code class="descname">generate_crt_curve_fits</code><span class="sig-paren">(</span><em>foldername</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/author/curve_fitting.html#generate_crt_curve_fits"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analysis.author.curve_fitting.generate_crt_curve_fits" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
+<dd><p>Generates curve fits for conversation refresh times distribution and saves it as a PNG.</p>
+<table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>foldername</strong> &#8211; Folder name as a parameter</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>foldername</strong> – Folder name as a parameter</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"></td>
+<tr class="field-even field"><th class="field-name">Return popt:</th><td class="field-body">An array containging optimal values for the parameters.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return rms:</th><td class="field-body">Mean squared error.</td>
 </tr>
 </tbody>
 </table>
@@ -127,13 +131,14 @@
 <dl class="function">
 <dt id="analysis.author.curve_fitting.generate_crt_dist">
 <code class="descclassname">analysis.author.curve_fitting.</code><code class="descname">generate_crt_dist</code><span class="sig-paren">(</span><em>csv_filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/author/curve_fitting.html#generate_crt_dist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analysis.author.curve_fitting.generate_crt_dist" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
+<dd><p>Generates distribution for conversation refresh times from a csv.</p>
+<table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>csv_filename</strong> &#8211; The csv filename as a parameter</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>csv_filename</strong> – The csv filename as a parameter</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">CRT distribution</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Conversation Refresh Times(CRT) as a distribution.</td>
 </tr>
 </tbody>
 </table>
@@ -142,13 +147,16 @@
 <dl class="function">
 <dt id="analysis.author.curve_fitting.generate_rt_curve_fits">
 <code class="descclassname">analysis.author.curve_fitting.</code><code class="descname">generate_rt_curve_fits</code><span class="sig-paren">(</span><em>foldername</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/author/curve_fitting.html#generate_rt_curve_fits"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analysis.author.curve_fitting.generate_rt_curve_fits" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
+<dd><p>Generates curve fits for refresh times distribution and saves it as a PNG.</p>
+<table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>foldername</strong> &#8211; Folder name as a parameter</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>foldername</strong> – Folder name as a parameter</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"></td>
+<tr class="field-even field"><th class="field-name">Return popt:</th><td class="field-body">An array containging optimal values for the parameters.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return rms:</th><td class="field-body">Mean squared error.</td>
 </tr>
 </tbody>
 </table>
@@ -157,13 +165,14 @@
 <dl class="function">
 <dt id="analysis.author.curve_fitting.generate_rt_dist">
 <code class="descclassname">analysis.author.curve_fitting.</code><code class="descname">generate_rt_dist</code><span class="sig-paren">(</span><em>csv_filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/author/curve_fitting.html#generate_rt_dist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analysis.author.curve_fitting.generate_rt_dist" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
+<dd><p>Generates distribution for refresh times from a csv.</p>
+<table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>csv_filename</strong> &#8211; The csv filename as a parameter</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>csv_filename</strong> – The csv filename as a parameter</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Response Time (RT) as a distribution</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Refresh Times(RT) as a distribution.</td>
 </tr>
 </tbody>
 </table>
@@ -172,7 +181,8 @@
 <dl class="function">
 <dt id="analysis.author.curve_fitting.inv_func">
 <code class="descclassname">analysis.author.curve_fitting.</code><code class="descname">inv_func</code><span class="sig-paren">(</span><em>x</em>, <em>a</em>, <em>b</em>, <em>c</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/author/curve_fitting.html#inv_func"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analysis.author.curve_fitting.inv_func" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>The model function used for curve fitting.</p>
+</dd></dl>
 
 </div>
 <div class="section" id="module-analysis.author.edge_list">
@@ -183,26 +193,43 @@ the entire mailing list.</p>
 <dl class="function">
 <dt id="analysis.author.edge_list.generate_edge_list">
 <code class="descclassname">analysis.author.edge_list.</code><code class="descname">generate_edge_list</code><span class="sig-paren">(</span><em>author_nodelist_filename</em>, <em>author_edgelist_filename</em>, <em>nodelist_filename='graph_nodes.csv'</em>, <em>edgelist_filename='graph_edges.csv'</em>, <em>threads_json_filename='clean_data.json'</em>, <em>author_json_filename='author_uid_map.json'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/author/edge_list.html#generate_edge_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analysis.author.edge_list.generate_edge_list" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>author_nodelist_filename</strong> – The csv file containing the author nodes data.</li>
+<li><strong>author_edgelist_filename</strong> – The csv file containing the author edges data.</li>
+<li><strong>nodelist_filename</strong> – The csv file containing the nodes.</li>
+<li><strong>edgelist_filename</strong> – The csv file containing the edges.</li>
+<li><strong>threads_json_filename</strong> – The JSON file containing the cleaned headers.</li>
+<li><strong>author_json_filename</strong> – The JSON file containing the author UID map.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 </div>
 <div class="section" id="module-analysis.author.ranking">
 <span id="analysis-author-ranking-module"></span><h2>analysis.author.ranking module<a class="headerlink" href="#module-analysis.author.ranking" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
-<dt id="analysis.author.ranking.generate_author_ranking">
-<code class="descclassname">analysis.author.ranking.</code><code class="descname">generate_author_ranking</code><span class="sig-paren">(</span><em>json_filename</em>, <em>output_filename</em>, <em>active_score</em>, <em>passive_score</em>, <em>write_to_file=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/author/ranking.html#generate_author_ranking"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analysis.author.ranking.generate_author_ranking" title="Permalink to this definition">¶</a></dt>
+<dt id="analysis.author.ranking.get">
+<code class="descclassname">analysis.author.ranking.</code><code class="descname">get</code><span class="sig-paren">(</span><em>json_filename</em>, <em>output_filename</em>, <em>active_score</em>, <em>passive_score</em>, <em>write_to_file=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/author/ranking.html#get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analysis.author.ranking.get" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>json_data</strong> &#8211; </li>
-<li><strong>active_score</strong> &#8211; </li>
-<li><strong>passive_score</strong> &#8211; </li>
+<li><strong>json_data</strong> – The JSON file containing the headers.</li>
+<li><strong>output_filename</strong> – Stores authors’ email address,score and rank.</li>
+<li><strong>active_score</strong> – Score for direct mail receipents.</li>
+<li><strong>passive_score</strong> – Score for receipents through CC.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Sorted author scores</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Sorted author scores.</p>
 </td>
 </tr>
 </tbody>
@@ -220,12 +247,19 @@ the entire mailing list.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>json_data</strong> &#8211; </li>
-<li><strong>discussion_graph</strong> &#8211; </li>
+<li><strong>headers_filename</strong> – The JSON file containing the headers.</li>
+<li><strong>nodelist_filename</strong> – The csv file containing the nodes.</li>
+<li><strong>edgelist_filename</strong> – The csv file containing the edges.</li>
+<li><strong>foldername</strong> – The mailbox folder.</li>
+<li><strong>time_ubound</strong> – Time limit upper bound can be specified here in the form of a timestamp in one of the identifiable formats
+and all messages that have arrived after this timestamp will be ignored.</li>
+<li><strong>time_lbound</strong> – Time limit lower bound can be specified here in the form of a timestamp in one of the identifiable formats
+and all messages that have arrived before this timestamp will be ignored.</li>
+<li><strong>plot</strong> – Plot thread based time statistics if True.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">None if successfully plotted, else ‘No messages!’.</p>
 </td>
 </tr>
 </tbody>
@@ -235,7 +269,8 @@ the entire mailing list.</p>
 <dl class="function">
 <dt id="analysis.author.time_statistics.inv_func">
 <code class="descclassname">analysis.author.time_statistics.</code><code class="descname">inv_func</code><span class="sig-paren">(</span><em>x</em>, <em>a</em>, <em>b</em>, <em>c</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/author/time_statistics.html#inv_func"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analysis.author.time_statistics.inv_func" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>The model function used for curve fitting.</p>
+</dd></dl>
 
 </div>
 <div class="section" id="module-analysis.author.wh_table">
@@ -246,11 +281,22 @@ the entire mailing list.</p>
 <dd><p>This module is used to generate the author version of the width height table. The width height table for the
 authors is a representation of the number of total and new authors in a thread aggregated at a given generation.
 The table, which itself is temporarily stored in a two dimensional array, is then written into a CSV file. These
-tables are can be used to decipher the basic conversation structure.
-:param ignore_lat: If true, then lone author threads are ignored.
-:param time_limit: All messages until this timne are considered and all messages after this time are ignored. Time</p>
-<blockquote>
-<div>is specified as a string in one of the recognized formats.</div></blockquote>
+tables are can be used to decipher the basic conversation structure.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>nodelist_filename</strong> – The csv file containing the nodes.</li>
+<li><strong>edgelist_filename</strong> – The csv file containing the edges.</li>
+<li><strong>output_filename</strong> – Stores the width-height table values.</li>
+<li><strong>ignore_lat</strong> – If true, then lone author threads are ignored.</li>
+<li><strong>time_limit</strong> – All messages until this time are considered and all messages after this time are ignored. Time is specified as a string in one of the recognized formats.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>
@@ -322,14 +368,14 @@ tables are can be used to decipher the basic conversation structure.
         <li class="right" >
           <a href="analysis.html" title="analysis package"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">MailingListParser 0.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">MailingListParser 0.1.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="modules.html" >Documentation for the Code</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="analysis.html" >analysis package</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2017, Prasad Talasila,Achyudh Ram.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.
+        &#169; Copyright 2015-2017, Prasad Talasila, Achyudh Ram, Yash Pungaliya.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.
     </div>
   </body>
 </html>

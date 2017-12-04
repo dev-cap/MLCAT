@@ -1,0 +1,278 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>analysis.thread.message_activity &#8212; MailingListParser 0.1.2 documentation</title>
+    <link rel="stylesheet" href="../../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.1.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">MailingListParser 0.1.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for analysis.thread.message_activity</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">plotly</span> <span class="k">as</span> <span class="nn">ply</span>
+<span class="kn">import</span> <span class="nn">plotly.graph_objs</span> <span class="k">as</span> <span class="nn">plygo</span>
+<span class="kn">from</span> <span class="nn">util.read</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">json</span>
+
+
+<div class="viewcode-block" id="generate_weekly_message_activity_heatmap"><a class="viewcode-back" href="../../../analysis.thread.html#analysis.thread.message_activity.generate_weekly_message_activity_heatmap">[docs]</a><span class="k">def</span> <span class="nf">generate_weekly_message_activity_heatmap</span><span class="p">(</span><span class="n">json_data</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generate weekly message activity heatmap from JSON data.</span>
+
+<span class="sd">    :param json_data: Data for generating the heatmap.</span>
+<span class="sd">    :param filename: Heatmap file name.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">heatmap_data</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">48</span><span class="p">)]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">7</span><span class="p">)]</span>
+    <span class="k">for</span> <span class="n">msg_uid</span><span class="p">,</span> <span class="n">json_obj</span> <span class="ow">in</span> <span class="n">json_data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">sent_day</span> <span class="o">=</span> <span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">weekday</span><span class="p">()</span>
+        <span class="n">bin_number</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">hour</span> <span class="k">if</span> <span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">minute</span> <span class="o">&lt;</span> <span class="mi">30</span> <span class="k">else</span> <span class="mi">2</span><span class="o">*</span><span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">hour</span><span class="o">+</span><span class="mi">1</span>
+        <span class="n">heatmap_data</span><span class="p">[</span><span class="n">sent_day</span><span class="p">][</span><span class="n">bin_number</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="n">heatmap</span> <span class="o">=</span> <span class="p">[</span><span class="n">plygo</span><span class="o">.</span><span class="n">Heatmap</span><span class="p">(</span>
+        <span class="n">z</span><span class="o">=</span><span class="n">heatmap_data</span><span class="p">,</span>
+        <span class="n">x</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">48</span><span class="p">)),</span>
+        <span class="n">y</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Monday&#39;</span><span class="p">,</span> <span class="s1">&#39;Tuesday&#39;</span><span class="p">,</span> <span class="s1">&#39;Wednesday&#39;</span><span class="p">,</span> <span class="s1">&#39;Thursday&#39;</span><span class="p">,</span> <span class="s1">&#39;Friday&#39;</span><span class="p">,</span> <span class="s1">&#39;Saturday&#39;</span><span class="p">,</span> <span class="s1">&#39;Sunday&#39;</span><span class="p">])]</span>
+    <span class="n">ply</span><span class="o">.</span><span class="n">offline</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">heatmap</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="n">filename</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="generate_monthly_message_activity_heatmap"><a class="viewcode-back" href="../../../analysis.thread.html#analysis.thread.message_activity.generate_monthly_message_activity_heatmap">[docs]</a><span class="k">def</span> <span class="nf">generate_monthly_message_activity_heatmap</span><span class="p">(</span><span class="n">json_data</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generate monthly message activity heatmap from JSON data.</span>
+
+<span class="sd">    :param json_data: Data for generating the heatmap.</span>
+<span class="sd">    :param filename: Heatmap file name.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">heatmap_data</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">48</span><span class="p">)]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">12</span><span class="p">)]</span>
+    <span class="k">for</span> <span class="n">msg_uid</span><span class="p">,</span> <span class="n">json_obj</span> <span class="ow">in</span> <span class="n">json_data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">sent_month</span> <span class="o">=</span> <span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">month</span><span class="o">-</span><span class="mi">1</span>
+        <span class="n">bin_number</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">hour</span> <span class="k">if</span> <span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">minute</span> <span class="o">&lt;</span> <span class="mi">30</span> <span class="k">else</span> <span class="mi">2</span><span class="o">*</span><span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">hour</span><span class="o">+</span><span class="mi">1</span>
+        <span class="n">heatmap_data</span><span class="p">[</span><span class="n">sent_month</span><span class="p">][</span><span class="n">bin_number</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="n">heatmap</span> <span class="o">=</span> <span class="p">[</span><span class="n">plygo</span><span class="o">.</span><span class="n">Heatmap</span><span class="p">(</span>
+        <span class="n">z</span><span class="o">=</span><span class="n">heatmap_data</span><span class="p">,</span>
+        <span class="n">x</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">48</span><span class="p">)),</span>
+        <span class="n">y</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">12</span><span class="p">)))]</span>
+    <span class="n">ply</span><span class="o">.</span><span class="n">offline</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">heatmap</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="n">filename</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="generate_daily_message_activity_timeline"><a class="viewcode-back" href="../../../analysis.thread.html#analysis.thread.message_activity.generate_daily_message_activity_timeline">[docs]</a><span class="k">def</span> <span class="nf">generate_daily_message_activity_timeline</span><span class="p">(</span><span class="n">json_data</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generate daily message activity timeline from JSON data.</span>
+
+<span class="sd">    :param json_data: Data for generating the timeline.</span>
+<span class="sd">    :param filename: Timeline file name.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">timeline_data</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">48</span><span class="p">)]</span>
+    <span class="k">for</span> <span class="n">msg_uid</span><span class="p">,</span> <span class="n">json_obj</span> <span class="ow">in</span> <span class="n">json_data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">bin_number</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">hour</span> <span class="k">if</span> <span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">minute</span> <span class="o">&lt;</span> <span class="mi">30</span> <span class="k">else</span> <span class="mi">2</span><span class="o">*</span><span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">hour</span><span class="o">+</span><span class="mi">1</span>
+        <span class="n">timeline_data</span><span class="p">[</span><span class="n">bin_number</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="n">trace</span> <span class="o">=</span> <span class="n">plygo</span><span class="o">.</span><span class="n">Scatter</span><span class="p">(</span>
+        <span class="n">x</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">48</span><span class="p">)),</span>
+        <span class="n">y</span><span class="o">=</span><span class="n">timeline_data</span>
+    <span class="p">)</span>
+    <span class="n">timeline</span> <span class="o">=</span> <span class="p">[</span><span class="n">trace</span><span class="p">]</span>
+    <span class="n">ply</span><span class="o">.</span><span class="n">offline</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">timeline</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="n">filename</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="generate_weekly_message_activity_timeline"><a class="viewcode-back" href="../../../analysis.thread.html#analysis.thread.message_activity.generate_weekly_message_activity_timeline">[docs]</a><span class="k">def</span> <span class="nf">generate_weekly_message_activity_timeline</span><span class="p">(</span><span class="n">json_data</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generate weekly message activity timeline from JSON data.</span>
+
+<span class="sd">    :param json_data: Data for generating the timeline.</span>
+<span class="sd">    :param filename: Timeline file name.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">timeline_data</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">7</span><span class="o">*</span><span class="mi">24</span><span class="p">)]</span>
+    <span class="k">for</span> <span class="n">msg_uid</span><span class="p">,</span> <span class="n">json_obj</span> <span class="ow">in</span> <span class="n">json_data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">bin_number</span> <span class="o">=</span> <span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">hour</span> <span class="o">+</span> <span class="mi">24</span> <span class="o">*</span> <span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">weekday</span><span class="p">()</span>
+        <span class="n">timeline_data</span><span class="p">[</span><span class="n">bin_number</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="n">trace</span> <span class="o">=</span> <span class="n">plygo</span><span class="o">.</span><span class="n">Scatter</span><span class="p">(</span>
+        <span class="n">x</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">7</span><span class="o">*</span><span class="mi">24</span><span class="p">)),</span>
+        <span class="n">y</span><span class="o">=</span><span class="n">timeline_data</span>
+    <span class="p">)</span>
+    <span class="n">timeline</span> <span class="o">=</span> <span class="p">[</span><span class="n">trace</span><span class="p">]</span>
+    <span class="n">ply</span><span class="o">.</span><span class="n">offline</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">timeline</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="n">filename</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="generate_monthly_message_activity_timeline"><a class="viewcode-back" href="../../../analysis.thread.html#analysis.thread.message_activity.generate_monthly_message_activity_timeline">[docs]</a><span class="k">def</span> <span class="nf">generate_monthly_message_activity_timeline</span><span class="p">(</span><span class="n">json_data</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generate monthly message activity timeline from JSON data.</span>
+
+<span class="sd">    :param json_data: Data for generating the timeline.</span>
+<span class="sd">    :param filename: Timeline file name.</span>
+<span class="sd">    &quot;&quot;&quot;</span>	
+    <span class="n">timeline_data</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">31</span><span class="o">*</span><span class="mi">24</span><span class="p">)]</span>
+    <span class="k">for</span> <span class="n">msg_uid</span><span class="p">,</span> <span class="n">json_obj</span> <span class="ow">in</span> <span class="n">json_data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">bin_number</span> <span class="o">=</span> <span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">hour</span> <span class="o">+</span> <span class="mi">24</span> <span class="o">*</span> <span class="p">(</span><span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">day</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">timeline_data</span><span class="p">[</span><span class="n">bin_number</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="n">trace</span> <span class="o">=</span> <span class="n">plygo</span><span class="o">.</span><span class="n">Scatter</span><span class="p">(</span>
+        <span class="n">x</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">31</span><span class="o">*</span><span class="mi">24</span><span class="p">)),</span>
+        <span class="n">y</span><span class="o">=</span><span class="n">timeline_data</span>
+    <span class="p">)</span>
+    <span class="n">timeline</span> <span class="o">=</span> <span class="p">[</span><span class="n">trace</span><span class="p">]</span>
+    <span class="n">ply</span><span class="o">.</span><span class="n">offline</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">timeline</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="n">filename</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="generate_yearly_message_activity_timeline"><a class="viewcode-back" href="../../../analysis.thread.html#analysis.thread.message_activity.generate_yearly_message_activity_timeline">[docs]</a><span class="k">def</span> <span class="nf">generate_yearly_message_activity_timeline</span><span class="p">(</span><span class="n">json_data</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generate yearly message activity timeline from JSON data.</span>
+
+<span class="sd">    :param json_data: Data for generating the timeline.</span>
+<span class="sd">    :param filename: Timeline file name.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">timeline_data</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">366</span><span class="o">*</span><span class="mi">24</span><span class="p">)]</span>
+    <span class="k">for</span> <span class="n">msg_uid</span><span class="p">,</span> <span class="n">json_obj</span> <span class="ow">in</span> <span class="n">json_data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">bin_number</span> <span class="o">=</span> <span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">hour</span> <span class="o">+</span> <span class="mi">24</span> <span class="o">*</span> <span class="p">(</span><span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">timetuple</span><span class="p">()</span><span class="o">.</span><span class="n">tm_yday</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">timeline_data</span><span class="p">[</span><span class="n">bin_number</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="n">trace</span> <span class="o">=</span> <span class="n">plygo</span><span class="o">.</span><span class="n">Scatter</span><span class="p">(</span>
+        <span class="n">x</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">365</span><span class="o">*</span><span class="mi">24</span><span class="p">)),</span>
+        <span class="n">y</span><span class="o">=</span><span class="n">timeline_data</span>
+    <span class="p">)</span>
+    <span class="n">timeline</span> <span class="o">=</span> <span class="p">[</span><span class="n">trace</span><span class="p">]</span>
+    <span class="n">ply</span><span class="o">.</span><span class="n">offline</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">timeline</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="n">filename</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="generate_message_activity_heatmaps"><a class="viewcode-back" href="../../../analysis.thread.html#analysis.thread.message_activity.generate_message_activity_heatmaps">[docs]</a><span class="k">def</span> <span class="nf">generate_message_activity_heatmaps</span><span class="p">(</span><span class="n">clean_headers_filename</span><span class="p">,</span> <span class="n">foldername</span><span class="p">,</span> <span class="n">timeline</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Extract header information and call functions to generate various timelines or heatmaps.</span>
+
+<span class="sd">    :param clean_headers_filename: The JSON file containing cleaned headers.</span>
+<span class="sd">    :param foldername: The MBOX folder.</span>
+<span class="sd">    :param timeline: True for generating timelines,False for heatmaps.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Time limit can be specified here in the form of a timestamp in one of the identifiable formats. All messages</span>
+    <span class="c1"># that have arrived after time_ubound and before time_lbound will be ignored.</span>
+    <span class="n">time_ubound</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">time_lbound</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="c1"># If ignore_lat is true, then messages that belong to threads that have only a single author are ignored.</span>
+    <span class="n">ignore_lat</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="n">author_graph</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">()</span>
+    <span class="n">email_re</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;[\w\.-]+@[\w\.-]+&#39;</span><span class="p">)</span>
+    <span class="n">json_data</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">time_ubound</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">time_ubound</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%a, </span><span class="si">%d</span><span class="s2"> %b %Y %H:%M:%S %z&quot;</span><span class="p">)</span>
+    <span class="n">time_ubound</span> <span class="o">=</span> <span class="n">get_datetime_object</span><span class="p">(</span><span class="n">time_ubound</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">time_lbound</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">time_lbound</span> <span class="o">=</span> <span class="s2">&quot;Sun, 01 Jan 2001 00:00:00 +0000&quot;</span>
+    <span class="n">time_lbound</span> <span class="o">=</span> <span class="n">get_datetime_object</span><span class="p">(</span><span class="n">time_lbound</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;All messages before&quot;</span><span class="p">,</span> <span class="n">time_ubound</span><span class="p">,</span> <span class="s2">&quot;and after&quot;</span><span class="p">,</span> <span class="n">time_lbound</span><span class="p">,</span>  <span class="s2">&quot;are being considered.&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">ignore_lat</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">clean_headers_filename</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">json_file</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">lines_per_n</span><span class="p">(</span><span class="n">json_file</span><span class="p">,</span> <span class="mi">9</span><span class="p">):</span>
+                <span class="n">json_obj</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
+                <span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;Message-ID&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;Message-ID&#39;</span><span class="p">])</span>
+                <span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">],</span> <span class="s2">&quot;%a, </span><span class="si">%d</span><span class="s2"> %b %Y %H:%M:%S %z&quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">time_lbound</span> <span class="o">&lt;=</span> <span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">time_ubound</span><span class="p">:</span>
+                    <span class="c1"># print(&quot;\nFrom&quot;, json_obj[&#39;From&#39;], &quot;\nTo&quot;, json_obj[&#39;To&#39;], &quot;\nCc&quot;, json_obj[&#39;Cc&#39;])</span>
+                    <span class="n">from_addr</span> <span class="o">=</span> <span class="n">email_re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;From&#39;</span><span class="p">])</span>
+                    <span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;From&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">from_addr</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="k">if</span> <span class="n">from_addr</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;From&#39;</span><span class="p">]</span>
+                    <span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;To&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">email_re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;To&#39;</span><span class="p">]))</span>
+                    <span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;Cc&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">email_re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;Cc&#39;</span><span class="p">]))</span> <span class="k">if</span> <span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;Cc&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span>
+                    <span class="c1"># print(&quot;\nFrom&quot;, json_obj[&#39;From&#39;], &quot;\nTo&quot;, json_obj[&#39;To&#39;], &quot;\nCc&quot;, json_obj[&#39;Cc&#39;])</span>
+                    <span class="n">json_data</span><span class="p">[</span><span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;Message-ID&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">json_obj</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">lone_author_threads</span> <span class="o">=</span> <span class="n">get_lone_author_threads</span><span class="p">(</span><span class="n">save_file</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">nodelist_filename</span><span class="o">=</span><span class="n">foldername</span><span class="o">+</span><span class="s2">&quot;/tables/graph_nodes.csv&quot;</span><span class="p">,</span> <span class="n">edgelist_filename</span><span class="o">=</span><span class="n">foldername</span><span class="o">+</span><span class="s2">&quot;/tables/graph_edges.csv&quot;</span><span class="p">)</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">clean_headers_filename</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">json_file</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">lines_per_n</span><span class="p">(</span><span class="n">json_file</span><span class="p">,</span> <span class="mi">9</span><span class="p">):</span>
+                <span class="n">json_obj</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
+                <span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;Message-ID&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;Message-ID&#39;</span><span class="p">])</span>
+                <span class="k">if</span> <span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;Message-ID&#39;</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">lone_author_threads</span><span class="p">:</span>
+                    <span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">],</span> <span class="s2">&quot;%a, </span><span class="si">%d</span><span class="s2"> %b %Y %H:%M:%S %z&quot;</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">time_lbound</span> <span class="o">&lt;=</span> <span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">time_ubound</span><span class="p">:</span>
+                        <span class="c1"># print(&quot;\nFrom&quot;, json_obj[&#39;From&#39;], &quot;\nTo&quot;, json_obj[&#39;To&#39;], &quot;\nCc&quot;, json_obj[&#39;Cc&#39;])</span>
+                        <span class="n">from_addr</span> <span class="o">=</span> <span class="n">email_re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;From&#39;</span><span class="p">])</span>
+                        <span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;From&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">from_addr</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="k">if</span> <span class="n">from_addr</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;From&#39;</span><span class="p">]</span>
+                        <span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;To&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">email_re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;To&#39;</span><span class="p">]))</span>
+                        <span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;Cc&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">email_re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;Cc&#39;</span><span class="p">]))</span> <span class="k">if</span> <span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;Cc&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span>
+                        <span class="c1"># print(&quot;\nFrom&quot;, json_obj[&#39;From&#39;], &quot;\nTo&quot;, json_obj[&#39;To&#39;], &quot;\nCc&quot;, json_obj[&#39;Cc&#39;])</span>
+                        <span class="n">json_data</span><span class="p">[</span><span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;Message-ID&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">json_obj</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;JSON data loaded.&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">timeline</span><span class="p">:</span>
+        <span class="n">generate_weekly_message_activity_heatmap</span><span class="p">(</span><span class="n">json_data</span><span class="p">,</span> <span class="n">foldername</span><span class="o">+</span><span class="s1">&#39;/heatmaps/weekly-message-activity-heatmap.html&#39;</span><span class="p">)</span>
+        <span class="n">generate_monthly_message_activity_heatmap</span><span class="p">(</span><span class="n">json_data</span><span class="p">,</span> <span class="n">foldername</span><span class="o">+</span><span class="s1">&#39;/heatmaps/monthly-message-activity-heatmap.html&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">generate_daily_message_activity_timeline</span><span class="p">(</span><span class="n">json_data</span><span class="p">,</span> <span class="n">foldername</span> <span class="o">+</span> <span class="s1">&#39;/plots/daily-message-activity-timeline.html&#39;</span><span class="p">)</span>
+        <span class="n">generate_weekly_message_activity_timeline</span><span class="p">(</span><span class="n">json_data</span><span class="p">,</span> <span class="n">foldername</span> <span class="o">+</span> <span class="s1">&#39;/plots/weekly-message-activity-timeline.html&#39;</span><span class="p">)</span>
+        <span class="n">generate_monthly_message_activity_timeline</span><span class="p">(</span><span class="n">json_data</span><span class="p">,</span> <span class="n">foldername</span> <span class="o">+</span> <span class="s1">&#39;/plots/monthly-message-activity-timeline.html&#39;</span><span class="p">)</span>
+        <span class="n">generate_yearly_message_activity_timeline</span><span class="p">(</span><span class="n">json_data</span><span class="p">,</span> <span class="n">foldername</span> <span class="o">+</span> <span class="s1">&#39;/plots/yearly-message-activity-timeline.html&#39;</span><span class="p">)</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">MailingListParser 0.1.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2015-2017, Prasad Talasila, Achyudh Ram, Yash Pungaliya.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.
+    </div>
+  </body>
+</html>

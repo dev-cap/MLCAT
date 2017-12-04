@@ -1,20 +1,17 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>Algorithms for Parsing Mailing Lists. &#8212; MailingListParser 0.1 documentation</title>
-    
+    <title>Algorithms for Parsing Mailing Lists &#8212; MailingListParser 0.1.2 documentation</title>
     <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.1',
+        VERSION:     '0.1.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -24,13 +21,13 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Overview of Project Modules" href="overview_modules.html" />
-    <link rel="prev" title="util package" href="util.html" /> 
+    <link rel="next" title="Documentation for the Code" href="modules.html" />
+    <link rel="prev" title="What does MailingListParser plan to accomplish?" href="project_goals.html" /> 
   </head>
-  <body role="document">
+  <body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -41,12 +38,12 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="overview_modules.html" title="Overview of Project Modules"
+          <a href="modules.html" title="Documentation for the Code"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="util.html" title="util package"
+          <a href="project_goals.html" title="What does MailingListParser plan to accomplish?"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">MailingListParser 0.1 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">MailingListParser 0.1.2 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -56,7 +53,7 @@
           <div class="body" role="main">
             
   <div class="section" id="algorithms-for-parsing-mailing-lists">
-<h1>Algorithms for Parsing Mailing Lists.<a class="headerlink" href="#algorithms-for-parsing-mailing-lists" title="Permalink to this headline">¶</a></h1>
+<h1>Algorithms for Parsing Mailing Lists<a class="headerlink" href="#algorithms-for-parsing-mailing-lists" title="Permalink to this headline">¶</a></h1>
 <p>This section shows the function calls to Fetch Headers from IMAP Server which can be run by executing the driver file - fetch_headers.py</p>
 <ol class="arabic">
 <li><dl class="first docutils">
@@ -114,11 +111,10 @@
 <blockquote>
 <div><dl class="docutils">
 <dt>6.1 imap_hdr.init_uid_map()</dt>
-<dd><ul class="first simple">
+<dd><ul class="first last simple">
 <li>Returns a map with the string in the Message-Id field of the header to the UID of the mail is required</li>
-<li>The mapping is required to ensure that references are correctly recorded in the JSON file such that there</li>
+<li>The mapping is required to ensure that references are correctly recorded in the JSON file such that there are no references to mails that do not exist and to ease the processing of headers.</li>
 </ul>
-<p class="last">are no references to mails that do not exist and to ease the processing of headers</p>
 </dd>
 <dt>6.2 imap_conn.open_connection()</dt>
 <dd><ul class="first last simple">
@@ -128,12 +124,12 @@
 </dd>
 <dt>6.3 imap_hdr.date_to_utc()</dt>
 <dd><ul class="first last simple">
-<li>Converts a formatted string containing date and time from a local timezone to UTC</li>
+<li>Converts a formatted string containing date and time from a local timezone to UTC.</li>
 </ul>
 </dd>
 <dt>6.4 encoder.NoIndent()</dt>
 <dd><ul class="first last simple">
-<li>Converts a list into a string of comma separated elements of the list for pretty printing</li>
+<li>Converts a list into a string of comma separated elements of the list for pretty printing.</li>
 </ul>
 </dd>
 </dl>
@@ -154,11 +150,11 @@
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
-  <p class="topless"><a href="util.html"
-                        title="previous chapter">util package</a></p>
+  <p class="topless"><a href="project_goals.html"
+                        title="previous chapter">What does MailingListParser plan to accomplish?</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="overview_modules.html"
-                        title="next chapter">Overview of Project Modules</a></p>
+  <p class="topless"><a href="modules.html"
+                        title="next chapter">Documentation for the Code</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -190,17 +186,17 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="overview_modules.html" title="Overview of Project Modules"
+          <a href="modules.html" title="Documentation for the Code"
              >next</a> |</li>
         <li class="right" >
-          <a href="util.html" title="util package"
+          <a href="project_goals.html" title="What does MailingListParser plan to accomplish?"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">MailingListParser 0.1 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">MailingListParser 0.1.2 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2017, Prasad Talasila,Achyudh Ram.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.
+        &#169; Copyright 2015-2017, Prasad Talasila, Achyudh Ram, Yash Pungaliya.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.
     </div>
   </body>
 </html>

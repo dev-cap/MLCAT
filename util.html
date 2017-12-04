@@ -1,20 +1,17 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>util package &#8212; MailingListParser 0.1 documentation</title>
-    
+    <title>util package &#8212; MailingListParser 0.1.2 documentation</title>
     <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.1',
+        VERSION:     '0.1.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -24,12 +21,12 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="prev" title="input.mbox package" href="input.mbox.html" /> 
   </head>
-  <body role="document">
+  <body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -42,7 +39,7 @@
         <li class="right" >
           <a href="input.mbox.html" title="input.mbox package"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">MailingListParser 0.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">MailingListParser 0.1.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="modules.html" accesskey="U">Documentation for the Code</a> &#187;</li> 
       </ul>
     </div>  
@@ -57,23 +54,70 @@
 <div class="section" id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
 </div>
-<div class="section" id="module-util.author_uid_map">
-<span id="util-author-uid-map-module"></span><h2>util.author_uid_map module<a class="headerlink" href="#module-util.author_uid_map" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-util.author">
+<span id="util-author-module"></span><h2>util.author module<a class="headerlink" href="#module-util.author" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
-<dt id="util.author_uid_map.write_author_uid_map">
-<code class="descclassname">util.author_uid_map.</code><code class="descname">write_author_uid_map</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/author_uid_map.html#write_author_uid_map"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.author_uid_map.write_author_uid_map" title="Permalink to this definition">¶</a></dt>
+<dt id="util.author.get_uid_map">
+<code class="descclassname">util.author.</code><code class="descname">get_uid_map</code><span class="sig-paren">(</span><em>write_to_file=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/author.html#get_uid_map"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.author.get_uid_map" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function is used to generate and write to a JSON file the mapping of authors to a unique integer identifier.
 Authors are identified through a regular expression search for their email addresses. The integer identifiers
 generated are used in other modules like the generation and statistical analysis of hyperedges.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>write_to_file</strong> – If true, results are written to author_uid_map.json (default=True)</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A list of all message ids that are leaf nodes</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>
 <div class="section" id="module-util.custom_stopwords">
 <span id="util-custom-stopwords-module"></span><h2>util.custom_stopwords module<a class="headerlink" href="#module-util.custom_stopwords" title="Permalink to this headline">¶</a></h2>
-<p>This file contains a list of custom words for this project under custom_words and commonly used words under common_words</p>
+<p>A list of custom stop words specific to developer mailing lists under custom_words and commonly used words under common_words</p>
 </div>
-<div class="section" id="util-graph-leaf-nodes-module">
-<h2>util.graph_leaf_nodes module<a class="headerlink" href="#util-graph-leaf-nodes-module" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-util.graph">
+<span id="util-graph-module"></span><h2>util.graph module<a class="headerlink" href="#module-util.graph" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="util.graph.get_current_leaf_nodes">
+<code class="descclassname">util.graph.</code><code class="descname">get_current_leaf_nodes</code><span class="sig-paren">(</span><em>list1</em>, <em>list2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/graph.html#get_current_leaf_nodes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.graph.get_current_leaf_nodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function eliminates the non-leaf message-ids from the list of leaf message ids.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>list1</strong> – List containing all nodes</li>
+<li><strong>list2</strong> – Reference list</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">List without non-leaf nodes</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="util.graph.get_leaf_nodes">
+<code class="descclassname">util.graph.</code><code class="descname">get_leaf_nodes</code><span class="sig-paren">(</span><em>write_to_file=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/graph.html#get_leaf_nodes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.graph.get_leaf_nodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function is used to compute the message-ids of leaf nodes in the thread graph.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>write_to_file</strong> – If true, writes a list of leaf nodes to graph_leaf_nodes.csv (default = True)</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">List of message-ids of leaf nodes</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
 <div class="section" id="module-util.json_encoder">
 <span id="util-json-encoder-module"></span><h2>util.json_encoder module<a class="headerlink" href="#module-util.json_encoder" title="Permalink to this headline">¶</a></h2>
@@ -82,12 +126,13 @@ on separate lines. Here we convert a list into a string of comma separated eleme
 the elements of the list in a single line.</p>
 <dl class="class">
 <dt id="util.json_encoder.MyEncoder">
-<em class="property">class </em><code class="descclassname">util.json_encoder.</code><code class="descname">MyEncoder</code><span class="sig-paren">(</span><em>*</em>, <em>skipkeys=False</em>, <em>ensure_ascii=True</em>, <em>check_circular=True</em>, <em>allow_nan=True</em>, <em>sort_keys=False</em>, <em>indent=None</em>, <em>separators=None</em>, <em>default=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/json_encoder.html#MyEncoder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.json_encoder.MyEncoder" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">util.json_encoder.</code><code class="descname">MyEncoder</code><span class="sig-paren">(</span><em>skipkeys=False</em>, <em>ensure_ascii=True</em>, <em>check_circular=True</em>, <em>allow_nan=True</em>, <em>sort_keys=False</em>, <em>indent=None</em>, <em>separators=None</em>, <em>default=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/json_encoder.html#MyEncoder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.json_encoder.MyEncoder" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">json.encoder.JSONEncoder</span></code></p>
 <dl class="method">
 <dt id="util.json_encoder.MyEncoder.default">
 <code class="descname">default</code><span class="sig-paren">(</span><em>obj</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/json_encoder.html#MyEncoder.default"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.json_encoder.MyEncoder.default" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>For objects of the NoIndent class, custom separation is used. Otherwise the default represenation provided by JSON.</p>
+</dd></dl>
 
 </dd></dl>
 
@@ -98,22 +143,19 @@ the elements of the list in a single line.</p>
 </dd></dl>
 
 </div>
-<div class="section" id="module-util.preprocessing_utils">
-<span id="util-preprocessing-utils-module"></span><h2>util.preprocessing_utils module<a class="headerlink" href="#module-util.preprocessing_utils" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-util.preprocess">
+<span id="util-preprocess-module"></span><h2>util.preprocess module<a class="headerlink" href="#module-util.preprocess" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
-<dt id="util.preprocessing_utils.is_outlier">
-<code class="descclassname">util.preprocessing_utils.</code><code class="descname">is_outlier</code><span class="sig-paren">(</span><em>points</em>, <em>thresh=3.5</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/preprocessing_utils.html#is_outlier"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.preprocessing_utils.is_outlier" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a boolean array with True if points are outliers and False
-otherwise.</p>
+<dt id="util.preprocess.is_outlier">
+<code class="descclassname">util.preprocess.</code><code class="descname">is_outlier</code><span class="sig-paren">(</span><em>points</em>, <em>thresh=3.5</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/preprocess.html#is_outlier"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.preprocess.is_outlier" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a boolean array with True if points are outliers and False otherwise.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>points</strong> &#8211; An numobservations by numdimensions array of observations</li>
-<li><strong>thresh</strong> &#8211; The modified z-score to use as a threshold. Observations with
-a modified z-score (based on the median absolute deviation) greater
-than this value will be classified as outliers.</li>
+<li><strong>points</strong> – An numobservations by numdimensions array of observations.</li>
+<li><strong>thresh</strong> – The modified z-score to use as a threshold. Observations with a modified z-score (based on the median absolute deviation) greater than this value will be classified as outliers.</li>
 </ul>
 </td>
 </tr>
@@ -124,22 +166,22 @@ than this value will be classified as outliers.</li>
 </table>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Reference: Boris Iglewicz and David Hoaglin (1993), &#8220;Volume 16: How to Detect and Handle Outliers&#8221;, The ASQC Basic References in Quality Control:Statistical Techniques, Edward F. Mykytka, Ph.D., Editor.</p>
+<p class="last">Reference: Boris Iglewicz and David Hoaglin (1993), “Volume 16: How to Detect and Handle Outliers”, The ASQC Basic References in Quality Control:Statistical Techniques, Edward F. Mykytka, Ph.D., Editor.</p>
 </div>
 </dd></dl>
 
 </div>
-<div class="section" id="module-util.read_utils">
-<span id="util-read-utils-module"></span><h2>util.read_utils module<a class="headerlink" href="#module-util.read_utils" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-util.read">
+<span id="util-read-module"></span><h2>util.read module<a class="headerlink" href="#module-util.read" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
-<dt id="util.read_utils.get_datetime_object">
-<code class="descclassname">util.read_utils.</code><code class="descname">get_datetime_object</code><span class="sig-paren">(</span><em>orig_time</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/read_utils.html#get_datetime_object"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.read_utils.get_datetime_object" title="Permalink to this definition">¶</a></dt>
+<dt id="util.read.get_datetime_object">
+<code class="descclassname">util.read.</code><code class="descname">get_datetime_object</code><span class="sig-paren">(</span><em>orig_time</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/read.html#get_datetime_object"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.read.get_datetime_object" title="Permalink to this definition">¶</a></dt>
 <dd><p>A function to convert a formatted string containing date and time from a local timezone to UTC, by taking into consideration multiple formats of the input parameter and then return the corresponding datetime object.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>orig_time</strong> &#8211; Formatted string containing a date and time from a local timezone</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>orig_time</strong> – Formatted string containing a date and time from a local timezone</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A datetime object corresponding to the input string in UTC</td>
 </tr>
@@ -148,17 +190,17 @@ than this value will be classified as outliers.</li>
 </dd></dl>
 
 <dl class="function">
-<dt id="util.read_utils.get_lone_author_threads">
-<code class="descclassname">util.read_utils.</code><code class="descname">get_lone_author_threads</code><span class="sig-paren">(</span><em>save_file=None</em>, <em>nodelist_filename='graph_nodes.csv'</em>, <em>edgelist_filename='graph_edges.csv'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/read_utils.html#get_lone_author_threads"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.read_utils.get_lone_author_threads" title="Permalink to this definition">¶</a></dt>
+<dt id="util.read.get_lone_author_threads">
+<code class="descclassname">util.read.</code><code class="descname">get_lone_author_threads</code><span class="sig-paren">(</span><em>save_file=None</em>, <em>nodelist_filename='graph_nodes.csv'</em>, <em>edgelist_filename='graph_edges.csv'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/read.html#get_lone_author_threads"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.read.get_lone_author_threads" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function returns the UID of all the nodes that belong to a thread that has only one author</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>save_file</strong> &#8211; If True, the list of UIDs of nodes are saved to a text file</li>
-<li><strong>nodelist_filename</strong> &#8211; The name of the file containing the nodes</li>
-<li><strong>edgelist_filename</strong> &#8211; The name of the file containing the edges</li>
+<li><strong>save_file</strong> – If True, the list of UIDs of nodes are saved to a text file</li>
+<li><strong>nodelist_filename</strong> – The name of the file containing the nodes</li>
+<li><strong>edgelist_filename</strong> – The name of the file containing the edges</li>
 </ul>
 </td>
 </tr>
@@ -170,16 +212,16 @@ than this value will be classified as outliers.</li>
 </dd></dl>
 
 <dl class="function">
-<dt id="util.read_utils.get_messages_before">
-<code class="descclassname">util.read_utils.</code><code class="descname">get_messages_before</code><span class="sig-paren">(</span><em>time_limit</em>, <em>nodelist_filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/read_utils.html#get_messages_before"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.read_utils.get_messages_before" title="Permalink to this definition">¶</a></dt>
+<dt id="util.read.get_messages_before">
+<code class="descclassname">util.read.</code><code class="descname">get_messages_before</code><span class="sig-paren">(</span><em>time_limit</em>, <em>nodelist_filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/read.html#get_messages_before"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.read.get_messages_before" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function returns a set of Message-IDs that have arrived before the time limit passed as parameter.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>time_limit</strong> &#8211; A string formatted time stamp in one of the recognized formats.</li>
-<li><strong>nodelist_filename</strong> &#8211; The name of the file containing the nodes.</li>
+<li><strong>time_limit</strong> – A string formatted time stamp in one of the recognized formats.</li>
+<li><strong>nodelist_filename</strong> – The name of the file containing the nodes.</li>
 </ul>
 </td>
 </tr>
@@ -191,15 +233,15 @@ than this value will be classified as outliers.</li>
 </dd></dl>
 
 <dl class="function">
-<dt id="util.read_utils.get_utc_time">
-<code class="descclassname">util.read_utils.</code><code class="descname">get_utc_time</code><span class="sig-paren">(</span><em>orig_time</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/read_utils.html#get_utc_time"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.read_utils.get_utc_time" title="Permalink to this definition">¶</a></dt>
+<dt id="util.read.get_utc_time">
+<code class="descclassname">util.read.</code><code class="descname">get_utc_time</code><span class="sig-paren">(</span><em>orig_time</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/read.html#get_utc_time"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.read.get_utc_time" title="Permalink to this definition">¶</a></dt>
 <dd><p>A function to convert a formatted string containing date and time from a local timezone to UTC, by taking into
 consideration multiple formats of the input parameter</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>orig_time</strong> &#8211; Formatted string containing a date and time from a local timezone</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>orig_time</strong> – Formatted string containing a date and time from a local timezone</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Formatted string containing the date and time in UTC</td>
 </tr>
@@ -208,35 +250,37 @@ consideration multiple formats of the input parameter</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="util.read_utils.lines_per_n">
-<code class="descclassname">util.read_utils.</code><code class="descname">lines_per_n</code><span class="sig-paren">(</span><em>f</em>, <em>n</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/read_utils.html#lines_per_n"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.read_utils.lines_per_n" title="Permalink to this definition">¶</a></dt>
+<dt id="util.read.lines_per_n">
+<code class="descclassname">util.read.</code><code class="descname">lines_per_n</code><span class="sig-paren">(</span><em>f</em>, <em>n</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/read.html#lines_per_n"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.read.lines_per_n" title="Permalink to this definition">¶</a></dt>
 <dd><p>Each json object in the headers.json file occupies a set number of lines.
 This function is used to read those set number of lines and return them.</p>
 </dd></dl>
 
 </div>
-<div class="section" id="util-snaa-curve-fit-layout-module">
-<h2>util.snaa_curve_fit_layout module<a class="headerlink" href="#util-snaa-curve-fit-layout-module" title="Permalink to this headline">¶</a></h2>
-</div>
-<div class="section" id="util-thread-graph-nx-module">
-<h2>util.thread_graph_nx module<a class="headerlink" href="#util-thread-graph-nx-module" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-util.layout">
+<span id="util-layout-module"></span><h2>util.layout module<a class="headerlink" href="#module-util.layout" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="util.layout.generate_curve_fit">
+<code class="descclassname">util.layout.</code><code class="descname">generate_curve_fit</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/layout.html#generate_curve_fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.layout.generate_curve_fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generatees a panel of graphs comprising of CRT, CL and and RT plots for a range of time periods
+:return: None</p>
+</dd></dl>
+
 </div>
 <div class="section" id="module-util.union_find">
 <span id="util-union-find-module"></span><h2>util.union_find module<a class="headerlink" href="#module-util.union_find" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="union-find-with-path-compression">
-<h3>Union Find with path compression<a class="headerlink" href="#union-find-with-path-compression" title="Permalink to this headline">¶</a></h3>
-<p>A disjoint-set data structure, also called union-find data structure
-implements two functions:
-union(A, B) - merge A&#8217;s set with B&#8217;s set
-find(A) - finds what set A belongs to
+<p>This module is an implementation of the Union Find algorithm with path compression.
+The union-find data structure is also called a disjoint-set data structure.
 Union with path compression approach:
 Each node visited on the way to a root node may as well be attached
 directly to the root node.
 attach the smaller tree to the root of the larger tree
 Time Complexity  :  O(a(n)), where a(n) is the inverse of the function
-n=f(x)=A(x,x) and A is the extremely fast-growing Ackermann function.
-Author: NRYoung
-Source: <a class="reference external" href="https://github.com/nryoung/algorithms/blob/master/algorithms/data_structures/union_find_with_path_compression.py">https://github.com/nryoung/algorithms/blob/master/algorithms/data_structures/union_find_with_path_compression.py</a></p>
+n=f(x)=A(x,x) and A is the extremely fast-growing Ackermann function</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Source: <a class="reference external" href="https://github.com/nryoung/algorithms/blob/master/algorithms/data_structures/union_find_with_path_compression.py">https://github.com/nryoung/algorithms/blob/master/algorithms/data_structures/union_find_with_path_compression.py</a></p>
+</div>
 <dl class="class">
 <dt id="util.union_find.UnionFind">
 <em class="property">class </em><code class="descclassname">util.union_find.</code><code class="descname">UnionFind</code><span class="sig-paren">(</span><em>N</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/union_find.html#UnionFind"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.union_find.UnionFind" title="Permalink to this definition">¶</a></dt>
@@ -244,31 +288,73 @@ Source: <a class="reference external" href="https://github.com/nryoung/algorithm
 <dl class="method">
 <dt id="util.union_find.UnionFind.find">
 <code class="descname">find</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/union_find.html#UnionFind.find"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.union_find.UnionFind.find" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Helper function to find which set x belongs to</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>x</strong> – An integer whose set you want to merge</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The outermost parent set to which x belongs</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="util.union_find.UnionFind.is_connected">
 <code class="descname">is_connected</code><span class="sig-paren">(</span><em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/union_find.html#UnionFind.is_connected"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.union_find.UnionFind.is_connected" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Check if the sets of x and y are connected in the disjoint set data structure</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if if x and y are connected</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="util.union_find.UnionFind.make_set">
 <code class="descname">make_set</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/union_find.html#UnionFind.make_set"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.union_find.UnionFind.make_set" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Create a set with x as the only element.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>x</strong> – An  integer that would be the singleton element of the newly created set</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="util.union_find.UnionFind.parent">
 <code class="descname">parent</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/union_find.html#UnionFind.parent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.union_find.UnionFind.parent" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Used for unit testing check if the path is compressed</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="util.union_find.UnionFind.union">
 <code class="descname">union</code><span class="sig-paren">(</span><em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/union_find.html#UnionFind.union"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.union_find.UnionFind.union" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Merge x’s set with y’s set</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>x</strong> – An integer whose set you want to merge</li>
+<li><strong>y</strong> – Another integer whose set you want to merge</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 </dd></dl>
 
-</div>
 </div>
 </div>
 
@@ -282,18 +368,14 @@ Source: <a class="reference external" href="https://github.com/nryoung/algorithm
   <ul>
 <li><a class="reference internal" href="#">util package</a><ul>
 <li><a class="reference internal" href="#submodules">Submodules</a></li>
-<li><a class="reference internal" href="#module-util.author_uid_map">util.author_uid_map module</a></li>
+<li><a class="reference internal" href="#module-util.author">util.author module</a></li>
 <li><a class="reference internal" href="#module-util.custom_stopwords">util.custom_stopwords module</a></li>
-<li><a class="reference internal" href="#util-graph-leaf-nodes-module">util.graph_leaf_nodes module</a></li>
+<li><a class="reference internal" href="#module-util.graph">util.graph module</a></li>
 <li><a class="reference internal" href="#module-util.json_encoder">util.json_encoder module</a></li>
-<li><a class="reference internal" href="#module-util.preprocessing_utils">util.preprocessing_utils module</a></li>
-<li><a class="reference internal" href="#module-util.read_utils">util.read_utils module</a></li>
-<li><a class="reference internal" href="#util-snaa-curve-fit-layout-module">util.snaa_curve_fit_layout module</a></li>
-<li><a class="reference internal" href="#util-thread-graph-nx-module">util.thread_graph_nx module</a></li>
-<li><a class="reference internal" href="#module-util.union_find">util.union_find module</a><ul>
-<li><a class="reference internal" href="#union-find-with-path-compression">Union Find with path compression</a></li>
-</ul>
-</li>
+<li><a class="reference internal" href="#module-util.preprocess">util.preprocess module</a></li>
+<li><a class="reference internal" href="#module-util.read">util.read module</a></li>
+<li><a class="reference internal" href="#module-util.layout">util.layout module</a></li>
+<li><a class="reference internal" href="#module-util.union_find">util.union_find module</a></li>
 </ul>
 </li>
 </ul>
@@ -334,13 +416,13 @@ Source: <a class="reference external" href="https://github.com/nryoung/algorithm
         <li class="right" >
           <a href="input.mbox.html" title="input.mbox package"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">MailingListParser 0.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">MailingListParser 0.1.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="modules.html" >Documentation for the Code</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2017, Prasad Talasila,Achyudh Ram.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.
+        &#169; Copyright 2015-2017, Prasad Talasila, Achyudh Ram, Yash Pungaliya.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.
     </div>
   </body>
 </html>

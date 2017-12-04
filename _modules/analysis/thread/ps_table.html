@@ -5,7 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>analysis.thread.wh_table &#8212; MailingListParser 0.1.2 documentation</title>
+    <title>analysis.thread.ps_table &#8212; MailingListParser 0.1.2 documentation</title>
     <link rel="stylesheet" href="../../../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
@@ -45,21 +45,21 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <h1>Source code for analysis.thread.wh_table</h1><div class="highlight"><pre>
+  <h1>Source code for analysis.thread.ps_table</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">csv</span>
 <span class="kn">from</span> <span class="nn">util.read</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">networkx</span> <span class="k">as</span> <span class="nn">nx</span>
 
 
-<div class="viewcode-block" id="generate_wh_table_threads"><a class="viewcode-back" href="../../../analysis.thread.html#analysis.thread.wh_table.generate_wh_table_threads">[docs]</a><span class="k">def</span> <span class="nf">generate_wh_table_threads</span><span class="p">(</span><span class="n">nodelist_filename</span><span class="p">,</span> <span class="n">edgelist_filename</span><span class="p">,</span> <span class="n">output_filename</span><span class="p">,</span> <span class="n">ignore_lat</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">time_limit</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="generate"><a class="viewcode-back" href="../../../analysis.thread.html#analysis.thread.ps_table.generate">[docs]</a><span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="n">ignore_lat</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">time_limit</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    </span>
-<span class="sd">    Generate the thread width height table, which is a representation of the number of nodes in the graph that have a</span>
-<span class="sd">    given height and a given number of children in a tabular form. This table provides an aggregate statistical view of</span>
-<span class="sd">    all the discussion threads and is temporarily stored in a two dimensional array then written into a CSV file.</span>
+
+<span class="sd">    This function generate a table containing the number of mails in a thread and the corresponding aggregate count</span>
+<span class="sd">    of the number of threads that have that number of mails in them, along with the total number of authors who have</span>
+<span class="sd">    participated in such threads and the average number of authors. This table is then written to a CSV file.</span>
 
 <span class="sd">    :param ignore_lat: If true, then lone author threads are ignored.</span>
-<span class="sd">    :param time_limit: All messages until this time are considered and all messages after this time are ignored. Time</span>
-<span class="sd">                       is specified as a string in one of the recognized formats.</span>
+<span class="sd">    :param time_limit: All messages until this time are considered and all messages after this time are ignored. Time is specified as a string in one of the recognized formats.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">time_limit</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">time_limit</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%a, </span><span class="si">%d</span><span class="s2"> %b %Y %H:%M:%S %z&quot;</span><span class="p">)</span>
@@ -72,7 +72,7 @@
 
     <span class="c1"># Add nodes into NetworkX graph by reading from CSV file</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">ignore_lat</span><span class="p">:</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">nodelist_filename</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">node_file</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;graph_nodes.csv&quot;</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">node_file</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">pair</span> <span class="ow">in</span> <span class="n">node_file</span><span class="p">:</span>
                 <span class="n">node</span> <span class="o">=</span> <span class="n">pair</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;;&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">get_datetime_object</span><span class="p">(</span><span class="n">node</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span> <span class="o">&lt;</span> <span class="n">time_limit</span><span class="p">:</span>
@@ -85,7 +85,7 @@
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Nodes added.&quot;</span><span class="p">)</span>
 
         <span class="c1"># Add edges into NetworkX graph by reading from CSV file</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">edgelist_filename</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">edge_file</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;graph_edges.csv&quot;</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">edge_file</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">pair</span> <span class="ow">in</span> <span class="n">edge_file</span><span class="p">:</span>
                 <span class="n">edge</span> <span class="o">=</span> <span class="n">pair</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;;&#39;</span><span class="p">)</span>
                 <span class="n">edge</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">edge</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
@@ -98,7 +98,7 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="n">lone_author_threads</span> <span class="o">=</span> <span class="n">get_lone_author_threads</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
         <span class="c1"># Add nodes into NetworkX graph only if they are not a part of a thread that has only a single author</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">nodelist_filename</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">node_file</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;graph_nodes.csv&quot;</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">node_file</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">pair</span> <span class="ow">in</span> <span class="n">node_file</span><span class="p">:</span>
                 <span class="n">node</span> <span class="o">=</span> <span class="n">pair</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;;&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
                 <span class="n">node</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">node</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
@@ -111,7 +111,7 @@
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Nodes added.&quot;</span><span class="p">)</span>
 
     <span class="c1"># Add edges into NetworkX graph only if they are not a part of a thread that has only a single author</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">edgelist_filename</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">edge_file</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;graph_edges.csv&quot;</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">edge_file</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">pair</span> <span class="ow">in</span> <span class="n">edge_file</span><span class="p">:</span>
                 <span class="n">edge</span> <span class="o">=</span> <span class="n">pair</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;;&#39;</span><span class="p">)</span>
                 <span class="n">edge</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">edge</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
@@ -122,43 +122,31 @@
             <span class="n">edge_file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Edges added.&quot;</span><span class="p">)</span>
 
-    <span class="c1"># Find out the maximum height of the graph and maximum number of child nodes for any node</span>
-    <span class="n">max_width</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">discussion_graph</span><span class="o">.</span><span class="n">adjacency_list</span><span class="p">())</span>
-    <span class="n">max_height</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">dag_longest_path_length</span><span class="p">(</span><span class="n">discussion_graph</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No. of Nodes: &quot;</span><span class="p">,</span> <span class="n">nx</span><span class="o">.</span><span class="n">number_of_nodes</span><span class="p">(</span><span class="n">discussion_graph</span><span class="p">))</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No. of Edges: &quot;</span><span class="p">,</span> <span class="n">nx</span><span class="o">.</span><span class="n">number_of_edges</span><span class="p">(</span><span class="n">discussion_graph</span><span class="p">))</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No. of Weakly Connected Components: &quot;</span><span class="p">,</span> <span class="n">nx</span><span class="o">.</span><span class="n">number_weakly_connected_components</span><span class="p">(</span><span class="n">discussion_graph</span><span class="p">))</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Maximum number of children:&quot;</span><span class="p">,</span> <span class="n">max_width</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Maximum height of the graph:&quot;</span><span class="p">,</span> <span class="n">max_height</span><span class="p">)</span>
+    <span class="n">max_nodes</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">number_of_nodes</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">nx</span><span class="o">.</span><span class="n">weakly_connected_component_subgraphs</span><span class="p">(</span><span class="n">discussion_graph</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Maximum number of mails in a thread:&quot;</span><span class="p">,</span> <span class="n">max_nodes</span><span class="p">)</span>
 
-    <span class="c1"># The following 2D array stores the number of nodes at given height with a given number of children</span>
-    <span class="c1"># If A[i][j] = n, then there are n nodes at height i with j children</span>
-    <span class="n">wh_table</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">max_width</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">max_height</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span>
+    <span class="c1"># This list stores the number of authors in all threads of a given size. If no_of_authors[i] = k, there are a total</span>
+    <span class="c1"># of k authors in all threads of size i.</span>
+    <span class="n">no_of_authors</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">max_nodes</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span>
+    <span class="n">no_of_threads</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">max_nodes</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span>
+    
     <span class="k">for</span> <span class="n">conn_subgraph</span> <span class="ow">in</span> <span class="n">nx</span><span class="o">.</span><span class="n">weakly_connected_component_subgraphs</span><span class="p">(</span><span class="n">discussion_graph</span><span class="p">):</span>
-        <span class="n">source_node</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">conn_subgraph</span><span class="o">.</span><span class="n">nodes</span><span class="p">())</span>
-        <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">conn_subgraph</span><span class="o">.</span><span class="n">nodes</span><span class="p">():</span>
-            <span class="n">node_width</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">conn_subgraph</span><span class="o">.</span><span class="n">successors</span><span class="p">(</span><span class="n">node</span><span class="p">))</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="n">node_height</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">shortest_path_length</span><span class="p">(</span><span class="n">conn_subgraph</span><span class="p">,</span> <span class="n">source_node</span><span class="p">,</span> <span class="n">node</span><span class="p">)</span>
-            <span class="k">except</span><span class="p">:</span>
-                <span class="n">node_height</span> <span class="o">=</span> <span class="mi">1</span>
-            <span class="n">wh_table</span><span class="p">[</span><span class="n">node_height</span><span class="p">][</span><span class="n">node_width</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
-            <span class="c1"># print(&quot;Node:&quot;, node, &quot;Height:&quot;,node_height, &quot;Width:&quot;,node_width)</span>
+        <span class="n">authors</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">node</span><span class="p">,</span> <span class="n">attributes</span> <span class="ow">in</span> <span class="n">conn_subgraph</span><span class="o">.</span><span class="n">nodes_iter</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+            <span class="n">authors</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">attributes</span><span class="p">[</span><span class="s1">&#39;sender&#39;</span><span class="p">])</span>
+        <span class="n">no_of_authors</span><span class="p">[</span><span class="n">nx</span><span class="o">.</span><span class="n">number_of_nodes</span><span class="p">(</span><span class="n">conn_subgraph</span><span class="p">)]</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">authors</span><span class="p">)</span>
+        <span class="n">no_of_threads</span><span class="p">[</span><span class="n">nx</span><span class="o">.</span><span class="n">number_of_nodes</span><span class="p">(</span><span class="n">conn_subgraph</span><span class="p">)]</span> <span class="o">+=</span> <span class="mi">1</span>
 
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">output_filename</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">csvfile</span><span class="p">:</span>
+    <span class="c1"># print(no_of_authors)</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;participant_size_table.csv&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">csvfile</span><span class="p">:</span>
         <span class="n">tablewriter</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">writer</span><span class="p">(</span><span class="n">csvfile</span><span class="p">)</span>
-        <span class="n">tablewriter</span><span class="o">.</span><span class="n">writerow</span><span class="p">([</span><span class="s2">&quot;Height&quot;</span><span class="p">,</span> <span class="s2">&quot;Number of children&quot;</span><span class="p">])</span>
-        <span class="n">tablewriter</span><span class="o">.</span><span class="n">writerow</span><span class="p">([</span><span class="s2">&quot; &quot;</span><span class="p">]</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">max_width</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span> <span class="o">+</span> <span class="p">[</span><span class="s2">&quot;Subtotal&quot;</span><span class="p">])</span>
-        <span class="n">row_height</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="n">total</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">wh_table</span><span class="p">:</span>
-            <span class="n">subtotal</span> <span class="o">=</span> <span class="mi">0</span>
-            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">row</span><span class="p">:</span>
-                <span class="n">subtotal</span> <span class="o">+=</span> <span class="n">j</span>
-            <span class="n">tablewriter</span><span class="o">.</span><span class="n">writerow</span><span class="p">([</span><span class="n">row_height</span><span class="p">]</span> <span class="o">+</span> <span class="n">row</span> <span class="o">+</span> <span class="p">[</span><span class="n">subtotal</span><span class="p">])</span>
-            <span class="n">row_height</span> <span class="o">+=</span> <span class="mi">1</span>
-            <span class="n">total</span> <span class="o">+=</span> <span class="n">subtotal</span>
-        <span class="n">tablewriter</span><span class="o">.</span><span class="n">writerow</span><span class="p">([</span><span class="s2">&quot;Total:&quot;</span><span class="p">,</span> <span class="n">total</span><span class="p">])</span>
+        <span class="n">nmails</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">tablewriter</span><span class="o">.</span><span class="n">writerow</span><span class="p">([</span><span class="s2">&quot;No. of mails&quot;</span><span class="p">,</span> <span class="s2">&quot;No. of threads&quot;</span><span class="p">,</span> <span class="s2">&quot;Total no. of authors&quot;</span><span class="p">,</span> <span class="s2">&quot;Average no. of authors&quot;</span><span class="p">])</span>
+        <span class="k">for</span> <span class="n">row1</span> <span class="ow">in</span> <span class="n">no_of_authors</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">row1</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">row2</span> <span class="o">=</span> <span class="n">no_of_threads</span><span class="p">[</span><span class="n">nmails</span><span class="p">]</span>
+                <span class="n">tablewriter</span><span class="o">.</span><span class="n">writerow</span><span class="p">([</span><span class="n">nmails</span><span class="p">,</span> <span class="n">row2</span><span class="p">,</span> <span class="n">row1</span><span class="p">,</span> <span class="nb">format</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">row1</span><span class="o">/</span><span class="n">row2</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="s1">&#39;.3f&#39;</span><span class="p">)])</span>
+            <span class="n">nmails</span> <span class="o">+=</span> <span class="mi">1</span>
         <span class="n">csvfile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
 </pre></div>
 

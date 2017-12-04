@@ -7,7 +7,7 @@ Submodules
 analysis.author.graph.author_interaction module
 -----------------------------------------------
 
-.. automodule:: analysis.author.graph.author_interaction
+.. automodule:: analysis.author.graph.interaction
     :members:
     :undoc-members:
     :show-inheritance:
