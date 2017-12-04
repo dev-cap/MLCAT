@@ -1,13 +1,20 @@
 language: python
 python:
   - "3.5"
-# command to install dependencies
-install: "pip3 install -r requirements.txt"
 
-# command to run tests
+install:
+  - pip3 install -r requirements.txt
+
 script:
   - py.test -v --color=yes
-  - bash etc/deploy_docs.sh
+
+deploy:
+  skip_cleanup: true
+  provider: script
+  script: bash etc/deploy_docs.sh
+  on:
+    branch: development
+
 notifications:
   email:
     recipients:
