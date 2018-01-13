@@ -1,6 +1,6 @@
-What is MailingListParser?
+What is MLCAT?
 ==========================
-Welcome to the MailingListParser project! The main objective of this project is to develop a mailing list parser to extract information from a mailing list such as senders,receivers, time stamps etc and then use this to construct an organizational (or communication) structure like conversation thread hypergraphs for further analysis. We utilize social network analysis techniques to examine the relationships between authors on common mailing lists like LKML, Sakai, Apache etc. Study of these interactions on different levels helps us in deriving the local and global communication patterns between users on different threads. 
+Welcome to the Mailing List Community Analysis Tool! The main objective of this project is to develop a mailing list parser to extract information from a mailing list such as senders,receivers, time stamps etc and then use this to construct an organizational (or communication) structure like conversation thread hypergraphs for further analysis. We utilize social network analysis techniques to examine the relationships between authors on common mailing lists like LKML, Sakai, Apache etc. Study of these interactions on different levels helps us in deriving the local and global communication patterns between users on different threads. 
 
 .. image:: _static/intro_1.png
     :align: center
