@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# MailingListParser documentation build configuration file, created by
+# MLCAT documentation build configuration file, created by
 # sphinx-quickstart on Mon Aug 21 18:37:43 2017.
 #
 # This file is execfile()d with the current directory set to its
@@ -52,7 +52,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'MailingListParser'
+project = u'MLCAT'
 copyright = u'2015-2017, Prasad Talasila, Achyudh Ram, Yash Pungaliya'
 author = u'Prasad Talasila, Achyudh Ram, Yash Pungaliya'
 
@@ -106,7 +106,7 @@ html_static_path = ['_static']
 # -- Options for HTMLHelp output ------------------------------------------
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'MailingListParserdoc'
+htmlhelp_basename = 'MLCATdoc'
 
 
 # -- Options for LaTeX output ---------------------------------------------
@@ -133,7 +133,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'MailingListParser.tex', 'MailingListParser Documentation',
+    (master_doc, 'MLCAT.tex', 'MLCAT Documentation',
      'Prasadd Talasila, Achyudh Ram', 'manual'),
 ]
 
@@ -143,7 +143,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'mailinglistparser', u'MailingListParser Documentation',
+    (master_doc, 'MLCAT', u'MLCAT Documentation',
      [author], 1)
 ]
 
@@ -154,8 +154,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'MailingListParser', u'MailingListParser Documentation',
-     author, 'MailingListParser', 'One line description of project.',
+    (master_doc, 'MLCAT', u'MLCAT Documentation',
+     author, 'MLCAT', 'One line description of project.',
      'Miscellaneous'),
 ]
 

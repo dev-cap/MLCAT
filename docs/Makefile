@@ -4,7 +4,7 @@
 # You can set these variables from the command line.
 SPHINXOPTS    =
 SPHINXBUILD   = python3 -c "import sys,sphinx;sys.exit(sphinx.main(sys.argv))"
-SPHINXPROJ    = MailingListParser
+SPHINXPROJ    = MLCAT
 SOURCEDIR     = .
 BUILDDIR      = _build
 
