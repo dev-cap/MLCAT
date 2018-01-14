@@ -20,7 +20,9 @@ notifications:
     recipients:
       - achyudhk@gmail.com
       - tsrkp@goa.bits-pilani.ac.in
-      - f20150052@goa.bits-pilani.ac.in
+      - f20150530@goa.bits-pilani.ac.in
+      -f20160057@goa.bits-pilani.ac.in
+      -f20160718@goa.bits-pilani.ac.in
     on_success: change
     on_failure: always
 
