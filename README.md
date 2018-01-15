@@ -2,8 +2,9 @@
 
 [![Build Status](https://travis-ci.org/DeveloperCAP/MLCAT.svg?branch=development)](https://travis-ci.org/DeveloperCAP/MLCAT)
 [![Maintainability](https://api.codeclimate.com/v1/badges/f1d7947c8a62338544dd/maintainability)](https://codeclimate.com/github/DeveloperCAP/MLCAT/maintainability)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/f1d7947c8a62338544dd/test_coverage)](https://codeclimate.com/github/DeveloperCAP/MLCAT/test_coverage)
-[![Requirements Status](https://requires.io/github/DeveloperCAP/MLCAT/requirements.svg?branch=master)](https://requires.io/github/DeveloperCAP/MLCAT/requirements/?branch=master)
+[![codecov](https://codecov.io/gh/DeveloperCAP/MLCAT/branch/master/graph/badge.svg)](https://codecov.io/gh/DeveloperCAP/MLCAT)
+[![Dependency Status](https://www.versioneye.com/user/projects/5a57a7d70fb24f382f102324/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/5a57a7d70fb24f382f102324)
+
 
 > Parsing mailing lists to detect communication patterns.
 
@@ -23,7 +24,7 @@ Mailing List Community Analysis Tool uses [Sphinx Python Documentation Generator
 
 The documentation can be found under 'docs/' whose updation has been made automatic by the a bash script which otherwise requires to run `make html` in the 'docs/' directory after every commit.
 
-You can view the documentation hosted on `gh-pages` [here](http://prasadtalasila.github.io/MailingListParser/).
+You can view the documentation hosted on `gh-pages` [here](http://developercap.github.io/MLCAT/).
 
 ## Testing Framework
 
