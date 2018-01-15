@@ -4,7 +4,7 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/f1d7947c8a62338544dd/maintainability)](https://codeclimate.com/github/DeveloperCAP/MLCAT/maintainability)
 [![codecov](https://codecov.io/gh/DeveloperCAP/MLCAT/branch/master/graph/badge.svg)](https://codecov.io/gh/DeveloperCAP/MLCAT)
 [![Dependency Status](https://www.versioneye.com/user/projects/5a57a7d70fb24f382f102324/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/5a57a7d70fb24f382f102324)
-[![Requirements Status](https://requires.io/github/DeveloperCAP/MLCAT/requirements.svg?branch=master)](https://requires.io/github/DeveloperCAP/MLCAT/requirements/?branch=master)
+
 
 > Parsing mailing lists to detect communication patterns.
 
