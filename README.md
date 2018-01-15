@@ -14,7 +14,7 @@ Welcome to the Mailing List Community Analysis Tool! The main objective of this 
 
 ## Usage
 
-The library's working has been modularised into many modules namely input, analysis and util. The [test_driver.py file](https://github.com/achyudhk/Mailing-List-Network-Analyzer/blob/development/lib/test_driver.py) presents a brief overview of how one can use the Mailing List Community Analysis Tool for parsing and analysis.
+The library's working has been modularised into many modules namely input, analysis and util. The [driver file](main_driver.py) presents a brief overview of how one can use the Mailing List Community Analysis Tool for parsing and analysis.
 
 Some of the visualisable sample outputs can be seen [here](https://github.com/DeveloperCAP/MLCAT/tree/development/data), categorized into various datasets, giving an idea about this project's capabilites and as to what kind of insights we can and we plan to derive from the datasets.
 
