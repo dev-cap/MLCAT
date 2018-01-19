@@ -52,7 +52,7 @@ git config user.email "$COMMIT_AUTHOR_EMAIL"
 # The delta will show diffs between new and old versions.
 git add .
 git commit -m "[Travis Commit] Autodoc Deploy to gh-pages | Caused by ${SHA}
-refer auto_commit_script: https://github.com/prasadtalasila/MailingListParser/blob/$SOURCE_BRANCH/etc/deploy_docs.sh
+refer auto_commit_script: https://github.com/DeveloperCAP/MLCAT/blob/$SOURCE_BRANCH/etc/deploy_docs.sh
 " || exit 0 #exit the script if there is nothing to commit
 
 #go to parent directory and perform SSH configuration
