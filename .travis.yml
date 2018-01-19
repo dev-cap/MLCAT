@@ -1,19 +1,28 @@
 language: python
 python:
   - "3.5"
-# command to install dependencies
-install: "pip3 install -r requirements.txt"
 
-# command to run tests
+install:
+  - pip3 install -r requirements.txt
+
 script:
   - py.test -v --color=yes
-  - bash etc/deploy_docs.sh
+
+deploy:
+  skip_cleanup: true
+  provider: script
+  script: bash etc/deploy_docs.sh
+  on:
+    branch: development
+
 notifications:
   email:
     recipients:
       - achyudhk@gmail.com
       - tsrkp@goa.bits-pilani.ac.in
-      - f20150052@goa.bits-pilani.ac.in
+      - f20150530@goa.bits-pilani.ac.in
+      - f20160057@goa.bits-pilani.ac.in
+      - f20160718@goa.bits-pilani.ac.in
     on_success: change
     on_failure: always
 
