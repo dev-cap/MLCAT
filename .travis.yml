@@ -6,7 +6,7 @@ install:
   - pip3 install -r requirements.txt
 
 script:
-  - py.test -v --color=yes
+  - py.test --cov=.
 
 deploy:
   skip_cleanup: true
