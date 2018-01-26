@@ -8,14 +8,14 @@ sudo apt-get install -y python3-pip
 
 # Install virtualenv, create a virtual environment and activate it
 sudo -H pip3 install virtualenv
-virtualenv env
-source env/bin/activate
+virtualenv .env
+source .env/bin/activate
 
 
 # Install Graph-Tool
 sudo apt-get install -y expat
 sudo apt-get install -y libsparsehash-dev
-sudo apt-get install -y gtk 3
+sudo apt-get install -y gtk+3
 sudo apt-get install -y libboost-all-dev
 sudo apt-get install -y build-essential
 sudo apt-get install -y libcairo2-dev
