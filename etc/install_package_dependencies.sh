@@ -1,10 +1,18 @@
-# This script can be used to install all the required package dependencies on a clean system
-
+#This script can be used to install all the required package dependencies on a clean system
+ 
 PROJECT_PATH=$(pwd)
 
-# Install Python-PIP
+# Install Python
 sudo apt-get update
-sudo apt-get install -y python-pip
+sudo add-apt-repository ppa:fkrull/deadsnakes
+sudo apt-get install -y python3.5
+sudo apt-get install -y build-essential libssl-dev libffi-dev python-dev
+sudo apt-get install -y python3-pip
+
+# Install venv, create a virtual environment and activate it
+sudo apt-get install -y python3-venv
+python3 -m venv .env
+source .env/bin/activate
 
 
 # Install Graph-Tool
@@ -12,19 +20,11 @@ sudo apt-get install -y expat
 sudo apt-get install -y libsparsehash-dev
 sudo apt-get install -y gtk+3
 sudo apt-get install -y libboost-all-dev
-sudo apt-get install -y build-essential
 sudo apt-get install -y libcairo2-dev
-sudo apt-get install -y python3-pip
-sudo apt-get install -y python3-dev
-sudo apt-get install -y python3-matplotlib
 sudo apt-get install -y gfortran libopenblas-dev liblapack-dev
 sudo apt-get install -y libcgal-dev
-sudo apt-get install -y python3-numpy
-sudo apt-get install -y python2.7-config
-sudo apt-get install -y python3-cairo
-sudo apt-get install -y python3-scipy
 sudo apt-get install -y graphviz graphviz-dev libgraphviz-dev pkg-config
-sudo apt-get install -y python3-pygraphviz
+pip3 install pycairo
 
 echo 'deb http://downloads.skewed.de/apt/xenial xenial universe' | sudo tee -a  /etc/apt/sources.list
 echo 'deb-src http://downloads.skewed.de/apt/xenial xenial universe' | sudo tee -a  /etc/apt/sources.list
@@ -46,13 +46,11 @@ cd examples/python
 make python3
 python3 example-networkx.py
 
-# For installation(pip) of PyGraphViz
-sudo apt-get install graphviz libgraphviz-dev pkg-config
-
-# For installation(pip) Python-iGraph
-sudo apt-get install -y libxml2-dev libigraph0-dev
+# Install nltk corpus wordnet
+python3 -m nltk.downloader wordnet
 
 # Install python packages
 cd "$PROJECT_PATH"
 cd ..
-sudo -H pip3 install -r requirements.txt
+pip3 install -r requirements.txt
+deactivate
