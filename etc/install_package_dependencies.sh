@@ -2,13 +2,16 @@
  
 PROJECT_PATH=$(pwd)
 
-# Install Python-PIP
+# Install Python
 sudo apt-get update
+sudo add-apt-repository ppa:fkrull/deadsnakes
+sudo apt-get install -y python3.5
+sudo apt-get install -y build-essential libssl-dev libffi-dev python-dev
 sudo apt-get install -y python3-pip
 
-# Install virtualenv, create a virtual environment and activate it
-sudo -H pip3 install virtualenv
-virtualenv .env
+# Install venv, create a virtual environment and activate it
+sudo apt-get install -y python3-venv
+python3 -m venv .env
 source .env/bin/activate
 
 
@@ -17,7 +20,6 @@ sudo apt-get install -y expat
 sudo apt-get install -y libsparsehash-dev
 sudo apt-get install -y gtk+3
 sudo apt-get install -y libboost-all-dev
-sudo apt-get install -y build-essential
 sudo apt-get install -y libcairo2-dev
 sudo apt-get install -y gfortran libopenblas-dev liblapack-dev
 sudo apt-get install -y libcgal-dev
