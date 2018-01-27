@@ -4,7 +4,6 @@ PROJECT_PATH=$(pwd)
 
 # Install Python
 sudo apt-get update
-sudo add-apt-repository ppa:fkrull/deadsnakes
 sudo apt-get install -y python3.5
 sudo apt-get install -y build-essential libssl-dev libffi-dev python-dev
 sudo apt-get install -y python3-pip
@@ -24,6 +23,7 @@ sudo apt-get install -y libcairo2-dev
 sudo apt-get install -y gfortran libopenblas-dev liblapack-dev
 sudo apt-get install -y libcgal-dev
 sudo apt-get install -y graphviz graphviz-dev libgraphviz-dev pkg-config
+pip3 install wheel
 pip3 install pycairo
 
 echo 'deb http://downloads.skewed.de/apt/xenial xenial universe' | sudo tee -a  /etc/apt/sources.list
@@ -34,6 +34,17 @@ sudo apt-get install -y --allow-unauthenticated python3-graph-tool
 # Update pip
 pip3 install --upgrade pip
 sudo -H pip3 install --upgrade pip
+
+
+# Install igraph
+sudo apt-get install -y build-essential libxml2-dev
+sudo apt-get -y install libigraph-dev
+
+
+# Install python packages
+cd "$PROJECT_PATH"
+cd ..
+pip3 install -r requirements.txt
 
 # Install Infomap Community Detection
 sudo apt-get install -y swig
@@ -49,8 +60,4 @@ python3 example-networkx.py
 # Install nltk corpus wordnet
 python3 -m nltk.downloader wordnet
 
-# Install python packages
-cd "$PROJECT_PATH"
-cd ..
-pip3 install -r requirements.txt
 deactivate
