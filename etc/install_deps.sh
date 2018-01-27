@@ -1,6 +1,8 @@
+#!/bin/bash
 #This script can be used to install all the required package dependencies on a clean system
  
 PROJECT_PATH=$(pwd)
+REQUIREMENTS_FILE="$(pwd)/requirements.txt"
 
 # Install Python
 sudo apt-get update
@@ -17,7 +19,6 @@ source .env/bin/activate
 # Install Graph-Tool
 sudo apt-get install -y expat
 sudo apt-get install -y libsparsehash-dev
-sudo apt-get install -y gtk+3
 sudo apt-get install -y libboost-all-dev
 sudo apt-get install -y libcairo2-dev
 sudo apt-get install -y gfortran libopenblas-dev liblapack-dev
@@ -42,9 +43,7 @@ sudo apt-get -y install libigraph-dev
 
 
 # Install python packages
-cd "$PROJECT_PATH"
-cd ..
-pip3 install -r requirements.txt
+pip3 install -r "$REQUIREMENTS_FILE"
 
 # Install Infomap Community Detection
 sudo apt-get install -y swig
@@ -52,12 +51,14 @@ mkdir Infomap
 cd Infomap
 wget http://www.mapequation.org/downloads/Infomap.zip
 unzip Infomap.zip
+rm Infomap.zip
 make
 cd examples/python
 make python3
-python3 example-networkx.py
 
 # Install nltk corpus wordnet
 python3 -m nltk.downloader wordnet
 
 deactivate
+
+cd $PROJECT_PATH
