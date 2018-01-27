@@ -47,14 +47,21 @@ pip3 install -r "$REQUIREMENTS_FILE"
 
 # Install Infomap Community Detection
 sudo apt-get install -y swig
-mkdir Infomap
-cd Infomap
-wget http://www.mapequation.org/downloads/Infomap.zip
-unzip Infomap.zip
-rm Infomap.zip
-make
-cd examples/python
-make python3
+
+cd $PROJECT_PATH
+if [ -f Infomap/Infomap ]
+then
+    echo "Infomaps is already present in the local system"
+else
+    mkdir Infomap
+    cd Infomap
+    wget http://www.mapequation.org/downloads/Infomap.zip
+    unzip Infomap.zip
+    rm Infomap.zip
+    make
+    cd examples/python
+    make python3
+fi
 
 # Install nltk corpus wordnet
 python3 -m nltk.downloader wordnet
