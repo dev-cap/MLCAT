@@ -8,18 +8,19 @@ cache:
 install:
   - pip3 install -r requirements.txt
 
-script:
-  - py.test -v --color=yes --cov=.
-
-after_success:
-  - codecov
-
-deploy:
-  skip_cleanup: true
-  provider: script
-  script: bash etc/deploy_docs.sh
-  on:
-    branch: development
+jobs:
+  include:
+    - stage: compile
+      script: python3.5 -m compileall lib/
+    - stage: test
+      script: bash etc/pytest.sh
+    - script: sleep 10   # for unit tests in future
+    - stage: deploy
+      skip_cleanup: true
+      provider: script
+      script: bash etc/deploy_docs.sh
+      on:
+        branch: development 
 
 notifications:
   email:
