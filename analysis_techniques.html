@@ -116,11 +116,11 @@ A few questions that we can ask on this framework are:
 <p>Community detection algorithms are used to find the clustering and modularity coefficients across timescales, and associate relevant labels for communities and the authors belonging to them through text mining. The <em>Infomap community detection algorithm</em> pertaining to weighted and directed links was used for the multilevel community detection analysis. The Infomap algorithm is based on information theoretic principles. It tries to build a grouping which provides the shortest description length for a random walk on the graph, where the description length is measured by the expected number of bits per vertex required to encode the path of a random walk. The <em>Edge-betweenness community detection algorithm</em> is a hierarchical decomposition process where edges are removed in the decreasing order of the number of shortest paths that pass through a given edge, which is termed as the edge-betweenness score. This method is slow  due to the computational complexity of calculating the edge-betweenness scores, which have to be calculated every iteration (after each edge removal).</p>
 <p>Dendrograms, which are tree diagrams used to show the arrangement of clusters identified by the hierarchical clustering algorithms, were plotted with using the results given by the aforementioned algorithms, along with the vertex clustering for the Infomap method. Due to the restrictions in visually representing a large number of authors, the 1000 most active authors in the mailing list were used for plotting the dendrograms.</p>
 <p><strong>Dendrogram from the Edge-betweenness Method</strong></p>
-<img alt="_images/dendrogram_edge_betweenness.png" class="align-center" src="_images/dendrogram_edge_betweenness.png" />
+<img alt="https://github.com/DeveloperCAP/MLCAT/wiki/Images/dendrogram_edge_betweenness.png" class="align-center" src="https://github.com/DeveloperCAP/MLCAT/wiki/Images/dendrogram_edge_betweenness.png" />
 <p><strong>Dendrogram from the Infomaps Method</strong></p>
-<img alt="_images/dendrogram_infomap.png" class="align-center" src="_images/dendrogram_infomap.png" />
+<img alt="https://github.com/DeveloperCAP/MLCAT/wiki/Images/dendrogram_infomap.png" class="align-center" src="https://github.com/DeveloperCAP/MLCAT/wiki/Images/dendrogram_infomap.png" />
 <p><strong>Vertex Clustering from the Infomap Method</strong></p>
-<img alt="_images/vertex_clustering_infomap.png" class="align-center" src="_images/vertex_clustering_infomap.png" />
+<img alt="https://github.com/DeveloperCAP/MLCAT/wiki/Images/vertex_clustering_infomap.png" class="align-center" src="https://github.com/DeveloperCAP/MLCAT/wiki/Images/vertex_clustering_infomap.png" />
 </div>
 <div class="section" id="keyword-digest">
 <h4>Keyword Digest<a class="headerlink" href="#keyword-digest" title="Permalink to this headline">¶</a></h4>
@@ -137,7 +137,7 @@ In order to complete this step, chi-square goodness of fit was performed on the 
 <div class="section" id="width-height-table-for-threads">
 <h4>1. Width-Height Table for Threads<a class="headerlink" href="#width-height-table-for-threads" title="Permalink to this headline">¶</a></h4>
 <p>The width height table is a representation of the number of nodes in the graph that have a given height and a given number of children in a tabular form. The wh_table_threads.py module generates a width height table for the authors graph and saves it as a CSV file.</p>
-<img alt="_images/wh_table_threads.png" class="align-center" src="_images/wh_table_threads.png" />
+<img alt="https://github.com/DeveloperCAP/MLCAT/wiki/Images/wh_table_threads.png" class="align-center" src="https://github.com/DeveloperCAP/MLCAT/wiki/Images/wh_table_threads.png" />
 </div>
 <div class="section" id="discussion-thread-lengths">
 <h4>2. Discussion Thread Lengths<a class="headerlink" href="#discussion-thread-lengths" title="Permalink to this headline">¶</a></h4>
@@ -166,48 +166,48 @@ In order to complete this step, chi-square goodness of fit was performed on the 
 </ul>
 </dd>
 </dl>
-<img alt="_images/thread_length_hist.png" class="align-center" src="_images/thread_length_hist.png" />
-<img alt="_images/inter_arrival_times_hist_range.png" class="align-center" src="_images/inter_arrival_times_hist_range.png" />
+<img alt="https://github.com/DeveloperCAP/MLCAT/wiki/Images/thread_length_hist.png" class="align-center" src="https://github.com/DeveloperCAP/MLCAT/wiki/Images/thread_length_hist.png" />
+<img alt="https://github.com/DeveloperCAP/MLCAT/wiki/Images/inter_arrival_times_hist_range.png" class="align-center" src="https://github.com/DeveloperCAP/MLCAT/wiki/Images/inter_arrival_times_hist_range.png" />
 </div>
 <div class="section" id="message-activity-heatmaps">
 <h4>3. Message Activity Heatmaps<a class="headerlink" href="#message-activity-heatmaps" title="Permalink to this headline">¶</a></h4>
 <p>To estimate the user activity on an online community, we divide the 24 hours of a day into 48 bins of 30 minutes each. Each bin consists of the number of messages sent during that particular time interval. The daily bins are aggregated into monthly bins. The activity information gained from such heatmaps would inform the new users of a mailing list about the peak hours and increase the chances of participating in active conversations during specific times of a day.
 The following heatmap shows the weekly message activity:</p>
-<img alt="_images/monthly-message-activity-heatmap.png" class="align-center" src="_images/monthly-message-activity-heatmap.png" />
+<img alt="https://github.com/DeveloperCAP/MLCAT/wiki/Images/monthly-message-activity-heatmap.png" class="align-center" src="https://github.com/DeveloperCAP/MLCAT/wiki/Images/monthly-message-activity-heatmap.png" />
 <p>The following heatmap shows the weekly message activity:</p>
-<img alt="_images/weekly-message-activity-heatmap.png" class="align-center" src="_images/weekly-message-activity-heatmap.png" />
+<img alt="https://github.com/DeveloperCAP/MLCAT/wiki/Images/weekly-message-activity-heatmap.png" class="align-center" src="https://github.com/DeveloperCAP/MLCAT/wiki/Images/weekly-message-activity-heatmap.png" />
 </div>
 </div>
 <div class="section" id="statistics-on-the-author-network">
 <h3>Statistics on the Author Network<a class="headerlink" href="#statistics-on-the-author-network" title="Permalink to this headline">¶</a></h3>
 <div class="section" id="width-height-table-for-the-author-interaction-graph">
 <h4>1. Width Height Table for the Author Interaction Graph<a class="headerlink" href="#width-height-table-for-the-author-interaction-graph" title="Permalink to this headline">¶</a></h4>
-<img alt="_images/wh_table_authors.png" class="align-center" src="_images/wh_table_authors.png" />
+<img alt="https://github.com/DeveloperCAP/MLCAT/wiki/Images/wh_table_authors.png" class="align-center" src="https://github.com/DeveloperCAP/MLCAT/wiki/Images/wh_table_authors.png" />
 <p>The width height table for the authors is a representation of the number of total and new authors in a thread aggregated at a given generation.</p>
 </div>
 <div class="section" id="participant-size-table">
 <h4>2. Participant-Size Table<a class="headerlink" href="#participant-size-table" title="Permalink to this headline">¶</a></h4>
-<img alt="_images/participant_size_table.png" class="align-center" src="_images/participant_size_table.png" />
+<img alt="https://github.com/DeveloperCAP/MLCAT/wiki/Images/participant_size_table.png" class="align-center" src="https://github.com/DeveloperCAP/MLCAT/wiki/Images/participant_size_table.png" />
 <p>The participant_size table is a series between the number of mails in a thread and the corresponding number of authors who have participated in that thread. The first twenty entries of this table is given above.</p>
 </div>
 <div class="section" id="degree-distribution-of-authors">
 <h4>3. Degree Distribution of Authors<a class="headerlink" href="#degree-distribution-of-authors" title="Permalink to this headline">¶</a></h4>
-<img alt="_images/degree_dist_hist.png" class="align-center" src="_images/degree_dist_hist.png" />
+<img alt="https://github.com/DeveloperCAP/MLCAT/wiki/Images/degree_dist_hist.png" class="align-center" src="https://github.com/DeveloperCAP/MLCAT/wiki/Images/degree_dist_hist.png" />
 <p>The degree distribution of the nodes is as expected having a mean of zero (as sum of in-degrees = sum of out-degrees) with a standard deviation of 57.22. The degree distribution curve is bell shaped without any skew and is centered at zero. Excluding some outliers, most of the degree differentials are around zero with 90th percentile of 23 and 95th percentile of 42 for the absolute values of the degree differentials.</p>
 </div>
 <div class="section" id="author-thread-participation">
 <h4>4. Author Thread Participation<a class="headerlink" href="#author-thread-participation" title="Permalink to this headline">¶</a></h4>
-<img alt="_images/author_thread_participation.png" class="align-center" src="_images/author_thread_participation.png" />
+<img alt="https://github.com/DeveloperCAP/MLCAT/wiki/Images/author_thread_participation.png" class="align-center" src="https://github.com/DeveloperCAP/MLCAT/wiki/Images/author_thread_participation.png" />
 <p>An author is said to be an active participant in a thread if he has sent at least one mail in the thread. This graph represents the total number of threads each author has participated in. It can be seen that majority of the subscribers to the mailing list are passive observers. This finding correlates with the observations from hyperedges generated for the threads.</p>
 </div>
 <div class="section" id="distribution-of-hyperedges-among-authors">
 <h4>5. Distribution of Hyperedges among Authors<a class="headerlink" href="#distribution-of-hyperedges-among-authors" title="Permalink to this headline">¶</a></h4>
-<img alt="_images/hyperedge_distribution.png" class="align-center" src="_images/hyperedge_distribution.png" />
+<img alt="https://github.com/DeveloperCAP/MLCAT/wiki/Images/hyperedge_distribution.png" class="align-center" src="https://github.com/DeveloperCAP/MLCAT/wiki/Images/hyperedge_distribution.png" />
 <p>This graph represents the number of receiving vertices upon which the hyperedge is incident on, with the y-axis measuring the number of such hyperedges incident on the corresponding number of edges represented by the x-axis. The graph resembles a Poisson curve where it peaks such that maximum number of hyperedges are incident on 5 vertices and then decreases from that maximum.</p>
 </div>
 <div class="section" id="conversation-refresh-times-crt">
 <h4>6. Conversation Refresh Times (CRT)<a class="headerlink" href="#conversation-refresh-times-crt" title="Permalink to this headline">¶</a></h4>
-<img alt="_images/conversation_refresh_times.png" class="align-center" src="_images/conversation_refresh_times.png" />
+<img alt="https://github.com/DeveloperCAP/MLCAT/wiki/Images/conversation_refresh_times.png" class="align-center" src="https://github.com/DeveloperCAP/MLCAT/wiki/Images/conversation_refresh_times.png" />
 <p>For a pair of users, this refers to the time when one conversation (or a thread) ends and another one starts and for overlapping conversations, the last matching messages are considered. These times are generated as a probability distribution (PDF) and then plotted as a histogram between the conversation refresh times (in seconds) and frequency.</p>
 </div>
 <div class="section" id="clustering-coefficients-of-the-authors">

@@ -76,19 +76,19 @@ Dendrograms, which are tree diagrams used to show the arrangement of clusters id
 
 **Dendrogram from the Edge-betweenness Method**
 
-.. image:: _static/dendrogram_edge_betweenness.png
+.. image:: https://github.com/DeveloperCAP/MLCAT/wiki/Images/dendrogram_edge_betweenness.png
     :align: center
 
 
 **Dendrogram from the Infomaps Method**
 
-.. image:: _static/dendrogram_infomap.png
+.. image:: https://github.com/DeveloperCAP/MLCAT/wiki/Images/dendrogram_infomap.png
     :align: center
 
 
 **Vertex Clustering from the Infomap Method**
 
-.. image:: _static/vertex_clustering_infomap.png
+.. image:: https://github.com/DeveloperCAP/MLCAT/wiki/Images/vertex_clustering_infomap.png
     :align: center
 
 
@@ -108,7 +108,7 @@ Statistics on the Discussion Threads
 ---------------------------------
 The width height table is a representation of the number of nodes in the graph that have a given height and a given number of children in a tabular form. The wh_table_threads.py module generates a width height table for the authors graph and saves it as a CSV file.
 
-.. image:: _static/wh_table_threads.png
+.. image:: https://github.com/DeveloperCAP/MLCAT/wiki/Images/wh_table_threads.png
     :align: center
 																			
 2. Discussion Thread Lengths
@@ -122,10 +122,10 @@ A typical discussion thread can span 3 generations (with 1 Standard Deviation(s)
     - 99th Percentile Thread Length: 4674019.0 secs. or 1298.34 hrs.
  - Thus, by ignoring the threads that have only a single author, it takes 21 days for 95% of the threads in the LKML to end and 54 days for 99% of the threads to end.
 
-.. image:: _static/thread_length_hist.png
+.. image:: https://github.com/DeveloperCAP/MLCAT/wiki/Images/thread_length_hist.png
     :align: center
 
-.. image:: _static/inter_arrival_times_hist_range.png
+.. image:: https://github.com/DeveloperCAP/MLCAT/wiki/Images/inter_arrival_times_hist_range.png
     :align: center
 
 
@@ -135,12 +135,12 @@ A typical discussion thread can span 3 generations (with 1 Standard Deviation(s)
 To estimate the user activity on an online community, we divide the 24 hours of a day into 48 bins of 30 minutes each. Each bin consists of the number of messages sent during that particular time interval. The daily bins are aggregated into monthly bins. The activity information gained from such heatmaps would inform the new users of a mailing list about the peak hours and increase the chances of participating in active conversations during specific times of a day.
 The following heatmap shows the weekly message activity:
 
-.. image:: _static/monthly-message-activity-heatmap.png
+.. image:: https://github.com/DeveloperCAP/MLCAT/wiki/Images/monthly-message-activity-heatmap.png
     :align: center
 
 The following heatmap shows the weekly message activity:
 
-.. image:: _static/weekly-message-activity-heatmap.png
+.. image:: https://github.com/DeveloperCAP/MLCAT/wiki/Images/weekly-message-activity-heatmap.png
     :align: center
 
 Statistics on the Author Network
@@ -148,7 +148,7 @@ Statistics on the Author Network
 1. Width Height Table for the Author Interaction Graph
 ------------------------------------------------------
 
-.. image:: _static/wh_table_authors.png
+.. image:: https://github.com/DeveloperCAP/MLCAT/wiki/Images/wh_table_authors.png
     :align: center
 
 The width height table for the authors is a representation of the number of total and new authors in a thread aggregated at a given generation.
@@ -156,7 +156,7 @@ The width height table for the authors is a representation of the number of tota
 2. Participant-Size Table
 -------------------------
 
-.. image:: _static/participant_size_table.png
+.. image:: https://github.com/DeveloperCAP/MLCAT/wiki/Images/participant_size_table.png
     :align: center
 
 The participant_size table is a series between the number of mails in a thread and the corresponding number of authors who have participated in that thread. The first twenty entries of this table is given above.
@@ -164,7 +164,7 @@ The participant_size table is a series between the number of mails in a thread a
 3. Degree Distribution of Authors
 ---------------------------------
 
-.. image:: _static/degree_dist_hist.png
+.. image:: https://github.com/DeveloperCAP/MLCAT/wiki/Images/degree_dist_hist.png
     :align: center
 
 The degree distribution of the nodes is as expected having a mean of zero (as sum of in-degrees = sum of out-degrees) with a standard deviation of 57.22. The degree distribution curve is bell shaped without any skew and is centered at zero. Excluding some outliers, most of the degree differentials are around zero with 90th percentile of 23 and 95th percentile of 42 for the absolute values of the degree differentials.
@@ -172,7 +172,7 @@ The degree distribution of the nodes is as expected having a mean of zero (as su
 4. Author Thread Participation
 ------------------------------
 
-.. image:: _static/author_thread_participation.png
+.. image:: https://github.com/DeveloperCAP/MLCAT/wiki/Images/author_thread_participation.png
     :align: center
 
 An author is said to be an active participant in a thread if he has sent at least one mail in the thread. This graph represents the total number of threads each author has participated in. It can be seen that majority of the subscribers to the mailing list are passive observers. This finding correlates with the observations from hyperedges generated for the threads.
@@ -180,7 +180,7 @@ An author is said to be an active participant in a thread if he has sent at leas
 5. Distribution of Hyperedges among Authors
 -------------------------------------------
 
-.. image:: _static/hyperedge_distribution.png
+.. image:: https://github.com/DeveloperCAP/MLCAT/wiki/Images/hyperedge_distribution.png
     :align: center
 
 This graph represents the number of receiving vertices upon which the hyperedge is incident on, with the y-axis measuring the number of such hyperedges incident on the corresponding number of edges represented by the x-axis. The graph resembles a Poisson curve where it peaks such that maximum number of hyperedges are incident on 5 vertices and then decreases from that maximum.
@@ -188,7 +188,7 @@ This graph represents the number of receiving vertices upon which the hyperedge 
 6. Conversation Refresh Times (CRT)
 -----------------------------------
 
-.. image:: _static/conversation_refresh_times.png
+.. image:: https://github.com/DeveloperCAP/MLCAT/wiki/Images/conversation_refresh_times.png
     :align: center
 
 For a pair of users, this refers to the time when one conversation (or a thread) ends and another one starts and for overlapping conversations, the last matching messages are considered. These times are generated as a probability distribution (PDF) and then plotted as a histogram between the conversation refresh times (in seconds) and frequency.
