@@ -62,15 +62,15 @@ Dendrograms, which are tree diagrams used to show the arrangement of clusters id
 
 **Dendrogram from the Edge-betweenness Method**
 
-![Edge-betweenness Dendrogram](https://github.com/DeveloperCAP/MLCAT/blob/development/data/lkml/graphs/dendrogram_edge_betweenness.png)
+![Edge-betweenness Dendrogram](https://github.com/DeveloperCAP/MLCAT/wiki/Images/dendrogram_edge_betweenness.png)
 
 **Dendrogram from the Infomaps Method**
 
-![Infomaps Dendrogram](https://github.com/DeveloperCAP/MLCAT/blob/development/data/lkml/graphs/dendrogram_infomap.png)
+![Infomaps Dendrogram](https://github.com/DeveloperCAP/MLCAT/wiki/Images/dendrogram_infomap.png)
 
 **Vertex Clustering from the Infomap Method**
 
-![Infomap Vertex Clustering](https://github.com/DeveloperCAP/MLCAT/blob/development/data/lkml/graphs/vertex_clustering_infomap.png)
+![Infomap Vertex Clustering](https://github.com/DeveloperCAP/MLCAT/wiki/Images/vertex_clustering_infomap.png)
 
 ### Keyword Digest
 
@@ -87,7 +87,7 @@ In order to complete this step, chi-square goodness of fit was performed on the 
 The width height table is a representation of the number of nodes in the graph that have a given height and a given number of children in a tabular form. The wh_table_threads.py module generates a width height table for the authors graph and saves it as a CSV file.
 
 
-![Width Height Table for Threads](https://github.com/DeveloperCAP/MLCAT/blob/master/docs/_static/wh_table_threads.png)																			
+![Width Height Table for Threads](https://github.com/DeveloperCAP/MLCAT/wiki/Images/wh_table_threads.png)																			
 ### 2. Discussion Thread Lengths
 A typical discussion thread can span 3 generations (with 1 Standard Deviation(s)) and 2 authors participating (with 0.5 Standard Deviation(s)) in the discussion. The following are the 95th and 99th percentile thread lengths:
  * Ignoring threads that have only a single author:
@@ -98,56 +98,56 @@ A typical discussion thread can span 3 generations (with 1 Standard Deviation(s)
     * 99th Percentile Thread Length: 4674019.0 secs. or 1298.34 hrs.
  * Thus, by ignoring the threads that have only a single author, it takes 21 days for 95% of the threads in the LKML to end and 54 days for 99% of the threads to end.
 
-![Thread Length Histogram](https://github.com/DeveloperCAP/MLCAT/blob/master/docs/_static/thread_length_hist.png)
+![Thread Length Histogram](https://github.com/DeveloperCAP/MLCAT/wiki/Images/thread_length_hist.png)
 
-![Message Response Time Histogram](https://github.com/DeveloperCAP/MLCAT/blob/master/docs/_static/inter_arrival_times_hist_range.png)
+![Message Response Time Histogram](https://github.com/DeveloperCAP/MLCAT/wiki/Images/inter_arrival_times_hist_range.png)
 
 ### 3. Message Activity Heatmaps
 To estimate the user activity on an online community, we divide the 24 hours of a day into 48 bins of 30 minutes each. Each bin consists of the number of messages sent during that particular time interval. The daily bins are aggregated into monthly bins. The activity information gained from such heatmaps would inform the new users of a mailing list about the peak hours and increase the chances of participating in active conversations during specific times of a day.
 
 The following heatmap shows the weekly message activity:
 
-![Weekly Message Activity Heatmap](https://github.com/DeveloperCAP/MLCAT/blob/master/docs/_static/weekly-message-activity-heatmap.png)
+![Weekly Message Activity Heatmap](https://github.com/DeveloperCAP/MLCAT/wiki/Images/weekly-message-activity-heatmap.png)
 
 The following heatmap shows the monthly message activity:
 
-![Monthly Message Activity Heatmap](https://github.com/DeveloperCAP/MLCAT/blob/master/docs/_static/monthly-message-activity-heatmap.png)
+![Monthly Message Activity Heatmap](https://github.com/DeveloperCAP/MLCAT/wiki/Images/monthly-message-activity-heatmap.png)
 
 ## Statistics on the Author Network
 
 ### 1. Width Height Table for the Author Interaction Graph
 
-![Width Height Table for the Author Interaction Graph](https://github.com/DeveloperCAP/MLCAT/blob/master/docs/_static/wh_table_authors.png)
+![Width Height Table for the Author Interaction Graph](https://github.com/DeveloperCAP/MLCAT/wiki/Images/wh_table_authors.png)
 
 The width height table for the authors is a representation of the number of total and new authors in a thread aggregated at a given generation.
 
 ### 2. Participant-Size Table
 
-![Participant Size Table](https://github.com/DeveloperCAP/MLCAT/blob/master/docs/_static/participant_size_table.png)
+![Participant Size Table](https://github.com/DeveloperCAP/MLCAT/wiki/Images/participant_size_table.png)
 
 The participant_size table is a series between the number of mails in a thread and the corresponding number of authors who have participated in that thread. The first twenty entries of this table is given above.
 
 ### 3. Degree Distribution of Authors
 
-![Degree Distribution of Authors](https://github.com/DeveloperCAP/MLCAT/blob/master/docs/_static/degree_dist_hist.png)
+![Degree Distribution of Authors](https://github.com/DeveloperCAP/MLCAT/wiki/Images/degree_dist_hist.png)
 
 The degree distribution of the nodes is as expected having a mean of zero (as sum of in-degrees = sum of out-degrees) with a standard deviation of 57.22. The degree distribution curve is bell shaped without any skew and is centered at zero. Excluding some outliers, most of the degree differentials are around zero with 90th percentile of 23 and 95th percentile of 42 for the absolute values of the degree differentials.
 
 ### 4. Author Thread Participation
 
-![Author Thread Participation](https://github.com/DeveloperCAP/MLCAT/blob/master/docs/_static/author_thread_participation.png)
+![Author Thread Participation](https://github.com/DeveloperCAP/MLCAT/wiki/Images/author_thread_participation.png)
 
 An author is said to be an active participant in a thread if he has sent at least one mail in the thread. This graph represents the total number of threads each author has participated in. It can be seen that majority of the subscribers to the mailing list are passive observers. This finding correlates with the observations from hyperedges generated for the threads.
 
 ### 5. Distribution of Hyperedges among Authors
 
-![Hyperedge Distribution](https://github.com/DeveloperCAP/MLCAT/blob/master/docs/_static/hyperedge_distribution.png)
+![Hyperedge Distribution](https://github.com/DeveloperCAP/MLCAT/wiki/Images/hyperedge_distribution.png)
 
 This graph represents the number of receiving vertices upon which the hyperedge is incident on, with the y-axis measuring the number of such hyperedges incident on the corresponding number of edges represented by the x-axis. The graph resembles a Poisson curve where it peaks such that maximum number of hyperedges are incident on 5 vertices and then decreases from that maximum.
 
 ### 6. Conversation Refresh Times (CRT)
 
-![Conversation Refresh Times Histogram](https://github.com/DeveloperCAP/MLCAT/blob/master/docs/_static/conversation_refresh_times.png)
+![Conversation Refresh Times Histogram](https://github.com/DeveloperCAP/MLCAT/wiki/Images/conversation_refresh_times.png)
 
 For a pair of users, this refers to the time when one conversation (or a thread) ends and another one starts and for overlapping conversations, the last matching messages are considered. These times are generated as a probability distribution (PDF) and then plotted as a histogram between the conversation refresh times (in seconds) and frequency.
 
