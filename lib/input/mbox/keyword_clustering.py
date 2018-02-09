@@ -7,9 +7,9 @@ from nltk.stem import WordNetLemmatizer
 from sklearn.cluster import KMeans
 from sklearn.feature_extraction.text import TfidfVectorizer
 
-from analysis.author import ranking
-from util import custom_stopwords
-from util.read import *
+from lib.analysis.author import ranking
+from lib.util import custom_stopwords
+from lib.util.read import *
 
 
 def get_top_authors(top_n, json_filename):

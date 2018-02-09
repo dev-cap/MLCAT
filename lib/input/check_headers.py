@@ -2,10 +2,10 @@ import email
 import imaplib
 import json
 
-from input.imap.connection import open_connection
+from lib.input.imap.connection import open_connection
 
-from input.imap.header import get_mail_header
-from util.read import lines_per_n
+from lib.input.imap.header import get_mail_header
+from lib.util.read import lines_per_n
 
 
 def get_unavailable_uid():

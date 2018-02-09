@@ -11,8 +11,8 @@ import sys
 import igraph
 import numpy
 import networkx as nx
-from analysis.author import ranking
-from util.read import *
+from lib.analysis.author import ranking
+from lib.util.read import *
 
 sys.setrecursionlimit(10000)
 
