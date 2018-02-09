@@ -1,5 +1,5 @@
 import csv
-from util.read import *
+from lib.util.read import *
 import networkx as nx
 
 

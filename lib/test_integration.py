@@ -1,9 +1,9 @@
 import traceback
 
-from analysis.thread.graph.edge_list import generate_edge_list
-from input.check_headers import *
-from input.data_cleanup import remove_invalid_references
-from input.mbox.mbox_hdr import extract_mail_header
+from lib.analysis.thread.graph.edge_list import generate_edge_list
+from lib.input.check_headers import *
+from lib.input.data_cleanup import remove_invalid_references
+from lib.input.mbox.mbox_hdr import extract_mail_header
 
 
 # Test Data Handling Module

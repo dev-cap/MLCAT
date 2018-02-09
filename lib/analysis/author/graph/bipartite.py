@@ -5,7 +5,7 @@ message sent by the author. A directed edge would be drawn from message to all t
 A projection of this bipartite graph is then generated.
 """
 import json
-from util.read import *
+from lib.util.read import *
 
 
 def msg_author_bipartite_graph(threadwise=False, ignore_lat=True, time_limit=None):

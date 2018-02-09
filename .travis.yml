@@ -8,6 +8,9 @@ cache:
 install:
   - pip3 install -r requirements.txt
 
+before_script:
+  export PYTHONPATH=$PYTHONPATH:$(pwd)
+
 jobs:
   include:
     - stage: compile
@@ -20,7 +23,7 @@ jobs:
       provider: script
       script: bash etc/deploy_docs.sh
       on:
-        branch: development 
+        branch: development
 
 notifications:
   email:
