@@ -8,7 +8,7 @@ This module has utility functions for handling graphs and for retriving auxiliar
 def get_current_leaf_nodes(list1, list2):
     """
     This function eliminates the non-leaf message-ids from the list of leaf message ids.
-    
+
     :param list1: List containing all nodes
     :param list2: Reference list
     :return: List without non-leaf nodes
@@ -18,7 +18,7 @@ def get_current_leaf_nodes(list1, list2):
     return list3
 
 
-def get_leaf_nodes(write_to_file=True):
+def get_leaf_nodes(src_file, dest_file):
     """
     This function is used to compute the message-ids of leaf nodes in the thread graph.
 
@@ -28,7 +28,7 @@ def get_leaf_nodes(write_to_file=True):
     leaf_msgs = []  # Keeps track of all those message ids that are leaf nodes
     msg_ref_map = {}  # Map between message id of each mail to its references list
 
-    with open('clean_data.json', 'r') as fil:
+    with open(src_file, 'r') as fil:
         for chunk in lines_per_n(fil, 9):
 
             jfile = json.loads(chunk)
@@ -41,7 +41,7 @@ def get_leaf_nodes(write_to_file=True):
 
         fil.close()
 
-    with open('graph_leaf_nodes.csv', 'w') as csv_file:
+    with open(dest_file, 'w') as csv_file:
         for msg_id in leaf_msgs:
             csv_file.write("{0};{1}\n".format(msg_id, msg_ref_map[msg_id]))
     csv_file.close()
