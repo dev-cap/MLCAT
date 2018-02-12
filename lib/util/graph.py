@@ -22,7 +22,8 @@ def get_leaf_nodes(src_file, dest_file):
     """
     This function is used to compute the message-ids of leaf nodes in the thread graph.
 
-    :param write_to_file: If true, writes a list of leaf nodes to graph_leaf_nodes.csv (default = True)
+    :param src_file: Source file containing message-ids.
+    :param dest_file: Destination file(csv) to which message-ids of leaf nodes be stored.
     :return: List of message-ids of leaf nodes
     """
     leaf_msgs = []  # Keeps track of all those message ids that are leaf nodes
