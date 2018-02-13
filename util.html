@@ -104,15 +104,20 @@ generated are used in other modules like the generation and statistical analysis
 
 <dl class="function">
 <dt id="util.graph.get_leaf_nodes">
-<code class="descclassname">util.graph.</code><code class="descname">get_leaf_nodes</code><span class="sig-paren">(</span><em>write_to_file=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/graph.html#get_leaf_nodes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.graph.get_leaf_nodes" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">util.graph.</code><code class="descname">get_leaf_nodes</code><span class="sig-paren">(</span><em>src_file</em>, <em>dest_file</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/graph.html#get_leaf_nodes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.graph.get_leaf_nodes" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function is used to compute the message-ids of leaf nodes in the thread graph.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>write_to_file</strong> – If true, writes a list of leaf nodes to graph_leaf_nodes.csv (default = True)</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>src_file</strong> – Source file containing message-ids.</li>
+<li><strong>dest_file</strong> – Destination file(csv) to which message-ids of leaf nodes be stored.</li>
+</ul>
+</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">List of message-ids of leaf nodes</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">List of message-ids of leaf nodes</p>
+</td>
 </tr>
 </tbody>
 </table>

@@ -52,7 +52,7 @@
 <div class="viewcode-block" id="is_outlier"><a class="viewcode-back" href="../../util.html#util.preprocess.is_outlier">[docs]</a><span class="k">def</span> <span class="nf">is_outlier</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">thresh</span><span class="o">=</span><span class="mf">3.5</span><span class="p">):</span>
 	<span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">	Returns a boolean array with True if points are outliers and False otherwise.</span>
-<span class="sd">	</span>
+
 <span class="sd">	:param points: An numobservations by numdimensions array of observations.</span>
 <span class="sd">	:param thresh: The modified z-score to use as a threshold. Observations with a modified z-score (based on the median absolute deviation) greater than this value will be classified as outliers.</span>
 <span class="sd">	:return: A numobservations-length boolean array.</span>
@@ -60,15 +60,16 @@
 <span class="sd">	.. note:: Reference: Boris Iglewicz and David Hoaglin (1993), &quot;Volume 16: How to Detect and Handle Outliers&quot;, The ASQC Basic References in Quality Control:Statistical Techniques, Edward F. Mykytka, Ph.D., Editor.</span>
 <span class="sd">	&quot;&quot;&quot;</span>
 	<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">points</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-		<span class="n">points</span> <span class="o">=</span> <span class="n">points</span><span class="p">[:,</span><span class="kc">None</span><span class="p">]</span>
-	<span class="n">median</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-	<span class="n">diff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">points</span> <span class="o">-</span> <span class="n">median</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
-	<span class="n">diff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">diff</span><span class="p">)</span>
-	<span class="n">med_abs_deviation</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">diff</span><span class="p">)</span>
+		<span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="kc">False</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">bool</span><span class="p">)</span>
+	<span class="k">else</span><span class="p">:</span>
+		<span class="n">median</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+		<span class="n">diff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">points</span> <span class="o">-</span> <span class="n">median</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+		<span class="n">diff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">diff</span><span class="p">)</span>
+		<span class="n">med_abs_deviation</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">diff</span><span class="p">)</span>
 
-	<span class="n">modified_z_score</span> <span class="o">=</span> <span class="mf">0.6745</span> <span class="o">*</span> <span class="n">diff</span> <span class="o">/</span> <span class="n">med_abs_deviation</span>
+		<span class="n">modified_z_score</span> <span class="o">=</span> <span class="mf">0.6745</span> <span class="o">*</span> <span class="n">diff</span> <span class="o">/</span> <span class="n">med_abs_deviation</span>
 
-	<span class="k">return</span> <span class="n">modified_z_score</span> <span class="o">&gt;</span> <span class="n">thresh</span></div>
+		<span class="k">return</span> <span class="n">modified_z_score</span> <span class="o">&gt;</span> <span class="n">thresh</span></div>
 </pre></div>
 
           </div>
