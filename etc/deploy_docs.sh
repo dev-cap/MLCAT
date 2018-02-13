@@ -7,7 +7,7 @@
 ###################
 
 
-set -e # Exit with nonzero exit code if anything fails
+set -ex # Exit with nonzero exit code if anything fails
 
 SOURCE_BRANCH="development"
 TARGET_BRANCH="gh-pages"
@@ -16,7 +16,7 @@ COMMIT_AUTHOR_EMAIL="achyudhk@gmail.com"
 
 function createDocs {
   cd docs && make html
-  cd .. &&  cp -r docs/_build/html/* out/ 
+  cd .. &&  cp -r docs/_build/html/* out/
 }
 
 # Pull requests and commits to other branches shouldn't try to deploy, just build to verify
