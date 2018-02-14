@@ -6,19 +6,25 @@ from input.data_cleanup import remove_invalid_references
 from input.mbox.mbox_hdr import extract_mail_header
 
 
+import configparser
+config = configparser.ConfigParser()
+config.read('config.ini')
+
 # Test Data Handling Module
 def driver_data_handling(mailbox_list):
     for mailbox in mailbox_list:
         try:
             # Define directories
-            mbox_filename = './data/' + mailbox + '/mbox/' + mailbox + '.mbox'
-            clean_headers_filename = './data/' + mailbox + '/json/clean_data.json'
-            unclean_headers_filename = './data/' + mailbox + '/json/headers.json'
-            nodelist_filename = './data/' + mailbox + '/tables/graph_nodes.csv'
-            edgelist_filename = './data/' + mailbox + '/tables/graph_edges.csv'
-            thread_uid_filename = './data/' + mailbox + '/json/thread_uid_map.json'
-            author_uid_filename = './data/' + mailbox + '/json/author_uid_map.json'
-
+                      
+            foldername=config['param_paths']['foldername']+mailbox
+            mbox_filename = config['param_paths']['foldername'] + mailbox + '/mbox/' + mailbox + '.mbox'
+            clean_headers_filename = config['param_paths']['foldername'] + mailbox + config['param_paths']['clean_headers_path']
+            headers_filename =  config['param_paths']['foldername'] + mailbox +config['param_paths']['headers_path']
+            nodelist_filename = config['param_paths']['foldername'] + mailbox  +config['param_paths']['nodelist_path']
+            edgelist_filename = config['param_paths']['foldername'] + mailbox +config['param_paths']['edgelist_path']
+            thread_uid_filename =config['param_paths']['foldername']+ mailbox +config['param_paths']['thread_uid_path']
+            author_uid_filename = config['param_paths']['foldername']+ mailbox +config['param_paths']['author_uid_path']
+            
             print("Processing Mailbox:", mailbox)
             extract_mail_header(mbox_filename=mbox_filename, json_filename=unclean_headers_filename,
                                 thread_uid_filename=thread_uid_filename, author_uid_filename=author_uid_filename)

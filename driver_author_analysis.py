@@ -6,19 +6,25 @@ from lib.analysis.thread.hypergraph import generate_hyperedge_distribution
 from lib.input.mbox.keyword_clustering import generate_kmeans_clustering
 from lib.input.mbox.keyword_digest import generate_keyword_digest
 from lib.analysis.author.community import vertex_clustering
+import configparser
+config = configparser.ConfigParser()
+config.read('config.ini')
+
 
 # mailbox_list = ['lkml', 'opensuse-kernel', 'opensuse-features', 'opensuse', 'opensuse-bugs', 'opensuse-factory', 'sakai-devel']
 mailbox_list = ['opensuse-kernel']
 
 for mailbox in mailbox_list:
     # Define directories
-    foldername = "./data/" + mailbox + '/'
-    mbox_filename = './data/' + mailbox + '/mbox/' + mailbox + '.mbox'
-    headers_filename = foldername + '/json/headers.json'
-    nodelist_filename = foldername + '/tables/graph_nodes.csv'
-    edgelist_filename = foldername + '/tables/graph_edges.csv'
-    thread_uid_filename = foldername + '/json/thread_uid_map.json'
-    author_uid_filename = foldername + '/json/author_uid_map.json'
+    
+    foldername=config['param_paths']['foldername']+mailbox
+    mbox_filename = config['param_paths']['foldername'] + mailbox + '/mbox/' + mailbox + '.mbox'
+    headers_filename =  config['param_paths']['foldername'] + mailbox +config['param_paths']['headers_path']
+    nodelist_filename = config['param_paths']['foldername'] + mailbox  +config['param_paths']['nodelist_path']
+    edgelist_filename = config['param_paths']['foldername'] + mailbox +config['param_paths']['edgelist_path']
+    thread_uid_filename =config['param_paths']['foldername']+ mailbox +config['param_paths']['thread_uid_path']
+    author_uid_filename = config['param_paths']['foldername']+ mailbox +config['param_paths']['author_uid_path']
+
 
     print("Processing Mailbox:", mailbox)
 
