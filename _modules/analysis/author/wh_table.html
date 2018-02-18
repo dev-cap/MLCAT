@@ -103,7 +103,7 @@
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Edges added.&quot;</span><span class="p">)</span>
 
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">lone_author_threads</span> <span class="o">=</span> <span class="n">get_lone_author_threads</span><span class="p">()</span>
+        <span class="n">lone_author_threads</span> <span class="o">=</span> <span class="n">get_lone_author_threads</span><span class="p">(</span><span class="n">nodelist_filename</span><span class="o">=</span><span class="n">nodelist_filename</span><span class="p">,</span> <span class="n">edgelist_filename</span><span class="o">=</span><span class="n">edgelist_filename</span><span class="p">)</span>
         <span class="c1"># Add nodes into NetworkX graph only if they are not a part of a thread that has only a single author</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">nodelist_filename</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">node_file</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">pair</span> <span class="ow">in</span> <span class="n">node_file</span><span class="p">:</span>
@@ -198,7 +198,6 @@
             <span class="n">row_height</span> <span class="o">+=</span> <span class="mi">1</span>
             <span class="n">total</span> <span class="o">+=</span> <span class="n">subtotal</span>
         <span class="n">tablewriter</span><span class="o">.</span><span class="n">writerow</span><span class="p">([</span><span class="s2">&quot;Total:&quot;</span><span class="p">,</span> <span class="n">total</span><span class="p">])</span></div>
-   
 </pre></div>
 
           </div>
