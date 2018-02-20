@@ -50,7 +50,7 @@ def generate_edge_list(author_nodelist_filename, author_edgelist_filename, nodel
 					json_data[json_obj['Message-ID']] = json_obj
 		print("JSON data loaded.")
 	else:
-		lone_author_threads = get_lone_author_threads(None, nodelist_filename, edgelist_filename)
+		lone_author_threads = get_lone_author_threads(nodelist_filename, edgelist_filename)
 		with open(threads_json_filename, 'r') as json_file:
 			for chunk in lines_per_n(json_file, 9):
 				json_obj = json.loads(chunk)

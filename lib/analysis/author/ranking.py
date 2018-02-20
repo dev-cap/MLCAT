@@ -49,7 +49,7 @@ def get(json_filename, output_filename, active_score, passive_score, write_to_fi
                     # print("\nFrom", json_obj['From'], "\nTo", json_obj['To'], "\nCc", json_obj['Cc'])
                     json_data[json_obj['Message-ID']] = json_obj
     else:
-        lone_author_threads = get_lone_author_threads(False)
+        lone_author_threads = get_lone_author_threads(nodelist_filename, edgelist_filename)
         with open(json_filename, 'r') as json_file:
             for chunk in lines_per_n(json_file, 9):
                 json_obj = json.loads(chunk)

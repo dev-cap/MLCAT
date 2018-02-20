@@ -80,7 +80,7 @@ def conversation_refresh_times(headers_filename, nodelist_filename, edgelist_fil
         print("Edges added.")
 
     else:
-        lone_author_threads = get_lone_author_threads(False)
+        lone_author_threads = get_lone_author_threads(nodelist_filename, edgelist_filename)
         # Add nodes into NetworkX graph only if they are not a part of a thread that has only a single author
         with open(nodelist_filename, "r") as node_file:
             for pair in node_file:
@@ -125,7 +125,7 @@ def conversation_refresh_times(headers_filename, nodelist_filename, edgelist_fil
                     # print("\nFrom", json_obj['From'], "\nTo", json_obj['To'], "\nCc", json_obj['Cc'])
                     json_data[json_obj['Message-ID']] = json_obj
     else:
-        lone_author_threads = get_lone_author_threads(False)
+        lone_author_threads = get_lone_author_threads(nodelist_filename, edgelist_filename)
         with open(headers_filename, 'r') as json_file:
             for chunk in lines_per_n(json_file, 9):
                 json_obj = json.loads(chunk)

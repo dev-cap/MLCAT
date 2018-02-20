@@ -163,7 +163,7 @@ def generate_message_activity_heatmaps(clean_headers_filename, foldername, timel
                     # print("\nFrom", json_obj['From'], "\nTo", json_obj['To'], "\nCc", json_obj['Cc'])
                     json_data[json_obj['Message-ID']] = json_obj
     else:
-        lone_author_threads = get_lone_author_threads(save_file=None, nodelist_filename=foldername+"/tables/graph_nodes.csv", edgelist_filename=foldername+"/tables/graph_edges.csv")
+        lone_author_threads = get_lone_author_threads(foldername+"/tables/graph_nodes.csv", foldername+"/tables/graph_edges.csv")
         with open(clean_headers_filename, 'r') as json_file:
             for chunk in lines_per_n(json_file, 9):
                 json_obj = json.loads(chunk)

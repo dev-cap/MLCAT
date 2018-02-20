@@ -51,7 +51,7 @@ def msg_author_bipartite_graph(threadwise=False, ignore_lat=True, time_limit=Non
                 edge_file.close()
             print("Edges added.")
         else:
-            lone_author_threads = get_lone_author_threads(False)
+            lone_author_threads = get_lone_author_threads(nodelist_filename, edgelist_filename)
             # Add nodes into NetworkX graph only if they are not a part of a thread that has only a single author
             with open("graph_nodes.csv", "r") as node_file:
                 for pair in node_file:
@@ -123,7 +123,7 @@ def msg_author_bipartite_graph(threadwise=False, ignore_lat=True, time_limit=Non
                         json_data[json_obj['Message-ID']] = json_obj
             print("JSON data loaded.")
         else:
-            lone_author_threads = get_lone_author_threads(False)
+            lone_author_threads = get_lone_author_threads(nodelist_filename, edgelist_filename)
             with open('clean_data.json', 'r') as json_file:
                 for chunk in lines_per_n(json_file, 9):
                     json_obj = json.loads(chunk)
