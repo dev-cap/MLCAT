@@ -70,7 +70,7 @@ def author_interaction():
 					json_data[json_obj['Message-ID']] = json_obj
 		print("JSON data loaded.")
 	else:
-		lone_author_threads = get_lone_author_threads(False)
+		lone_author_threads = get_lone_author_threads(nodelist_filename, edgelist_filename)
 		with open('clean_data.json', 'r') as json_file:
 			for chunk in lines_per_n(json_file, 9):
 				json_obj = json.loads(chunk)

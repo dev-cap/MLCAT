@@ -16,7 +16,7 @@ def lines_per_n(f, n):
         yield ''.join(chain([line], islice(f, n-1)))
 
 
-def get_lone_author_threads(save_file=None, nodelist_filename='graph_nodes.csv', edgelist_filename='graph_edges.csv'):
+def get_lone_author_threads(nodelist_filename, edgelist_filename, save_file=None):
     """
     This function returns the UID of all the nodes that belong to a thread that has only one author
 

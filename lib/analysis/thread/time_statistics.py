@@ -125,7 +125,7 @@ def generate_time_stats_threads(nodelist_filename, edgelist_filename, clean_head
         print("Nodes added.")
 
     else:
-        lone_author_threads = get_lone_author_threads(save_file=None, nodelist_filename=nodelist_filename, edgelist_filename=edgelist_filename)
+        lone_author_threads = get_lone_author_threads(nodelist_filename, edgelist_filename)
         # Add nodes into NetworkX graph only if they are not a part of a thread that has only a single author
         with open(nodelist_filename, "r") as node_file:
             for pair in node_file:

@@ -48,7 +48,7 @@ def generate(ignore_lat=False, time_limit=None):
         print("Edges added.")
 
     else:
-        lone_author_threads = get_lone_author_threads(False)
+        lone_author_threads = get_lone_author_threads(nodelist_filename, edgelist_filename)
         # Add nodes into NetworkX graph only if they are not a part of a thread that has only a single author
         with open("graph_nodes.csv", "r") as node_file:
             for pair in node_file:
