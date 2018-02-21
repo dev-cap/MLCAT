@@ -9,9 +9,9 @@ from lib.util.read import *
 
 def write_to_pajek(author_graph, filename="author_graph.net"):
 	"""
-	
+
 	Write the networkx graph in Pajek format to author_graph.net
-	
+
 	:param author_graph: Networkx graph.
 	:param filename: Write to Pajek file compatible with the Infomap Community Detection module.
 	"""
@@ -35,16 +35,20 @@ def write_to_pajek(author_graph, filename="author_graph.net"):
 			pajek_file.write(line)
 
 
-def author_interaction():
+def author_interaction(clean_data, graph_nodes, graph_edges, pajek_file, ignore_lat=True):
 	"""
-
 	Prints the number of strongly connected components,weekly connected components, number of nodes and edges from the author graph.
+
+	:param clean_data: Path to clean_data.json file
+	:param graph_nodes: Path to graph_nodes.csv file
+	:param graph_edges: Path to graph_edges.csv file
+	:param pajek_file: Path to author_graph.net(pajek file) which is used by write_to_pajek()
+	:param ignore_lat: True
 	"""
 	# Time limit can be specified here in the form of a timestamp in one of the identifiable formats and all messages
 	# that have arrived after this timestamp will be ignored.
 	time_limit = None
 	# If true, then messages that belong to threads that have only a single author are ignored.
-	ignore_lat = True
 	author_graph = nx.DiGraph()
 	email_re = re.compile(r'[\w\.-]+@[\w\.-]+')
 	json_data = dict()
@@ -55,7 +59,7 @@ def author_interaction():
 	print("All messages before", time_limit, "are being considered.")
 
 	if not ignore_lat:
-		with open('clean_data.json', 'r') as json_file:
+		with open(clean_data, 'r') as json_file:
 			for chunk in lines_per_n(json_file, 9):
 				json_obj = json.loads(chunk)
 				json_obj['Message-ID'] = int(json_obj['Message-ID'])
@@ -70,8 +74,8 @@ def author_interaction():
 					json_data[json_obj['Message-ID']] = json_obj
 		print("JSON data loaded.")
 	else:
-		lone_author_threads = get_lone_author_threads(False)
-		with open('clean_data.json', 'r') as json_file:
+		lone_author_threads = get_lone_author_threads(nodelist_filename=graph_nodes, edgelist_filename=graph_edges)
+		with open(clean_data, 'r') as json_file:
 			for chunk in lines_per_n(json_file, 9):
 				json_obj = json.loads(chunk)
 				json_obj['Message-ID'] = int(json_obj['Message-ID'])
@@ -95,10 +99,9 @@ def author_interaction():
 		for to_address in addr_list:
 			author_graph.add_edge(message['From'], to_address)
 
-	write_to_pajek(author_graph)
+	write_to_pajek(author_graph, filename=pajek_file)
 
 	print("No. of Weakly Connected Components:", nx.number_weakly_connected_components(author_graph))
 	print("No. of Strongly Connected Components:", nx.number_strongly_connected_components(author_graph))
 	print("Nodes:", nx.number_of_nodes(author_graph))
 	print("Edges:", nx.number_of_edges(author_graph))
-
