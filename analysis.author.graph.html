@@ -187,8 +187,23 @@ one author to another if the former sent a message to the latter either in To or
 the entire mailing list.</p>
 <dl class="function">
 <dt id="analysis.author.graph.generate.author_interaction">
-<code class="descclassname">analysis.author.graph.generate.</code><code class="descname">author_interaction</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/author/graph/generate.html#author_interaction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analysis.author.graph.generate.author_interaction" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">analysis.author.graph.generate.</code><code class="descname">author_interaction</code><span class="sig-paren">(</span><em>clean_data</em>, <em>graph_nodes</em>, <em>graph_edges</em>, <em>pajek_file</em>, <em>ignore_lat=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/author/graph/generate.html#author_interaction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analysis.author.graph.generate.author_interaction" title="Permalink to this definition">¶</a></dt>
 <dd><p>Prints the number of strongly connected components,weekly connected components, number of nodes and edges from the author graph.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>clean_data</strong> – Path to clean_data.json file</li>
+<li><strong>graph_nodes</strong> – Path to graph_nodes.csv file</li>
+<li><strong>graph_edges</strong> – Path to graph_edges.csv file</li>
+<li><strong>pajek_file</strong> – Path to author_graph.net(pajek file) which is used by write_to_pajek()</li>
+<li><strong>ignore_lat</strong> – If true, then messages that belong to threads that have only a single author are ignored.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
