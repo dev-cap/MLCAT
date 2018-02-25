@@ -43,12 +43,11 @@ def author_interaction(clean_data, graph_nodes, graph_edges, pajek_file, ignore_
 	:param graph_nodes: Path to graph_nodes.csv file
 	:param graph_edges: Path to graph_edges.csv file
 	:param pajek_file: Path to author_graph.net(pajek file) which is used by write_to_pajek()
-	:param ignore_lat: True
+	:param ignore_lat: If true, then messages that belong to threads that have only a single author are ignored.
 	"""
 	# Time limit can be specified here in the form of a timestamp in one of the identifiable formats and all messages
 	# that have arrived after this timestamp will be ignored.
 	time_limit = None
-	# If true, then messages that belong to threads that have only a single author are ignored.
 	author_graph = nx.DiGraph()
 	email_re = re.compile(r'[\w\.-]+@[\w\.-]+')
 	json_data = dict()
