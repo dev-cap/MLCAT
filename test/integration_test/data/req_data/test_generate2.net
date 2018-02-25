@@ -1,0 +1,35 @@
+*vertices 15
+1 "jdelvare@suse.de" 
+2 "tiwai@suse.de" 
+3 "opensuse-kernel@opensuse.org" 
+4 "mikky_m@mail.ru" 
+5 "gregkh@suse.de" 
+6 "doiggl@velocitynet.com.au" 
+7 "leyendecker@opensuse.org" 
+8 "mkubecek@suse.cz" 
+9 "tchvatal@suse.cz" 
+10 "mmarek@suse.cz" 
+11 "matwey.kornilov@gmail.com" 
+12 "jeffm@suse.com" 
+13 "guillaume.gardet@free.fr" 
+14 "afaerber@suse.de" 
+15 "guillaume.gardet@opensuse.org" 
+*arcs
+1 2 1.0
+1 3 1.0
+4 3 1.0
+4 5 1.0
+5 3 1.0
+5 7 1.0
+6 3 1.0
+8 9 1.0
+8 3 1.0
+8 10 1.0
+11 3 1.0
+11 12 1.0
+11 13 1.0
+11 11 1.0
+11 14 1.0
+13 13 1.0
+13 3 1.0
+13 15 1.0
