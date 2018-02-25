@@ -5,7 +5,7 @@ import json
 
 def test_remove_invalid_references():
 
-    input_json_filename = './test/integration_test/data/headers_cl.json'
+    input_json_filename = './test/integration_test/data/headers_for_cleanup.json'
     output_json_filename = './test/integration_test/data/clean_headers.json'
 
     remove_invalid_references(input_json_filename, output_json_filename, ref_toggle=True)
