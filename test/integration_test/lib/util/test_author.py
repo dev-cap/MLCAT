@@ -1,11 +1,12 @@
 from lib.util.author import *
+import json
 
 def test_get_uid_map():
 
-	author_uid_map=dict()
-	check='jdelvare@suse.de' in author_uid_map
-	assert check==False
+	input_data='./test/integration_test/data/clean_data.json'
+	test_map='./test/integration_test/data/author_uid_map_test.json'
+	expected_map=json.load(open('./test/integration_test/data/author_uid_map.json')).keys()
 	
-	author_uid_map=get_uid_map()
-	check='jdelvare@suse.de' in author_uid_map
-	assert check==True
+	assert get_uid_map(input_data,test_map).keys()==expected_map
+	assert json.load(open(test_map)).keys()==expected_map
+
