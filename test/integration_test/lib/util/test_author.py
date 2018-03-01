@@ -8,5 +8,4 @@ def test_get_uid_map():
 	expected_set=json.load(open('./test/integration_test/data/author_uid_map.json')).keys()
 	
 	assert get_uid_map(input_data,test_map).keys()==expected_set
-    assert json.load(open(test_map)).keys()==expected_set
-
+	assert json.load(open(test_map)).keys()==expected_set
