@@ -58,7 +58,7 @@
 <span id="util-author-module"></span><h2>util.author module<a class="headerlink" href="#module-util.author" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="util.author.get_uid_map">
-<code class="descclassname">util.author.</code><code class="descname">get_uid_map</code><span class="sig-paren">(</span><em>write_to_file=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/author.html#get_uid_map"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.author.get_uid_map" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">util.author.</code><code class="descname">get_uid_map</code><span class="sig-paren">(</span><em>input_file='clean_data.json'</em>, <em>output_file='author_uid_map.json'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/author.html#get_uid_map"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.author.get_uid_map" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function is used to generate and write to a JSON file the mapping of authors to a unique integer identifier.
 Authors are identified through a regular expression search for their email addresses. The integer identifiers
 generated are used in other modules like the generation and statistical analysis of hyperedges.</p>
@@ -66,9 +66,14 @@ generated are used in other modules like the generation and statistical analysis
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>write_to_file</strong> – If true, results are written to author_uid_map.json (default=True)</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>input_file</strong> – Path of the JSON file containing the data under analysis (default= ‘clean_data.json’)</li>
+<li><strong>output_file</strong> – Path of the JSON file to which the generated map is written (default= “author_uid_map.json”)</li>
+</ul>
+</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A list of all message ids that are leaf nodes</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A list of all message ids that are leaf nodes</p>
+</td>
 </tr>
 </tbody>
 </table>
