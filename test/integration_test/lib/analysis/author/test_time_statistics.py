@@ -22,6 +22,3 @@ def test_conversation_refresh_times():
 
     assert conversation_refresh_times(headers_filename, graph_nodes, graph_edges, foldername) == None
     assert load_from_disk(foldername+'/conversation_refresh_times.csv') == load_from_disk(req_data)
-
-    # assert conversation_refresh_times(headers_filename, graph_nodes, graph_edges, foldername, plot=True) == None
-
