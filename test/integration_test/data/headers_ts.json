@@ -1,0 +1,90 @@
+{
+ "From": "Ildar Akhmetshin <aiaredir@yahoo.com>",
+ "References": "0",
+ "Time": "Wed, 01 Aug 2007 05:23:20 +0000",
+ "Cc": null,
+ "To": "opensuse-kernel@opensuse.org",
+ "In-Reply-To": null,
+ "Message-ID": 1
+}
+{
+ "From": "Jeff Mahoney <jeffm@suse.com>",
+ "References": "1",
+ "Time": "Wed, 01 Aug 2007 06:16:53 +0000",
+ "Cc": "opensuse-kernel@opensuse.org",
+ "To": "Ildar Akhmetshin <aiaredir@yahoo.com>",
+ "In-Reply-To": 1,
+ "Message-ID": 2
+}
+{
+ "From": "\"Joachim Deguara\" <joachim.deguara@amd.com>",
+ "References": "0",
+ "Time": "Wed, 01 Aug 2007 07:22:18 +0000",
+ "Cc": "\"Jeff Mahoney\" <jeffm@suse.com>,\n\t\"Ildar Akhmetshin\" <aiaredir@yahoo.com>",
+ "To": "opensuse-kernel@opensuse.org",
+ "In-Reply-To": 2,
+ "Message-ID": 3
+}
+{
+ "From": "Greg KH <gregkh@suse.de>",
+ "References": "0",
+ "Time": "Wed, 01 Aug 2007 16:37:49 +0000",
+ "Cc": "opensuse-kernel@opensuse.org, Jeff Mahoney <jeffm@suse.com>,\n\tIldar Akhmetshin <aiaredir@yahoo.com>",
+ "To": "Joachim Deguara <joachim.deguara@amd.com>",
+ "In-Reply-To": 3,
+ "Message-ID": 4
+}
+{
+ "From": "Jeff Mahoney <jeffm@suse.com>",
+ "References": "0",
+ "Time": "Wed, 01 Aug 2007 16:45:24 +0000",
+ "Cc": "Joachim Deguara <joachim.deguara@amd.com>,\n\topensuse-kernel@opensuse.org, Ildar Akhmetshin <aiaredir@yahoo.com>,\n\tJan Blunck <jblunck@suse.de>",
+ "To": "Greg KH <gregkh@suse.de>",
+ "In-Reply-To": 4,
+ "Message-ID": 5
+}
+{
+ "From": "\"Joachim Deguara\" <joachim.deguara@amd.com>",
+ "References": "0",
+ "Time": "Wed, 01 Aug 2007 17:50:44 +0000",
+ "Cc": "\"Jeff Mahoney\" <jeffm@suse.com>, \"Greg KH\" <gregkh@suse.de>,\n\t\"Ildar Akhmetshin\" <aiaredir@yahoo.com>,\n\t\"Jan Blunck\" <jblunck@suse.de>",
+ "To": "opensuse-kernel@opensuse.org",
+ "In-Reply-To": 5,
+ "Message-ID": 6
+}
+{
+ "From": "Andreas Jaeger <aj@suse.de>",
+ "References": "0",
+ "Time": "Wed, 01 Aug 2007 17:56:49 +0000",
+ "Cc": "opensuse-kernel@opensuse.org, \"Jeff Mahoney\" <jeffm@suse.com>,\n\t\"Greg KH\" <gregkh@suse.de>, \"Ildar Akhmetshin\" <aiaredir@yahoo.com>,\n\t\"Jan Blunck\" <jblunck@suse.de>",
+ "To": "\"Joachim Deguara\" <joachim.deguara@amd.com>",
+ "In-Reply-To": 0,
+ "Message-ID": 7
+}
+{
+ "From": "Andreas Jaeger <aj@suse.de>",
+ "References": "0",
+ "Time": "Wed, 01 Aug 2007 17:57:12 +0000",
+ "Cc": null,
+ "To": "opensuse-kernel@opensuse.org",
+ "In-Reply-To": null,
+ "Message-ID": 8
+}
+{
+ "From": "Andreas Jaeger <aj@suse.de>",
+ "References": "0",
+ "Time": "Wed, 01 Aug 2007 18:34:43 +0000",
+ "Cc": null,
+ "To": "opensuse-kernel@opensuse.org",
+ "In-Reply-To": 0,
+ "Message-ID": 9
+}
+{
+ "From": "Oliver Neukum <oneukum@suse.de>",
+ "References": "8",
+ "Time": "Wed, 01 Aug 2007 18:36:20 +0000",
+ "Cc": "Andreas Jaeger <aj@suse.de>",
+ "To": "opensuse-kernel@opensuse.org",
+ "In-Reply-To": 8,
+ "Message-ID": 10
+}

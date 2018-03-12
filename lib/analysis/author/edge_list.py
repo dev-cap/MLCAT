@@ -7,22 +7,20 @@ import json
 from lib.util.read import *
 
 
-def generate_edge_list(author_nodelist_filename, author_edgelist_filename, nodelist_filename='graph_nodes.csv',
-					   edgelist_filename='graph_edges.csv', threads_json_filename='clean_data.json', author_json_filename='author_uid_map.json'):
-	"""
-	
+def generate_edge_list(author_nodelist_filename, author_edgelist_filename, nodelist_filename,
+					   edgelist_filename, threads_json_filename, author_json_filename, ignore_lat=True):
+	"""	
 	:param author_nodelist_filename: The csv file containing the author nodes data.
 	:param author_edgelist_filename: The csv file containing the author edges data.
 	:param nodelist_filename: The csv file containing the nodes.
 	:param edgelist_filename: The csv file containing the edges.
 	:param threads_json_filename: The JSON file containing the cleaned headers.
 	:param author_json_filename: The JSON file containing the author UID map.
+	:param ignore_lat: If true, then messages that belong to threads that have only a single author are ignored.
 	"""
 	# Time limit can be specified here in the form of a timestamp in one of the identifiable formats and all messages
 	# that have arrived after this timestamp will be ignored.
-	# If true, then messages that belong to threads that have only a single author are ignored.
 	time_limit = None
-	ignore_lat = True
 	author_graph = nx.DiGraph()
 	with open(author_json_filename, 'r') as author_uid_file:
 		author_uid_map = json.load(author_uid_file)

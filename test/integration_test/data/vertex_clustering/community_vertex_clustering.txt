@@ -1,0 +1,7 @@
+Clustering with 15 elements and 4 clusters
+[0] opensuse-kernel@opensuse.org, mikky_m@mail.ru, gregkh@suse.de,
+    doiggl@velocitynet.com.au, leyendecker@opensuse.org
+[1] matwey.kornilov@gmail.com, guillaume.gardet@free.fr, jeffm@suse.com,
+    afaerber@suse.de, guillaume.gardet@opensuse.org
+[2] mkubecek@suse.cz, tchvatal@suse.cz, mmarek@suse.cz
+[3] jdelvare@suse.de, tiwai@suse.de
