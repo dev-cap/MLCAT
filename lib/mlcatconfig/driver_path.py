@@ -9,12 +9,16 @@ class Config(configparser.ConfigParser):
         if os.path.exists(self.cfgfile):
             self.read(self.cfgfile)
        	     
-        self.foldername=self.get('param_paths','foldername')+mailbox
-        self.mbox_filename = self.get('param_paths','foldername') + mailbox + '/mbox/' + mailbox + '.mbox'
-        self.clean_headers_filename = self.get('param_paths','foldername') + mailbox + self.get('param_paths','clean_headers_path')
-        self.headers_filename = self.get('param_paths','foldername') + mailbox +self.get('param_paths','headers_path')
-        self.nodelist_filename = self.get('param_paths','foldername') + mailbox  +self.get('param_paths','nodelist_path')
-        self.edgelist_filename = self.get('param_paths','foldername') + mailbox +self.get('param_paths','edgelist_path')
-        self.thread_uid_filename =self.get('param_paths','foldername')+ mailbox +self.get('param_paths','thread_uid_path')
-        self.author_uid_filename = self.get('param_paths','foldername')+ mailbox +self.get('param_paths','author_uid_path') 
+        self.mailbox=mailbox
+        
+        
+    def createVariables(self):
+        self.foldername=self.get('param_paths','foldername')+self.mailbox
+        self.mbox_filename = self.get('param_paths','foldername') + self.mailbox + '/mbox/' + self.mailbox + '.mbox'
+        self.clean_headers_filename = self.get('param_paths','foldername') +self.mailbox + self.get('param_paths','clean_headers_path')
+        self.headers_filename = self.get('param_paths','foldername') + self.mailbox +self.get('param_paths','headers_path')
+        self.nodelist_filename = self.get('param_paths','foldername') + self.mailbox  +self.get('param_paths','nodelist_path')
+        self.edgelist_filename = self.get('param_paths','foldername') + self.mailbox +self.get('param_paths','edgelist_path')
+        self.thread_uid_filename =self.get('param_paths','foldername')+ self.mailbox +self.get('param_paths','thread_uid_path')
+        self.author_uid_filename = self.get('param_paths','foldername')+ self.mailbox +self.get('param_paths','author_uid_path') 
 
