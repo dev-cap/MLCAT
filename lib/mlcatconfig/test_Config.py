@@ -1,11 +1,15 @@
 import pytest
 import configparser
 import os
+from lib.mlcatconfig.driver_path import *
 
 def test_config_class():
+    
+    path=os.path.abspath("mlcat.cfg")
     t_config=Config('t_mailbox')
-    t_config.createVariables()
-
+    t_config.read(path)
+    t_config.createVariables();
+    
     assert t_config.foldername =='./data/t_mailbox'
     assert t_config.mbox_filename=='./data/t_mailbox/mbox/t_mailbox.mbox'
     assert t_config.clean_headers_path=='./data/t_mailbox/json/clean_data.json'
