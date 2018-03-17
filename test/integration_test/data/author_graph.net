@@ -10,9 +10,9 @@
 9 "tchvatal@suse.cz" 
 10 "mmarek@suse.cz" 
 11 "matwey.kornilov@gmail.com" 
-12 "guillaume.gardet@free.fr" 
-13 "afaerber@suse.de" 
-14 "jeffm@suse.com" 
+12 "jeffm@suse.com" 
+13 "guillaume.gardet@free.fr" 
+14 "afaerber@suse.de" 
 15 "guillaume.gardet@opensuse.org" 
 *arcs
 1 2 1.0
@@ -27,9 +27,9 @@
 8 10 1.0
 11 11 1.0
 11 12 1.0
-11 2 1.0
 11 13 1.0
+11 2 1.0
 11 14 1.0
-12 15 1.0
-12 2 1.0
-12 12 1.0
+13 15 1.0
+13 13 1.0
+13 2 1.0

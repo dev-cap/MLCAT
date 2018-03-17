@@ -83,3 +83,6 @@ celerybeat-schedule
 
 # Installation-specific directories
 Infomap
+
+# Temporary output files of tests
+.tmp/

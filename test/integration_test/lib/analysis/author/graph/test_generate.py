@@ -7,7 +7,7 @@ def test_author_interaction():
     clean_data = './test/integration_test/data/clean_data.json'
     graph_nodes = './test/integration_test/data/graph_nodes.csv'
     graph_edges = './test/integration_test/data/graph_edges.csv'
-    pajek_file = './test/integration_test/data/author_graph.net'
+    pajek_file = './.tmp/integration_test/lib/analysis/author/graph/generate/author_graph.net'
     req_output1 = './test/integration_test/data/req_data/test_generate1.net'
     req_output2 = './test/integration_test/data/req_data/test_generate2.net'
 
