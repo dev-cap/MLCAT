@@ -1,3 +1,4 @@
+import os
 from lib.analysis.author.curve_fitting import generate_crt_curve_fits
 from lib.analysis.author import ranking
 from lib.analysis.author.time_statistics import conversation_refresh_times
@@ -6,10 +7,7 @@ from lib.analysis.thread.hypergraph import generate_hyperedge_distribution
 from lib.input.mbox.keyword_clustering import generate_kmeans_clustering
 from lib.input.mbox.keyword_digest import generate_keyword_digest
 from lib.analysis.author.community import vertex_clustering
-from driver_path import driver_path_class
-import configparser
-config = configparser.ConfigParser()
-config.read('config.ini')
+from lib.mlcatconfig.driver_path import Config
 
 
 # mailbox_list = ['lkml', 'opensuse-kernel', 'opensuse-features', 'opensuse', 'opensuse-bugs', 'opensuse-factory', 'sakai-devel']
@@ -17,7 +15,10 @@ mailbox_list = ['opensuse-kernel']
 
 for mailbox in mailbox_list:
     # Define directories
-    path_ob=driver_path_class(mailbox)
+    path=os.path.abspath("lib/mlcatconfig/mlcat.cfg")
+    path_ob= Config(mailbox)
+    path_ob.read(path)
+    path_ob.createVariables();
 
 
     print("Processing Mailbox:", mailbox)
