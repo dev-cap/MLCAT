@@ -10,6 +10,7 @@ class TestUnionFind(object):
 			ob=UnionFind(-1)
 			
 		ob=UnionFind(5)
+		ob.make_set(5)
 		with pytest.raises(TypeError):
 			ob.make_set('a')
 		with pytest.raises(ValueError):
