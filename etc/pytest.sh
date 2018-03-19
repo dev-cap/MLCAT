@@ -2,6 +2,8 @@
 
 export PYTHONPATH=.
 
+set -ex
+
 # Making directories for output files
 mkdir -p .tmp/integration_test/lib/util/author/
 mkdir -p .tmp/integration_test/lib/util/graph/
