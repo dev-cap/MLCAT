@@ -9,7 +9,7 @@ def test_lines_per_n():
 	for j in l:
 		jf = json.loads(j)
 		assert str(jf['Message-ID']) == str(i)
-		if(i!=2)
+		if(i<>2)
 			i = i+1
 		else 
 			i=9	
