@@ -9,10 +9,10 @@ def test_lines_per_n():
 	for j in l:
 		jf = json.loads(j)
 		assert str(jf['Message-ID']) == str(i)
-		if(i<>2)
-			i = i+1
+		if(i==2)
+			i = 9
 		else 
-			i=9	
+			i = i+1	
 		
 
 def test_get_utc_time():
