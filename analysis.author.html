@@ -242,7 +242,7 @@ the entire mailing list.</p>
 <span id="analysis-author-time-statistics-module"></span><h2>analysis.author.time_statistics module<a class="headerlink" href="#module-analysis.author.time_statistics" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="analysis.author.time_statistics.conversation_refresh_times">
-<code class="descclassname">analysis.author.time_statistics.</code><code class="descname">conversation_refresh_times</code><span class="sig-paren">(</span><em>headers_filename</em>, <em>nodelist_filename</em>, <em>edgelist_filename</em>, <em>foldername</em>, <em>time_ubound=None</em>, <em>time_lbound=None</em>, <em>plot=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/author/time_statistics.html#conversation_refresh_times"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analysis.author.time_statistics.conversation_refresh_times" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">analysis.author.time_statistics.</code><code class="descname">conversation_refresh_times</code><span class="sig-paren">(</span><em>headers_filename</em>, <em>nodelist_filename</em>, <em>edgelist_filename</em>, <em>foldername</em>, <em>time_ubound=None</em>, <em>time_lbound=None</em>, <em>plot=False</em>, <em>ignore_lat=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/author/time_statistics.html#conversation_refresh_times"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analysis.author.time_statistics.conversation_refresh_times" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -257,6 +257,7 @@ and all messages that have arrived after this timestamp will be ignored.</li>
 <li><strong>time_lbound</strong> – Time limit lower bound can be specified here in the form of a timestamp in one of the identifiable formats
 and all messages that have arrived before this timestamp will be ignored.</li>
 <li><strong>plot</strong> – Plot thread based time statistics if True.</li>
+<li><strong>ignore_lat</strong> – If ignore_lat is true, then messages that belong to threads that have only a single author are ignored.</li>
 </ul>
 </td>
 </tr>

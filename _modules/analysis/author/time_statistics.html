@@ -62,9 +62,8 @@
     <span class="k">return</span> <span class="n">a</span><span class="o">/</span><span class="n">x</span> <span class="o">+</span> <span class="n">b</span><span class="o">/</span><span class="p">(</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">c</span></div>
 
 
-<div class="viewcode-block" id="conversation_refresh_times"><a class="viewcode-back" href="../../../analysis.author.html#analysis.author.time_statistics.conversation_refresh_times">[docs]</a><span class="k">def</span> <span class="nf">conversation_refresh_times</span><span class="p">(</span><span class="n">headers_filename</span><span class="p">,</span> <span class="n">nodelist_filename</span><span class="p">,</span> <span class="n">edgelist_filename</span><span class="p">,</span> <span class="n">foldername</span><span class="p">,</span> <span class="n">time_ubound</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">time_lbound</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">plot</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    </span>
+<div class="viewcode-block" id="conversation_refresh_times"><a class="viewcode-back" href="../../../analysis.author.html#analysis.author.time_statistics.conversation_refresh_times">[docs]</a><span class="k">def</span> <span class="nf">conversation_refresh_times</span><span class="p">(</span><span class="n">headers_filename</span><span class="p">,</span> <span class="n">nodelist_filename</span><span class="p">,</span> <span class="n">edgelist_filename</span><span class="p">,</span> <span class="n">foldername</span><span class="p">,</span> <span class="n">time_ubound</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">time_lbound</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">plot</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">ignore_lat</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;   </span>
 
 <span class="sd">    :param headers_filename: The JSON file containing the headers.</span>
 <span class="sd">    :param nodelist_filename: The csv file containing the nodes.</span>
@@ -75,13 +74,14 @@
 <span class="sd">    :param time_lbound: Time limit lower bound can be specified here in the form of a timestamp in one of the identifiable formats</span>
 <span class="sd">            and all messages that have arrived before this timestamp will be ignored.</span>
 <span class="sd">    :param plot: Plot thread based time statistics if True.</span>
+<span class="sd">    :param ignore_lat: If ignore_lat is true, then messages that belong to threads that have only a single author are ignored.</span>
 <span class="sd">    :return: None if successfully plotted, else &#39;No messages!&#39;.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Time limit can be specified here in the form of a timestamp in one of the identifiable formats. All messages</span>
     <span class="c1"># that have arrived after time_ubound and before time_lbound will be ignored.</span>
 
     <span class="c1"># If ignore_lat is true, then messages that belong to threads that have only a single author are ignored.</span>
-    <span class="n">ignore_lat</span> <span class="o">=</span> <span class="kc">False</span>
+    
 
     <span class="n">discussion_graph</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">()</span>
     <span class="n">email_re</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;[\w\.-]+@[\w\.-]+&#39;</span><span class="p">)</span>
@@ -128,7 +128,7 @@
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Edges added.&quot;</span><span class="p">)</span>
 
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">lone_author_threads</span> <span class="o">=</span> <span class="n">get_lone_author_threads</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">lone_author_threads</span> <span class="o">=</span> <span class="n">get_lone_author_threads</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="n">nodelist_filename</span><span class="o">=</span><span class="n">nodelist_filename</span><span class="p">,</span> <span class="n">edgelist_filename</span><span class="o">=</span><span class="n">edgelist_filename</span><span class="p">)</span>
         <span class="c1"># Add nodes into NetworkX graph only if they are not a part of a thread that has only a single author</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">nodelist_filename</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">node_file</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">pair</span> <span class="ow">in</span> <span class="n">node_file</span><span class="p">:</span>
@@ -173,7 +173,7 @@
                     <span class="c1"># print(&quot;\nFrom&quot;, json_obj[&#39;From&#39;], &quot;\nTo&quot;, json_obj[&#39;To&#39;], &quot;\nCc&quot;, json_obj[&#39;Cc&#39;])</span>
                     <span class="n">json_data</span><span class="p">[</span><span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;Message-ID&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">json_obj</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">lone_author_threads</span> <span class="o">=</span> <span class="n">get_lone_author_threads</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">lone_author_threads</span> <span class="o">=</span> <span class="n">get_lone_author_threads</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="n">nodelist_filename</span><span class="o">=</span><span class="n">nodelist_filename</span><span class="p">,</span> <span class="n">edgelist_filename</span><span class="o">=</span><span class="n">edgelist_filename</span><span class="p">)</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">headers_filename</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">json_file</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">lines_per_n</span><span class="p">(</span><span class="n">json_file</span><span class="p">,</span> <span class="mi">9</span><span class="p">):</span>
                 <span class="n">json_obj</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
@@ -258,10 +258,6 @@
 
     <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span> <span class="s2">&quot;No messages!&quot;</span></div>
-
-
-
-
 </pre></div>
 
           </div>
