@@ -55,24 +55,22 @@
 <span class="kn">from</span> <span class="nn">lib.util.read</span> <span class="k">import</span> <span class="o">*</span>
 
 
-<div class="viewcode-block" id="generate_edge_list"><a class="viewcode-back" href="../../../analysis.author.html#analysis.author.edge_list.generate_edge_list">[docs]</a><span class="k">def</span> <span class="nf">generate_edge_list</span><span class="p">(</span><span class="n">author_nodelist_filename</span><span class="p">,</span> <span class="n">author_edgelist_filename</span><span class="p">,</span> <span class="n">nodelist_filename</span><span class="o">=</span><span class="s1">&#39;graph_nodes.csv&#39;</span><span class="p">,</span>
-					   <span class="n">edgelist_filename</span><span class="o">=</span><span class="s1">&#39;graph_edges.csv&#39;</span><span class="p">,</span> <span class="n">threads_json_filename</span><span class="o">=</span><span class="s1">&#39;clean_data.json&#39;</span><span class="p">,</span> <span class="n">author_json_filename</span><span class="o">=</span><span class="s1">&#39;author_uid_map.json&#39;</span><span class="p">):</span>
-	<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">	</span>
-<span class="sd">	:param author_nodelist_filename: The csv file containing the author nodes data.</span>
-<span class="sd">	:param author_edgelist_filename: The csv file containing the author edges data.</span>
-<span class="sd">	:param nodelist_filename: The csv file containing the nodes.</span>
-<span class="sd">	:param edgelist_filename: The csv file containing the edges.</span>
-<span class="sd">	:param threads_json_filename: The JSON file containing the cleaned headers.</span>
-<span class="sd">	:param author_json_filename: The JSON file containing the author UID map.</span>
+<div class="viewcode-block" id="generate_edge_list"><a class="viewcode-back" href="../../../analysis.author.html#analysis.author.edge_list.generate_edge_list">[docs]</a><span class="k">def</span> <span class="nf">generate_edge_list</span><span class="p">(</span><span class="n">author_nodes</span><span class="p">,</span> <span class="n">author_edges</span><span class="p">,</span> <span class="n">graph_nodes</span><span class="p">,</span>
+					   <span class="n">graph_edges</span><span class="p">,</span> <span class="n">threads_json</span><span class="p">,</span> <span class="n">author_json</span><span class="p">,</span> <span class="n">ignore_lat</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;	</span>
+<span class="sd">	:param author_nodes: The csv file containing the author nodes data.</span>
+<span class="sd">	:param author_edges: The csv file containing the author edges data.</span>
+<span class="sd">	:param graph_nodes: The csv file containing the nodes (Lone author threads).</span>
+<span class="sd">	:param graph_edges: The csv file containing the edges (Lone author threads).</span>
+<span class="sd">	:param threads_json: The JSON file containing the cleaned headers.</span>
+<span class="sd">	:param author_json: The JSON file containing the author UID map.</span>
+<span class="sd">	:param ignore_lat: If true, then messages that belong to threads that have only a single author are ignored.</span>
 <span class="sd">	&quot;&quot;&quot;</span>
 	<span class="c1"># Time limit can be specified here in the form of a timestamp in one of the identifiable formats and all messages</span>
 	<span class="c1"># that have arrived after this timestamp will be ignored.</span>
-	<span class="c1"># If true, then messages that belong to threads that have only a single author are ignored.</span>
 	<span class="n">time_limit</span> <span class="o">=</span> <span class="kc">None</span>
-	<span class="n">ignore_lat</span> <span class="o">=</span> <span class="kc">True</span>
 	<span class="n">author_graph</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">()</span>
-	<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">author_json_filename</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">author_uid_file</span><span class="p">:</span>
+	<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">author_json</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">author_uid_file</span><span class="p">:</span>
 		<span class="n">author_uid_map</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">author_uid_file</span><span class="p">)</span>
 	<span class="n">email_re</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;[\w\.-]+@[\w\.-]+&#39;</span><span class="p">)</span>
 	<span class="n">json_data</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
@@ -83,7 +81,7 @@
 	<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;All messages before&quot;</span><span class="p">,</span> <span class="n">time_limit</span><span class="p">,</span> <span class="s2">&quot;are being considered.&quot;</span><span class="p">)</span>
 
 	<span class="k">if</span> <span class="ow">not</span> <span class="n">ignore_lat</span><span class="p">:</span>
-		<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">threads_json_filename</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">json_file</span><span class="p">:</span>
+		<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">threads_json</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">json_file</span><span class="p">:</span>
 			<span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">lines_per_n</span><span class="p">(</span><span class="n">json_file</span><span class="p">,</span> <span class="mi">9</span><span class="p">):</span>
 				<span class="n">json_obj</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
 				<span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;Message-ID&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;Message-ID&#39;</span><span class="p">])</span>
@@ -98,8 +96,8 @@
 					<span class="n">json_data</span><span class="p">[</span><span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;Message-ID&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">json_obj</span>
 		<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;JSON data loaded.&quot;</span><span class="p">)</span>
 	<span class="k">else</span><span class="p">:</span>
-		<span class="n">lone_author_threads</span> <span class="o">=</span> <span class="n">get_lone_author_threads</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">nodelist_filename</span><span class="p">,</span> <span class="n">edgelist_filename</span><span class="p">)</span>
-		<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">threads_json_filename</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">json_file</span><span class="p">:</span>
+		<span class="n">lone_author_threads</span> <span class="o">=</span> <span class="n">get_lone_author_threads</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">graph_nodes</span><span class="p">,</span> <span class="n">graph_edges</span><span class="p">)</span>
+		<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">threads_json</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">json_file</span><span class="p">:</span>
 			<span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">lines_per_n</span><span class="p">(</span><span class="n">json_file</span><span class="p">,</span> <span class="mi">9</span><span class="p">):</span>
 				<span class="n">json_obj</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
 				<span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;Message-ID&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;Message-ID&#39;</span><span class="p">])</span>
@@ -123,9 +121,9 @@
 		<span class="k">for</span> <span class="n">to_address</span> <span class="ow">in</span> <span class="n">addr_list</span><span class="p">:</span>
 			<span class="n">author_graph</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">author_uid_map</span><span class="p">[</span><span class="n">message</span><span class="p">[</span><span class="s1">&#39;From&#39;</span><span class="p">]],</span> <span class="n">author_uid_map</span><span class="p">[</span><span class="n">to_address</span><span class="p">])</span>
 
-	<span class="n">nx</span><span class="o">.</span><span class="n">write_edgelist</span><span class="p">(</span><span class="n">author_graph</span><span class="p">,</span> <span class="n">author_edgelist_filename</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">)</span>
+	<span class="n">nx</span><span class="o">.</span><span class="n">write_edgelist</span><span class="p">(</span><span class="n">author_graph</span><span class="p">,</span> <span class="n">author_edges</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">)</span>
 
-	<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">author_nodelist_filename</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">nodelist_file</span><span class="p">:</span>
+	<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">author_nodes</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">nodelist_file</span><span class="p">:</span>
 		<span class="k">for</span> <span class="n">author_address</span><span class="p">,</span> <span class="n">author_uid</span> <span class="ow">in</span> <span class="n">author_uid_map</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
 			<span class="n">nodelist_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">author_uid</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">author_address</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span></div>
 

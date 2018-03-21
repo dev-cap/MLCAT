@@ -192,18 +192,19 @@ one author to another if the former sent a message to the latter either in To or
 the entire mailing list.</p>
 <dl class="function">
 <dt id="analysis.author.edge_list.generate_edge_list">
-<code class="descclassname">analysis.author.edge_list.</code><code class="descname">generate_edge_list</code><span class="sig-paren">(</span><em>author_nodelist_filename</em>, <em>author_edgelist_filename</em>, <em>nodelist_filename='graph_nodes.csv'</em>, <em>edgelist_filename='graph_edges.csv'</em>, <em>threads_json_filename='clean_data.json'</em>, <em>author_json_filename='author_uid_map.json'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/author/edge_list.html#generate_edge_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analysis.author.edge_list.generate_edge_list" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">analysis.author.edge_list.</code><code class="descname">generate_edge_list</code><span class="sig-paren">(</span><em>author_nodes</em>, <em>author_edges</em>, <em>graph_nodes</em>, <em>graph_edges</em>, <em>threads_json</em>, <em>author_json</em>, <em>ignore_lat=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/author/edge_list.html#generate_edge_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analysis.author.edge_list.generate_edge_list" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>author_nodelist_filename</strong> – The csv file containing the author nodes data.</li>
-<li><strong>author_edgelist_filename</strong> – The csv file containing the author edges data.</li>
-<li><strong>nodelist_filename</strong> – The csv file containing the nodes.</li>
-<li><strong>edgelist_filename</strong> – The csv file containing the edges.</li>
-<li><strong>threads_json_filename</strong> – The JSON file containing the cleaned headers.</li>
-<li><strong>author_json_filename</strong> – The JSON file containing the author UID map.</li>
+<li><strong>author_nodes</strong> – The csv file containing the author nodes data.</li>
+<li><strong>author_edges</strong> – The csv file containing the author edges data.</li>
+<li><strong>graph_nodes</strong> – The csv file containing the nodes (Lone author threads).</li>
+<li><strong>graph_edges</strong> – The csv file containing the edges (Lone author threads).</li>
+<li><strong>threads_json</strong> – The JSON file containing the cleaned headers.</li>
+<li><strong>author_json</strong> – The JSON file containing the author UID map.</li>
+<li><strong>ignore_lat</strong> – If true, then messages that belong to threads that have only a single author are ignored.</li>
 </ul>
 </td>
 </tr>
