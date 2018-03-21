@@ -7,24 +7,22 @@ import json
 from lib.util.read import *
 
 
-def generate_edge_list(author_nodelist_filename, author_edgelist_filename, nodelist_filename='graph_nodes.csv',
-					   edgelist_filename='graph_edges.csv', threads_json_filename='clean_data.json', author_json_filename='author_uid_map.json'):
-	"""
-	
-	:param author_nodelist_filename: The csv file containing the author nodes data.
-	:param author_edgelist_filename: The csv file containing the author edges data.
-	:param nodelist_filename: The csv file containing the nodes.
-	:param edgelist_filename: The csv file containing the edges.
-	:param threads_json_filename: The JSON file containing the cleaned headers.
-	:param author_json_filename: The JSON file containing the author UID map.
+def generate_edge_list(author_nodes, author_edges, graph_nodes,
+					   graph_edges, threads_json, author_json, ignore_lat=True):
+	"""	
+	:param author_nodes: The csv file containing the author nodes data.
+	:param author_edges: The csv file containing the author edges data.
+	:param graph_nodes: The csv file containing the nodes (Lone author threads).
+	:param graph_edges: The csv file containing the edges (Lone author threads).
+	:param threads_json: The JSON file containing the cleaned headers.
+	:param author_json: The JSON file containing the author UID map.
+	:param ignore_lat: If true, then messages that belong to threads that have only a single author are ignored.
 	"""
 	# Time limit can be specified here in the form of a timestamp in one of the identifiable formats and all messages
 	# that have arrived after this timestamp will be ignored.
-	# If true, then messages that belong to threads that have only a single author are ignored.
 	time_limit = None
-	ignore_lat = True
 	author_graph = nx.DiGraph()
-	with open(author_json_filename, 'r') as author_uid_file:
+	with open(author_json, 'r') as author_uid_file:
 		author_uid_map = json.load(author_uid_file)
 	email_re = re.compile(r'[\w\.-]+@[\w\.-]+')
 	json_data = dict()
@@ -35,7 +33,7 @@ def generate_edge_list(author_nodelist_filename, author_edgelist_filename, nodel
 	print("All messages before", time_limit, "are being considered.")
 
 	if not ignore_lat:
-		with open(threads_json_filename, 'r') as json_file:
+		with open(threads_json, 'r') as json_file:
 			for chunk in lines_per_n(json_file, 9):
 				json_obj = json.loads(chunk)
 				json_obj['Message-ID'] = int(json_obj['Message-ID'])
@@ -50,8 +48,8 @@ def generate_edge_list(author_nodelist_filename, author_edgelist_filename, nodel
 					json_data[json_obj['Message-ID']] = json_obj
 		print("JSON data loaded.")
 	else:
-		lone_author_threads = get_lone_author_threads(None, nodelist_filename, edgelist_filename)
-		with open(threads_json_filename, 'r') as json_file:
+		lone_author_threads = get_lone_author_threads(None, graph_nodes, graph_edges)
+		with open(threads_json, 'r') as json_file:
 			for chunk in lines_per_n(json_file, 9):
 				json_obj = json.loads(chunk)
 				json_obj['Message-ID'] = int(json_obj['Message-ID'])
@@ -75,9 +73,9 @@ def generate_edge_list(author_nodelist_filename, author_edgelist_filename, nodel
 		for to_address in addr_list:
 			author_graph.add_edge(author_uid_map[message['From']], author_uid_map[to_address])
 
-	nx.write_edgelist(author_graph, author_edgelist_filename, delimiter="\t")
+	nx.write_edgelist(author_graph, author_edges, delimiter="\t")
 
-	with open(author_nodelist_filename, 'w') as nodelist_file:
+	with open(author_nodes, 'w') as nodelist_file:
 		for author_address, author_uid in author_uid_map.items():
 			nodelist_file.write(str(author_uid) + "\t" + author_address + "\n")
 
