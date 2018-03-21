@@ -14,9 +14,8 @@ def inv_func(x, a, b, c):
     return a/x + b/(x**2) + c
 
 
-def conversation_refresh_times(headers_filename, nodelist_filename, edgelist_filename, foldername, time_ubound = None, time_lbound = None, plot=False):
-    """
-    
+def conversation_refresh_times(headers_filename, nodelist_filename, edgelist_filename, foldername, time_ubound = None, time_lbound = None, plot=False, ignore_lat = False):
+    """   
 
     :param headers_filename: The JSON file containing the headers.
     :param nodelist_filename: The csv file containing the nodes.
@@ -27,13 +26,14 @@ def conversation_refresh_times(headers_filename, nodelist_filename, edgelist_fil
     :param time_lbound: Time limit lower bound can be specified here in the form of a timestamp in one of the identifiable formats
             and all messages that have arrived before this timestamp will be ignored.
     :param plot: Plot thread based time statistics if True.
+    :param ignore_lat: If ignore_lat is true, then messages that belong to threads that have only a single author are ignored.
     :return: None if successfully plotted, else 'No messages!'.
     """
     # Time limit can be specified here in the form of a timestamp in one of the identifiable formats. All messages
     # that have arrived after time_ubound and before time_lbound will be ignored.
 
     # If ignore_lat is true, then messages that belong to threads that have only a single author are ignored.
-    ignore_lat = False
+    
 
     discussion_graph = nx.DiGraph()
     email_re = re.compile(r'[\w\.-]+@[\w\.-]+')
@@ -80,7 +80,7 @@ def conversation_refresh_times(headers_filename, nodelist_filename, edgelist_fil
         print("Edges added.")
 
     else:
-        lone_author_threads = get_lone_author_threads(False)
+        lone_author_threads = get_lone_author_threads(False, nodelist_filename=nodelist_filename, edgelist_filename=edgelist_filename)
         # Add nodes into NetworkX graph only if they are not a part of a thread that has only a single author
         with open(nodelist_filename, "r") as node_file:
             for pair in node_file:
@@ -125,7 +125,7 @@ def conversation_refresh_times(headers_filename, nodelist_filename, edgelist_fil
                     # print("\nFrom", json_obj['From'], "\nTo", json_obj['To'], "\nCc", json_obj['Cc'])
                     json_data[json_obj['Message-ID']] = json_obj
     else:
-        lone_author_threads = get_lone_author_threads(False)
+        lone_author_threads = get_lone_author_threads(False, nodelist_filename=nodelist_filename, edgelist_filename=edgelist_filename)
         with open(headers_filename, 'r') as json_file:
             for chunk in lines_per_n(json_file, 9):
                 json_obj = json.loads(chunk)
@@ -210,7 +210,3 @@ def conversation_refresh_times(headers_filename, nodelist_filename, edgelist_fil
 
     else:
         return "No messages!"
-
-
-
-
