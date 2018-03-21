@@ -19,6 +19,9 @@ class TestUnionFind(object):
 	def test_union(self):	
 		ob=UnionFind(5)
 		ob.union(4,2)
+		ob.union(4,3)
+		ob.union(1,2)
+		ob.union(4,4)
 		with pytest.raises(TypeError):
 			ob.union(1,'a')
 		with pytest.raises(ValueError):
