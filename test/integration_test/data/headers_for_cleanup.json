@@ -1,0 +1,54 @@
+{
+ "Message-ID": 500,
+ "From": "Marcus Meissner <meissner@suse.de>",
+ "To": "Hans-Peter Jansen <hpj@urpla.net>",
+ "Cc": "opensuse-kernel@opensuse.org",
+ "Time": "Fri, 20 Jun 2008 07:08:14 +0000",
+ "In-Reply-To": 497,
+ "References": "497"
+}
+{
+ "Message-ID": 501,
+ "From": "Marcus Meissner <meissner@suse.de>",
+ "To": "Greg KH <gregkh@suse.de>",
+ "Cc": "Pavel Machek <pavel@suse.cz>, Jeff Mahoney <jeffm@suse.com>,\n\topensuse-kernel@opensuse.org",
+ "Time": "Fri, 20 Jun 2008 13:51:46 +0000",
+ "In-Reply-To": 498,
+ "References": "0"
+}
+{
+ "Message-ID": 504,
+ "From": "\"Hans-Peter Jansen\" <hpj@urpla.net>",
+ "To": "opensuse-kernel@opensuse.org",
+ "Cc": "None",
+ "Time": "Sat, 21 Jun 2008 10:41:11 +0000",
+ "In-Reply-To": 503,
+ "References": "0"
+}
+{
+ "Message-ID": 509,
+ "From": "LDB <thesource@ldb-jab.org>",
+ "To": "Greg KH <gregkh@suse.de>",
+ "Cc": "LDB <thesource@ldb-jab.org>, opensuse-kernel@opensuse.org",
+ "Time": "Fri, 04 Jul 2008 10:59:50 +0000",
+ "In-Reply-To": 508,
+ "References": "0"
+}
+{
+ "Message-ID": 510,
+ "From": "Jean Delvare <jdelvare@suse.de>",
+ "To": "opensuse-kernel@opensuse.org",
+ "Cc": "Takashi Iwai <tiwai@suse.de>",
+ "Time": "Thu, 10 Jul 2008 14:27:51 +0000",
+ "In-Reply-To": 0,
+ "References": "511"
+}
+{
+ "Message-ID": 511,
+ "From": "Takashi Iwai <tiwai@suse.de>",
+ "To": "opensuse-kernel@opensuse.org",
+ "Cc": "None",
+ "Time": "Fri, 11 Jul 2008 02:00:38 +0000",
+ "In-Reply-To": 0,
+ "References": "0"
+}

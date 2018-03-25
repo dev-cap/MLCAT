@@ -4,6 +4,7 @@
 __pycache__/
 *.py[cod]
 *$py.class
+.pytest_cache/
 
 # C extensions
 *.so
@@ -82,3 +83,6 @@ celerybeat-schedule
 
 # Installation-specific directories
 Infomap
+
+# Temporary output files of tests
+.tmp/

@@ -55,7 +55,7 @@ def generate_wh_table_authors(nodelist_filename, edgelist_filename, output_filen
         print("Edges added.")
 
     else:
-        lone_author_threads = get_lone_author_threads()
+        lone_author_threads = get_lone_author_threads(nodelist_filename=nodelist_filename, edgelist_filename=edgelist_filename)
         # Add nodes into NetworkX graph only if they are not a part of a thread that has only a single author
         with open(nodelist_filename, "r") as node_file:
             for pair in node_file:
@@ -150,4 +150,3 @@ def generate_wh_table_authors(nodelist_filename, edgelist_filename, output_filen
             row_height += 1
             total += subtotal
         tablewriter.writerow(["Total:", total])
-   

@@ -3,14 +3,14 @@ import re
 from lib.util.read import lines_per_n
 
 
-def get_uid_map(write_to_file=True):
+def get_uid_map(input_file='clean_data.json',output_file="author_uid_map.json"):
     """
-
     This function is used to generate and write to a JSON file the mapping of authors to a unique integer identifier.
     Authors are identified through a regular expression search for their email addresses. The integer identifiers
     generated are used in other modules like the generation and statistical analysis of hyperedges.
     
-    :param write_to_file: If true, results are written to author_uid_map.json (default=True)
+    :param input_file: Path of the JSON file containing the data under analysis (default= 'clean_data.json')
+    :param output_file: Path of the JSON file to which the generated map is written (default= "author_uid_map.json")
     :return: A list of all message ids that are leaf nodes
     """
     index = 0
@@ -18,7 +18,7 @@ def get_uid_map(write_to_file=True):
     author_uid_map = dict()
     email_re = re.compile(r'[\w\.-]+@[\w\.-]+')
 
-    with open('clean_data.json', 'r') as json_file:
+    with open(input_file, 'r') as json_file:
         for chunk in lines_per_n(json_file, 9):
             json_obj = json.loads(chunk)
             from_addr = email_re.search(json_obj['From'])
@@ -32,8 +32,9 @@ def get_uid_map(write_to_file=True):
         author_uid_map[address] = index
         index += 1
 
-    with open("author_uid_map.json", 'w') as map_file:
+    with open(output_file, 'w') as map_file:
         json.dump(author_uid_map, map_file, indent=1)
         map_file.close()
-    print("UID map written to author_uid_map.json.")
+    print("UID map written to "+output_file+".")
     return author_uid_map
+

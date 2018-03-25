@@ -1,0 +1,27 @@
+{
+ "From": "Ildar Akhmetshin <aiaredir@yahoo.com>",
+ "References": "0",
+ "Time": "Wed, 01 Aug 2007 05:23:20 +0000",
+ "Cc": null,
+ "To": "opensuse-kernel@opensuse.org",
+ "In-Reply-To": null,
+ "Message-ID": 1
+}
+{
+ "From": "Jeff Mahoney <jeffm@suse.com>",
+ "References": "1",
+ "Time": "Wed, 01 Aug 2007 06:16:53 +0000",
+ "Cc": "opensuse-kernel@opensuse.org",
+ "To": "Ildar Akhmetshin <aiaredir@yahoo.com>",
+ "In-Reply-To": 1,
+ "Message-ID": 2
+}
+{
+ "From": "Andreas Jaeger <aj@suse.de>",
+ "References": "0",
+ "Time": "Wed, 01 Aug 2007 18:34:43 +0000",
+ "Cc": null,
+ "To": "opensuse-kernel@opensuse.org",
+ "In-Reply-To": 0,
+ "Message-ID": 9
+}
