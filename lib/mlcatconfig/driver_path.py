@@ -7,13 +7,14 @@ class Config(configparser.ConfigParser):
         if cfgfile==None:
             cfgfile="mlcat.cfg"
         self.cfgfile=os.path.abspath(cfgfile)
+        
         super(Config,self).__init__(allow_no_value=True)
         if os.path.exists(self.cfgfile):
             self.read(self.cfgfile)
        	     
         self.mailbox=mailbox
         
-        
+       
     def createVariables(self,section=None):
     	if section==None:
     	    section='param_paths'
@@ -26,9 +27,5 @@ class Config(configparser.ConfigParser):
     	self.thread_uid_filename =self.get(section,'foldername')+ self.mailbox +self.get(section,'thread_uid_path')
     	self.author_uid_filename = self.get(section,'foldername')+ self.mailbox +self.get(section,'author_uid_path') 
 
-
-config=Config('openuse')
-config.createVariables()
-print(config.foldername)
 
 

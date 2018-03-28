@@ -14,9 +14,9 @@ def test_config_class():
         assert False
         
     t_config=Config('t_mailbox')
-    t_config.read(path)
+    #t_config.read(path)
     t_config.createVariables();
-    
+       
     assert t_config.foldername =='./data/t_mailbox'
     assert t_config.mbox_filename=='./data/t_mailbox/mbox/t_mailbox.mbox'
     assert t_config.clean_headers_filename=='./data/t_mailbox/json/clean_data.json'
