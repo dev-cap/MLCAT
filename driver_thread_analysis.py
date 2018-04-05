@@ -4,7 +4,7 @@ from lib.analysis.author.curve_fitting import generate_cl_curve_fits, generate_r
 from lib.analysis.thread.time_statistics import generate_time_stats_threads
 from lib.analysis.thread.message_activity import generate_message_activity_heatmaps
 from lib.analysis.thread.wh_table import generate_wh_table_threads
-from lib.mlcatconfig.driver_path import Config
+from lib.mlcatconfig.config import Config
 
 
 # mailbox_list = [d for d in os.listdir('data') if os.path.isdir(os.path.join('data', d))]-fork

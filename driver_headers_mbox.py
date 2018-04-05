@@ -5,7 +5,7 @@ from lib.input.check_headers import *
 from lib.input.mbox.mbox_hdr import extract_mail_header
 from lib.input.data_cleanup import remove_invalid_references
 from lib.analysis.author.edge_list import generate_edge_list
-from lib.mlcatconfig.driver_path import Config
+from lib.mlcatconfig.config import Config
 
 
 mailbox_list = [d for d in os.listdir('data') if os.path.isdir(os.path.join('data', d))]
