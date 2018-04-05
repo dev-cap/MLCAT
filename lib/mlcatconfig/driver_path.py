@@ -5,13 +5,13 @@ import os
 class Config(configparser.ConfigParser):
     def __init__(self,mailbox,cfgfile=None):
         if cfgfile==None:
-            cfgfile="mlcat.cfg"
+            cfgfile="lib/mlcatconfig/mlcat.cfg"
         self.cfgfile=os.path.abspath(cfgfile)
+        
         
         super(Config,self).__init__(allow_no_value=True)
         if os.path.exists(self.cfgfile):
-            self.read(self.cfgfile)
-       	     
+            self.read(self.cfgfile)       	
         self.mailbox=mailbox
         
        
@@ -27,5 +27,5 @@ class Config(configparser.ConfigParser):
     	self.thread_uid_filename =self.get(section,'foldername')+ self.mailbox +self.get(section,'thread_uid_path')
     	self.author_uid_filename = self.get(section,'foldername')+ self.mailbox +self.get(section,'author_uid_path') 
 
-
+config=Config('lkml')
 

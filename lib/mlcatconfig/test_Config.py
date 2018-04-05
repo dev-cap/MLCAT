@@ -9,12 +9,12 @@ from driver_path import *
     
 def test_config_class():
     
-    path=os.path.abspath("mlcat.cfg")
+    path=os.path.abspath("lib/mlcatconfig/mlcat.cfg")
     if ' ' in path:
         assert False
         
     t_config=Config('t_mailbox')
-    #t_config.read(path)
+    t_config.read(path)
     t_config.createVariables();
        
     assert t_config.foldername =='./data/t_mailbox'
