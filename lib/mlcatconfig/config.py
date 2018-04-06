@@ -28,5 +28,5 @@ class Config(configparser.ConfigParser):
     	self.thread_uid_filename =self.get(section,'foldername')+ self.mailbox +self.get(section,'thread_uid_path')
     	self.author_uid_filename = self.get(section,'foldername')+ self.mailbox +self.get(section,'author_uid_path') 
 
-config=Config('lkml')
+
 
