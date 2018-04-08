@@ -23,6 +23,7 @@ def test_vertex_clustering(mock_igraph):
     req_clustering_file = './test/integration_test/data/req_data/test_community1'
     req_list = ['opensuse-kernel@opensuse.org', 'mikky_m@mail.ru', 'gregkh@suse.de', 'doiggl@velocitynet.com.au', 'leyendecker@opensuse.org']
 
+    vertex_clustering(json_filename, nodelist_filename, edgelist_filename, foldername, ignore_lat=True)
     vertex_clustering(json_filename, nodelist_filename, edgelist_filename, foldername)
 
     igraph.plot.assert_called()
