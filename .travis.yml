@@ -5,11 +5,14 @@ python:
 cache:
   - pip
 
+before_install:
+  - bash etc/travis_installs.sh
+
 install:
   - pip3 install -r requirements.txt
 
 before_script:
-  export PYTHONPATH=$PYTHONPATH:$(pwd)
+  - export PYTHONPATH=$PYTHONPATH:$(pwd)
 
 jobs:
   include:
