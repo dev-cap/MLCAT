@@ -1,0 +1,45 @@
+{
+ "From": "Ildar Akhmetshin <aiaredir@yahoo.com>",
+ "References": "0",
+ "Time": "Wed, 01 Aug 2007 05:23:20 +0000",
+ "Cc": null,
+ "To": "opensuse-kernel@opensuse.org",
+ "In-Reply-To": null,
+ "Message-ID": 1
+}
+{
+ "From": "Jeff Mahoney <jeffm@suse.com>",
+ "References": "1",
+ "Time": "Wed, 01 Aug 2007 06:16:53 +0000",
+ "Cc": "opensuse-kernel@opensuse.org",
+ "To": "Ildar Akhmetshin <aiaredir@yahoo.com>",
+ "In-Reply-To": 1,
+ "Message-ID": 2
+}
+{
+ "From": "Jeff Mahoney <jeffm@suse.com>",
+ "References": "1",
+ "Time": "Wed, 01 Aug 2007 06:16:53 +0000",
+ "Cc": "opensuse-kernel@opensuse.org",
+ "To": "Ildar Akhmetshin <aiaredir@yahoo.com>",
+ "In-Reply-To": 1,
+ "Message-ID": 2
+}
+{
+ "From": "\"Joachim Deguara\" <joachim.deguara@amd.com>",
+ "References": "0",
+ "Time": "Wed, 01 Aug 2007 07:22:18 +0000",
+ "Cc": "\"Jeff Mahoney\" <jeffm@suse.com>,\n\t\"Ildar Akhmetshin\" <aiaredir@yahoo.com>",
+ "To": "lkml.subscriber@gmail.com",
+ "In-Reply-To": 2,
+ "Message-ID": 3
+}
+{
+ "From": "Jeff Mahoney <jeffm@suse.com>",
+ "References": "0",
+ "Timez": "Wed, 01 Aug 2007 16:45:24 +0000",
+ "Cc": "Joachim Deguara <joachim.deguara@amd.com>,\n\topensuse-kernel@opensuse.org, Ildar Akhmetshin <aiaredir@yahoo.com>,\n\tJan Blunck <jblunck@suse.de>",
+ "To": "Greg KH <gregkh@suse.de>",
+ "In-Reply-To": 4,
+ "Message-ID": 5
+} 
