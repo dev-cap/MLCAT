@@ -8,16 +8,16 @@ headers_file='./test/integration_test/data/headers_for_check.json'
 def test_get_unavailable_uid(mock_function):
 
 	mock_function.return_value.uid.return_value=(1,['5'])
-	print(get_unavailable_uid())
+	assert get_unavailable_uid()==set()
 	
 def test_check_validity():
 
-	print(check_validity(False, headers_file)==5)
+	assert check_validity(False, headers_file)==5
 	
 def test_remove_unwanted_headers():
 
 	check_validity(False,headers_file)
-	remove_unwanted_headers()
+	remove_unwanted_headers(unwanted_uid,headers_file)
 	with open(headers_file, 'r') as json_file:
 		for chunk in lines_per_n(json_file, 9):
 			json_obj = json.loads(chunk)
@@ -26,7 +26,7 @@ def test_remove_unwanted_headers():
 def test_remove_duplicate_headers():
 
 	check_validity(False, headers_file)
-	remove_duplicate_headers()	
+	remove_duplicate_headers(duplicate_uid,headers_file)	
 	count_uid=0
 	with open(headers_file, 'r') as json_file:
 		for chunk in lines_per_n(json_file, 9):
@@ -51,7 +51,7 @@ def test_add_missing_headers(mock_function):
 def test_replace_invalid_headers(mock_function):
 	mock_function.return_value.uid.return_value=(1,['5'])
 	check_validity(False, headers_file)
-	replace_invalid_headers()
+	replace_invalid_headers(invalid_uid,headers_file)
 	if(invalid_uid):
 		mock_function.assert_any_call()
 
