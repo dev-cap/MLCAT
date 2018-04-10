@@ -33,7 +33,7 @@ def add_to_multigraph(graph_obj, discussion_graph, json_data, nbunch, label_pref
         i += 1
 
 
-def author_interaction_multigraph(discussion_graph, json_data, limit=10):
+def author_interaction_multigraph(discussion_graph, json_data, output_dir, limit=10):
     """
     Generate graphs in PNG format to show author interaction through multiple edges.
 
@@ -47,8 +47,8 @@ def author_interaction_multigraph(discussion_graph, json_data, limit=10):
         origin = min(int(x) for x in conn_subgraph.nodes())
         add_to_multigraph(interaction_graph, discussion_graph, json_data, [origin])
         # print(json_data[origin])
-        g1 = nx.to_agraph(interaction_graph)
-        g1.draw("author_multi/"+str(origin)+'.png', prog='circo')
+        g1 = nx.nx_agraph.to_agraph(interaction_graph)
+        g1.draw(output_dir + str(origin)+'.png', prog='circo')
         niter += 1
         if limit == niter and limit > 0:
             break
@@ -86,7 +86,7 @@ def add_to_weighted_graph(graph_obj, discussion_graph, json_data, nbunch, node_e
             add_to_weighted_graph(graph_obj, discussion_graph, json_data, succ_nbunch, node_enum)
 
 
-def author_interaction_weighted_graph(discussion_graph, json_data, limit=10):
+def author_interaction_weighted_graph(discussion_graph, json_data, output_dir, limit=10):
     """
     Generate graphs in PNG format to show author interaction through weighted edges.
 
@@ -100,14 +100,14 @@ def author_interaction_weighted_graph(discussion_graph, json_data, limit=10):
         origin = min(int(x) for x in conn_subgraph.nodes())
         add_to_weighted_graph(interaction_graph, discussion_graph, json_data, [origin], [])
         # print(json_data[origin])
-        g1 = nx.to_agraph(interaction_graph)
-        g1.draw("author_weighted/"+str(origin)+'.png', prog='circo')
+        g1 = nx.nx_agraph.to_agraph(interaction_graph)
+        g1.draw(output_dir + str(origin)+'.png', prog='circo')
         niter += 1
         if limit == niter and limit > 0:
             break
 
 
-def weighted_multigraph():
+def weighted_multigraph(graph_nodes, graph_edges, clean_data, output_dir, ignore_lat = False):
     """
 
     Calls other functions to generate graphs that show the interaction between authors either through multiple edges or
@@ -116,8 +116,6 @@ def weighted_multigraph():
     # Time limit can be specified here in the form of a timestamp in one of the identifiable formats and all messages
     # that have arrived after this timestamp will be ignored.
     time_limit = None
-    # If true, then messages that belong to threads that have only a single author are ignored.
-    ignore_lat = True
 
     if time_limit is None:
         time_limit = time.strftime("%a, %d %b %Y %H:%M:%S %z")
@@ -131,7 +129,7 @@ def weighted_multigraph():
 
     # Add nodes into NetworkX graph by reading from CSV file
     if not ignore_lat:
-        with open("graph_nodes.csv", "r") as node_file:
+        with open(graph_nodes, "r") as node_file:
             for pair in node_file:
                 node = pair.split(';', 2)
                 if get_datetime_object(node[2].strip()) < time_limit:
@@ -144,7 +142,7 @@ def weighted_multigraph():
         print("Nodes added.")
 
         # Add edges into NetworkX graph by reading from CSV file
-        with open("graph_edges.csv", "r") as edge_file:
+        with open(graph_edges, "r") as edge_file:
             for pair in edge_file:
                 edge = pair.split(';')
                 edge[0] = int(edge[0])
@@ -155,9 +153,9 @@ def weighted_multigraph():
         print("Edges added.")
 
     else:
-        lone_author_threads = get_lone_author_threads(False)
+        lone_author_threads = get_lone_author_threads(nodelist_filename=graph_nodes, edgelist_filename=graph_edges, save_file=False)
         # Add nodes into NetworkX graph only if they are not a part of a thread that has only a single author
-        with open("graph_nodes.csv", "r") as node_file:
+        with open(graph_nodes, "r") as node_file:
             for pair in node_file:
                 node = pair.split(';', 2)
                 node[0] = int(node[0])
@@ -170,7 +168,7 @@ def weighted_multigraph():
         print("Nodes added.")
 
         # Add edges into NetworkX graph only if they are not a part of a thread that has only a single author
-        with open("graph_edges.csv", "r") as edge_file:
+        with open(graph_edges, "r") as edge_file:
             for pair in edge_file:
                 edge = pair.split(';')
                 edge[0] = int(edge[0])
@@ -181,7 +179,7 @@ def weighted_multigraph():
             edge_file.close()
         print("Edges added.")
 
-    with open('clean_data.json', 'r') as json_file:
+    with open(clean_data, 'r') as json_file:
         for chunk in lines_per_n(json_file, 9):
             json_obj = json.loads(chunk)
             # print("\nFrom", json_obj['From'], "\nTo", json_obj['To'], "\nCc", json_obj['Cc'])
@@ -193,6 +191,6 @@ def weighted_multigraph():
             json_data[json_obj['Message-ID']] = json_obj
     print("JSON data loaded.")
 
-    author_interaction_weighted_graph(discussion_graph, json_data, limit=20)
-    author_interaction_multigraph(discussion_graph, json_data, limit=20)
+    author_interaction_weighted_graph(discussion_graph, json_data, output_dir, limit=20)
+    author_interaction_multigraph(discussion_graph, json_data, output_dir, limit=20)
 
