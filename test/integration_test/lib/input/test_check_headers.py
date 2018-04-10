@@ -12,9 +12,11 @@ def test_get_unavailable_uid(mock_function):
 	mock_function.return_value.uid.return_value=(1,['5'])
 	assert get_unavailable_uid()==set()
 	
-def test_check_validity():
+@mock.patch('lib.input.check_headers.open_connection')
+def test_check_validity(mock_function):
 
-	assert check_validity(False, headers_file)==5
+	mock_function.return_value.uid.return_value=(1,['5'])
+	assert check_validity(True, headers_file)==5
 	
 def test_remove_unwanted_headers():
 
