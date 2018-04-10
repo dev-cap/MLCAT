@@ -210,6 +210,7 @@ def replace_invalid_headers(to_replace=invalid_uid, json_header_filename="header
 
 	:param to_replace: A list of UIDs that need to be replaced. Default value is the list of invalid mails' UIDs.
 	:param json_header_filename: The json file containing the headers.
+	:param unwanted_uid_filename: The file containing unwanted uids.
 	"""
 	if len(to_replace) > 0:
 		print("Replacing invalid headers...")
