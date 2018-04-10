@@ -7,31 +7,33 @@ from lib.util.json_encoder import NoIndent, MyEncoder
 from lib.util.read import *
 
 
-def init_uid_map():
+def init_uid_map(uid_map_filename='thread_uid_map.json'):
     """
     To ensure that references are correctly recorded in the JSON file such that there are no references to mails that
     do not exist and to ease the processing of headers, a map with the string in the Message-Id field of the header to
     the UID of the mail is required. This function reads the header.json file and adds required entries to the map.
 
+    :param uid_map_filename: The JSON file where the Message_ID-UID mapping is stored. Default value is thread_uid_map.json.
     :return: A map with the string in the Message-Id field of the header to the UID of the mail
     """
     print("Initializing UID map...")
-    with open('thread_uid_map.json', 'r') as map_file:
+    with open(uid_map_filename, 'r') as map_file:
         uid_msg_id_map = json.load(map_file)
         map_file.close()
     return uid_msg_id_map
 
 
-def get_mail_header(to_get, range_=True):
+def get_mail_header(to_get, range_=True, uid_map_filename='thread_uid_map.json'):
     """
     This function fetches the emails from the IMAP server as per the parameters passed.
     
     :param to_get: List of UIDs of the mails to get. Default value is 2000.
     :param range_: If true, fetches all emails from the first element in to_get, till the newest mail. If false, fetches only the emails with the UIDs present in to_get. Default value is true.
+    :param uid_map_filename: The JSON file where the Message_ID-UID mapping is stored. Default value is thread_uid_map.json.
     """
     # This is used to map the string in the Message-Id field of the header to the UID of the mail.
     # By doing so we ease the further processing of information.
-    uid_msg_id_map = init_uid_map()
+    uid_msg_id_map = init_uid_map(uid_map_filename)
 
     # To start with an empty UID map, uncomment the following line:
     # uid_msg_id_map ={}
