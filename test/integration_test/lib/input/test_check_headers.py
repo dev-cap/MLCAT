@@ -1,5 +1,5 @@
-import pytest
-from unittest import mock
+import unittest 
+import mock
 from lib.input.check_headers import *
 
 headers_file='./test/integration_test/data/headers_for_check.json'
