@@ -45,7 +45,7 @@ def test_add_missing_headers(mock_function):
 		for chunk in lines_per_n(json_file, 9):
 			json_obj = json.loads(chunk)
 	check_validity(False, headers_file)
-	add_missing_headers(missing_uid,unwanted_uid_file)	
+	add_missing_headers(missing_uid,unwanted_uid_file,uid_map_file)	
 	if(missing_uid):
 		mock_function.assert_any_call()
 
@@ -53,7 +53,7 @@ def test_add_missing_headers(mock_function):
 def test_replace_invalid_headers(mock_function):
 	mock_function.return_value.uid.return_value=(1,['5'])
 	check_validity(False, headers_file)
-	replace_invalid_headers(invalid_uid,headers_file,unwanted_uid_file)
+	replace_invalid_headers(invalid_uid,headers_file,unwanted_uid_file,uid_map_file)
 	if(invalid_uid):
 		mock_function.assert_any_call()
 
