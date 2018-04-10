@@ -3,6 +3,8 @@ import mock
 from lib.input.check_headers import *
 
 headers_file='./test/integration_test/data/headers_for_check.json'
+unwanted_uid_file='./test/integration_test/data/unwanted_uid.txt'
+uid_map_file='./test/integration_test/data/thread_uid_map.json'
 
 @mock.patch('lib.input.check_headers.open_connection')
 def test_get_unavailable_uid(mock_function):
@@ -43,7 +45,7 @@ def test_add_missing_headers(mock_function):
 		for chunk in lines_per_n(json_file, 9):
 			json_obj = json.loads(chunk)
 	check_validity(False, headers_file)
-	add_missing_headers()	
+	add_missing_headers(missing_uid,unwanted_uid_file)	
 	if(missing_uid):
 		mock_function.assert_any_call()
 
@@ -59,6 +61,6 @@ def test_replace_invalid_headers(mock_function):
 def test_write_uid_map(mock_function):
 	mock_function.return_value.uid.return_value=(1,['5'])
 	check_validity(False, headers_file)
-	write_uid_map()
+	write_uid_map(1,last_uid_read,uid_map_file)
 	mock_function.assert_any_call()
 	
