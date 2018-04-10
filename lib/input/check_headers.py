@@ -202,7 +202,7 @@ def add_missing_headers(to_add=missing_uid, unwanted_uid_filename="unwanted_uid.
 		get_mail_header(to_add, False)
 
 
-def replace_invalid_headers(to_replace=invalid_uid, json_header_filename="headers.json"):
+def replace_invalid_headers(to_replace=invalid_uid, json_header_filename="headers.json", unwanted_uid_filename="unwanted_uid.txt"):
 	"""
 
 	This function removes the mail headers that have insufficient attributes and fetches those headers again.
@@ -226,7 +226,7 @@ def replace_invalid_headers(to_replace=invalid_uid, json_header_filename="header
 				json.dump(json_obj, json_file, indent=1)
 				json_file.write("\n")
 
-		add_missing_headers(to_replace)
+		add_missing_headers(to_replace, unwanted_uid_filename)
 
 
 def write_uid_map(from_index=1, to_index=last_uid_read, uid_map_filename="thread_uid_map.json"):
