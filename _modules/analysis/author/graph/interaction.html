@@ -81,7 +81,7 @@
         <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span></div>
 
 
-<div class="viewcode-block" id="author_interaction_multigraph"><a class="viewcode-back" href="../../../../analysis.author.graph.html#analysis.author.graph.interaction.author_interaction_multigraph">[docs]</a><span class="k">def</span> <span class="nf">author_interaction_multigraph</span><span class="p">(</span><span class="n">discussion_graph</span><span class="p">,</span> <span class="n">json_data</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+<div class="viewcode-block" id="author_interaction_multigraph"><a class="viewcode-back" href="../../../../analysis.author.graph.html#analysis.author.graph.interaction.author_interaction_multigraph">[docs]</a><span class="k">def</span> <span class="nf">author_interaction_multigraph</span><span class="p">(</span><span class="n">discussion_graph</span><span class="p">,</span> <span class="n">json_data</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Generate graphs in PNG format to show author interaction through multiple edges.</span>
 
@@ -95,8 +95,8 @@
         <span class="n">origin</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">conn_subgraph</span><span class="o">.</span><span class="n">nodes</span><span class="p">())</span>
         <span class="n">add_to_multigraph</span><span class="p">(</span><span class="n">interaction_graph</span><span class="p">,</span> <span class="n">discussion_graph</span><span class="p">,</span> <span class="n">json_data</span><span class="p">,</span> <span class="p">[</span><span class="n">origin</span><span class="p">])</span>
         <span class="c1"># print(json_data[origin])</span>
-        <span class="n">g1</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">to_agraph</span><span class="p">(</span><span class="n">interaction_graph</span><span class="p">)</span>
-        <span class="n">g1</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="s2">&quot;author_multi/&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">origin</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;.png&#39;</span><span class="p">,</span> <span class="n">prog</span><span class="o">=</span><span class="s1">&#39;circo&#39;</span><span class="p">)</span>
+        <span class="n">g1</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">nx_agraph</span><span class="o">.</span><span class="n">to_agraph</span><span class="p">(</span><span class="n">interaction_graph</span><span class="p">)</span>
+        <span class="n">g1</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="n">output_dir</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">origin</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;.png&#39;</span><span class="p">,</span> <span class="n">prog</span><span class="o">=</span><span class="s1">&#39;circo&#39;</span><span class="p">)</span>
         <span class="n">niter</span> <span class="o">+=</span> <span class="mi">1</span>
         <span class="k">if</span> <span class="n">limit</span> <span class="o">==</span> <span class="n">niter</span> <span class="ow">and</span> <span class="n">limit</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">break</span></div>
@@ -134,7 +134,7 @@
             <span class="n">add_to_weighted_graph</span><span class="p">(</span><span class="n">graph_obj</span><span class="p">,</span> <span class="n">discussion_graph</span><span class="p">,</span> <span class="n">json_data</span><span class="p">,</span> <span class="n">succ_nbunch</span><span class="p">,</span> <span class="n">node_enum</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="author_interaction_weighted_graph"><a class="viewcode-back" href="../../../../analysis.author.graph.html#analysis.author.graph.interaction.author_interaction_weighted_graph">[docs]</a><span class="k">def</span> <span class="nf">author_interaction_weighted_graph</span><span class="p">(</span><span class="n">discussion_graph</span><span class="p">,</span> <span class="n">json_data</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+<div class="viewcode-block" id="author_interaction_weighted_graph"><a class="viewcode-back" href="../../../../analysis.author.graph.html#analysis.author.graph.interaction.author_interaction_weighted_graph">[docs]</a><span class="k">def</span> <span class="nf">author_interaction_weighted_graph</span><span class="p">(</span><span class="n">discussion_graph</span><span class="p">,</span> <span class="n">json_data</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Generate graphs in PNG format to show author interaction through weighted edges.</span>
 
@@ -148,14 +148,14 @@
         <span class="n">origin</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">conn_subgraph</span><span class="o">.</span><span class="n">nodes</span><span class="p">())</span>
         <span class="n">add_to_weighted_graph</span><span class="p">(</span><span class="n">interaction_graph</span><span class="p">,</span> <span class="n">discussion_graph</span><span class="p">,</span> <span class="n">json_data</span><span class="p">,</span> <span class="p">[</span><span class="n">origin</span><span class="p">],</span> <span class="p">[])</span>
         <span class="c1"># print(json_data[origin])</span>
-        <span class="n">g1</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">to_agraph</span><span class="p">(</span><span class="n">interaction_graph</span><span class="p">)</span>
-        <span class="n">g1</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="s2">&quot;author_weighted/&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">origin</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;.png&#39;</span><span class="p">,</span> <span class="n">prog</span><span class="o">=</span><span class="s1">&#39;circo&#39;</span><span class="p">)</span>
+        <span class="n">g1</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">nx_agraph</span><span class="o">.</span><span class="n">to_agraph</span><span class="p">(</span><span class="n">interaction_graph</span><span class="p">)</span>
+        <span class="n">g1</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="n">output_dir</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">origin</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;.png&#39;</span><span class="p">,</span> <span class="n">prog</span><span class="o">=</span><span class="s1">&#39;circo&#39;</span><span class="p">)</span>
         <span class="n">niter</span> <span class="o">+=</span> <span class="mi">1</span>
         <span class="k">if</span> <span class="n">limit</span> <span class="o">==</span> <span class="n">niter</span> <span class="ow">and</span> <span class="n">limit</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">break</span></div>
 
 
-<div class="viewcode-block" id="weighted_multigraph"><a class="viewcode-back" href="../../../../analysis.author.graph.html#analysis.author.graph.interaction.weighted_multigraph">[docs]</a><span class="k">def</span> <span class="nf">weighted_multigraph</span><span class="p">():</span>
+<div class="viewcode-block" id="weighted_multigraph"><a class="viewcode-back" href="../../../../analysis.author.graph.html#analysis.author.graph.interaction.weighted_multigraph">[docs]</a><span class="k">def</span> <span class="nf">weighted_multigraph</span><span class="p">(</span><span class="n">graph_nodes</span><span class="p">,</span> <span class="n">graph_edges</span><span class="p">,</span> <span class="n">clean_data</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">,</span> <span class="n">ignore_lat</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">    Calls other functions to generate graphs that show the interaction between authors either through multiple edges or</span>
@@ -164,8 +164,6 @@
     <span class="c1"># Time limit can be specified here in the form of a timestamp in one of the identifiable formats and all messages</span>
     <span class="c1"># that have arrived after this timestamp will be ignored.</span>
     <span class="n">time_limit</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="c1"># If true, then messages that belong to threads that have only a single author are ignored.</span>
-    <span class="n">ignore_lat</span> <span class="o">=</span> <span class="kc">True</span>
 
     <span class="k">if</span> <span class="n">time_limit</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">time_limit</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%a, </span><span class="si">%d</span><span class="s2"> %b %Y %H:%M:%S %z&quot;</span><span class="p">)</span>
@@ -179,7 +177,7 @@
 
     <span class="c1"># Add nodes into NetworkX graph by reading from CSV file</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">ignore_lat</span><span class="p">:</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;graph_nodes.csv&quot;</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">node_file</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">graph_nodes</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">node_file</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">pair</span> <span class="ow">in</span> <span class="n">node_file</span><span class="p">:</span>
                 <span class="n">node</span> <span class="o">=</span> <span class="n">pair</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;;&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">get_datetime_object</span><span class="p">(</span><span class="n">node</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span> <span class="o">&lt;</span> <span class="n">time_limit</span><span class="p">:</span>
@@ -192,7 +190,7 @@
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Nodes added.&quot;</span><span class="p">)</span>
 
         <span class="c1"># Add edges into NetworkX graph by reading from CSV file</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;graph_edges.csv&quot;</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">edge_file</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">graph_edges</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">edge_file</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">pair</span> <span class="ow">in</span> <span class="n">edge_file</span><span class="p">:</span>
                 <span class="n">edge</span> <span class="o">=</span> <span class="n">pair</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;;&#39;</span><span class="p">)</span>
                 <span class="n">edge</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">edge</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
@@ -203,9 +201,9 @@
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Edges added.&quot;</span><span class="p">)</span>
 
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">lone_author_threads</span> <span class="o">=</span> <span class="n">get_lone_author_threads</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">lone_author_threads</span> <span class="o">=</span> <span class="n">get_lone_author_threads</span><span class="p">(</span><span class="n">nodelist_filename</span><span class="o">=</span><span class="n">graph_nodes</span><span class="p">,</span> <span class="n">edgelist_filename</span><span class="o">=</span><span class="n">graph_edges</span><span class="p">,</span> <span class="n">save_file</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
         <span class="c1"># Add nodes into NetworkX graph only if they are not a part of a thread that has only a single author</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;graph_nodes.csv&quot;</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">node_file</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">graph_nodes</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">node_file</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">pair</span> <span class="ow">in</span> <span class="n">node_file</span><span class="p">:</span>
                 <span class="n">node</span> <span class="o">=</span> <span class="n">pair</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;;&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
                 <span class="n">node</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">node</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
@@ -218,7 +216,7 @@
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Nodes added.&quot;</span><span class="p">)</span>
 
         <span class="c1"># Add edges into NetworkX graph only if they are not a part of a thread that has only a single author</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;graph_edges.csv&quot;</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">edge_file</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">graph_edges</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">edge_file</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">pair</span> <span class="ow">in</span> <span class="n">edge_file</span><span class="p">:</span>
                 <span class="n">edge</span> <span class="o">=</span> <span class="n">pair</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;;&#39;</span><span class="p">)</span>
                 <span class="n">edge</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">edge</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
@@ -229,7 +227,7 @@
             <span class="n">edge_file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Edges added.&quot;</span><span class="p">)</span>
 
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;clean_data.json&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">json_file</span><span class="p">:</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">clean_data</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">json_file</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">lines_per_n</span><span class="p">(</span><span class="n">json_file</span><span class="p">,</span> <span class="mi">9</span><span class="p">):</span>
             <span class="n">json_obj</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
             <span class="c1"># print(&quot;\nFrom&quot;, json_obj[&#39;From&#39;], &quot;\nTo&quot;, json_obj[&#39;To&#39;], &quot;\nCc&quot;, json_obj[&#39;Cc&#39;])</span>
@@ -241,8 +239,8 @@
             <span class="n">json_data</span><span class="p">[</span><span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;Message-ID&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">json_obj</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;JSON data loaded.&quot;</span><span class="p">)</span>
 
-    <span class="n">author_interaction_weighted_graph</span><span class="p">(</span><span class="n">discussion_graph</span><span class="p">,</span> <span class="n">json_data</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
-    <span class="n">author_interaction_multigraph</span><span class="p">(</span><span class="n">discussion_graph</span><span class="p">,</span> <span class="n">json_data</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span></div>
+    <span class="n">author_interaction_weighted_graph</span><span class="p">(</span><span class="n">discussion_graph</span><span class="p">,</span> <span class="n">json_data</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+    <span class="n">author_interaction_multigraph</span><span class="p">(</span><span class="n">discussion_graph</span><span class="p">,</span> <span class="n">json_data</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span></div>
 
 </pre></div>
 
