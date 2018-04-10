@@ -8,7 +8,7 @@ secure applications.
 """
 
 
-def open_connection(verbose=False):
+def open_connection(verbose=False, config_file='./imap.config'):
     """
     Function to establish to mail server and login to user account using IMAP4 protocol.
     Returns the connection object used in establishing IMAP connection to mail server.
@@ -16,11 +16,12 @@ def open_connection(verbose=False):
     verbose mode or not.
     
     :param verbose: Displays a detailed log if true.
+    :param config_file: The file to be read by the configparser object.
     """
 
     # Reading from config file
     config = configparser.ConfigParser()
-    config.read("imap.config")
+    config.read(config_file)
 
     # Creating connection to mail server using IMAP protocol
     hostname = config.get('server', 'hostname')
