@@ -181,7 +181,7 @@ def remove_duplicate_headers(to_remove=duplicate_uid, json_header_filename='head
 				json_file.write("\n")
 
 
-def add_missing_headers(to_add=missing_uid, unwanted_uid_filename="unwanted_uid.txt"):
+def add_missing_headers(to_add=missing_uid, unwanted_uid_filename="unwanted_uid.txt", uid_map_filename="thread_uid_map.json"):
 	"""
 
 	This function adds the mails that have been missed out, considering the fact that UIDs are consecutive.
@@ -189,6 +189,7 @@ def add_missing_headers(to_add=missing_uid, unwanted_uid_filename="unwanted_uid.
 
 	:param to_add: A list of UIDs that need to be added. Default value is the list of missing mails' UIDs.
 	:param unwanted_uid_filename: The file containing unwanted uids
+	:param uid_map_filename: The JSON file where the Message_ID-UID mapping is stored.
 	"""
 	# To prevent replacement of mails that are not forwarded from the LKML subscription:
 	with open(unwanted_uid_filename, 'r') as unw_file:
@@ -199,10 +200,10 @@ def add_missing_headers(to_add=missing_uid, unwanted_uid_filename="unwanted_uid.
 	to_add = [x for x in to_add if x not in unavailable_uid]
 	if len(to_add) > 0:
 		print("Fetching missing headers...")
-		get_mail_header(to_add, False)
+		get_mail_header(to_add, False, uid_map_filename)
 
 
-def replace_invalid_headers(to_replace=invalid_uid, json_header_filename="headers.json", unwanted_uid_filename="unwanted_uid.txt"):
+def replace_invalid_headers(to_replace=invalid_uid, json_header_filename="headers.json", unwanted_uid_filename="unwanted_uid.txt", uid_map_filename="thread_uid_map.json"):
 	"""
 
 	This function removes the mail headers that have insufficient attributes and fetches those headers again.
@@ -211,6 +212,7 @@ def replace_invalid_headers(to_replace=invalid_uid, json_header_filename="header
 	:param to_replace: A list of UIDs that need to be replaced. Default value is the list of invalid mails' UIDs.
 	:param json_header_filename: The json file containing the headers.
 	:param unwanted_uid_filename: The file containing unwanted uids.
+	:param uid_map_filename: The JSON file where the Message_ID-UID mapping is stored.
 	"""
 	if len(to_replace) > 0:
 		print("Replacing invalid headers...")
@@ -227,7 +229,7 @@ def replace_invalid_headers(to_replace=invalid_uid, json_header_filename="header
 				json.dump(json_obj, json_file, indent=1)
 				json_file.write("\n")
 
-		add_missing_headers(to_replace, unwanted_uid_filename)
+		add_missing_headers(to_replace, unwanted_uid_filename, uid_map_filename)
 
 
 def write_uid_map(from_index=1, to_index=last_uid_read, uid_map_filename="thread_uid_map.json"):
