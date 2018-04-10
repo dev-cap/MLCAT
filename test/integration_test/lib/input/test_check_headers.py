@@ -53,7 +53,7 @@ def test_add_missing_headers(mock_function):
 def test_replace_invalid_headers(mock_function):
 	mock_function.return_value.uid.return_value=(1,['5'])
 	check_validity(False, headers_file)
-	replace_invalid_headers(invalid_uid,headers_file)
+	replace_invalid_headers(invalid_uid,headers_file,unwanted_uid_file)
 	if(invalid_uid):
 		mock_function.assert_any_call()
 
