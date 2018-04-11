@@ -86,3 +86,6 @@ Infomap
 
 # Temporary output files of tests
 .tmp/
+
+# imap configuration file
+/imap
