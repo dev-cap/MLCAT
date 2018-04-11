@@ -229,7 +229,7 @@
 				<span class="n">json_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="add_missing_headers"><a class="viewcode-back" href="../../input.html#input.check_headers.add_missing_headers">[docs]</a><span class="k">def</span> <span class="nf">add_missing_headers</span><span class="p">(</span><span class="n">to_add</span><span class="o">=</span><span class="n">missing_uid</span><span class="p">,</span> <span class="n">unwanted_uid_filename</span><span class="o">=</span><span class="s2">&quot;unwanted_uid.txt&quot;</span><span class="p">):</span>
+<div class="viewcode-block" id="add_missing_headers"><a class="viewcode-back" href="../../input.html#input.check_headers.add_missing_headers">[docs]</a><span class="k">def</span> <span class="nf">add_missing_headers</span><span class="p">(</span><span class="n">to_add</span><span class="o">=</span><span class="n">missing_uid</span><span class="p">,</span> <span class="n">unwanted_uid_filename</span><span class="o">=</span><span class="s2">&quot;unwanted_uid.txt&quot;</span><span class="p">,</span> <span class="n">uid_map_filename</span><span class="o">=</span><span class="s2">&quot;thread_uid_map.json&quot;</span><span class="p">):</span>
 	<span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">	This function adds the mails that have been missed out, considering the fact that UIDs are consecutive.</span>
@@ -237,6 +237,7 @@
 
 <span class="sd">	:param to_add: A list of UIDs that need to be added. Default value is the list of missing mails&#39; UIDs.</span>
 <span class="sd">	:param unwanted_uid_filename: The file containing unwanted uids</span>
+<span class="sd">	:param uid_map_filename: The JSON file where the Message_ID-UID mapping is stored.</span>
 <span class="sd">	&quot;&quot;&quot;</span>
 	<span class="c1"># To prevent replacement of mails that are not forwarded from the LKML subscription:</span>
 	<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">unwanted_uid_filename</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">unw_file</span><span class="p">:</span>
@@ -247,10 +248,10 @@
 	<span class="n">to_add</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">to_add</span> <span class="k">if</span> <span class="n">x</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">unavailable_uid</span><span class="p">]</span>
 	<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">to_add</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
 		<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Fetching missing headers...&quot;</span><span class="p">)</span>
-		<span class="n">get_mail_header</span><span class="p">(</span><span class="n">to_add</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span></div>
+		<span class="n">get_mail_header</span><span class="p">(</span><span class="n">to_add</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="n">uid_map_filename</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="replace_invalid_headers"><a class="viewcode-back" href="../../input.html#input.check_headers.replace_invalid_headers">[docs]</a><span class="k">def</span> <span class="nf">replace_invalid_headers</span><span class="p">(</span><span class="n">to_replace</span><span class="o">=</span><span class="n">invalid_uid</span><span class="p">,</span> <span class="n">json_header_filename</span><span class="o">=</span><span class="s2">&quot;headers.json&quot;</span><span class="p">):</span>
+<div class="viewcode-block" id="replace_invalid_headers"><a class="viewcode-back" href="../../input.html#input.check_headers.replace_invalid_headers">[docs]</a><span class="k">def</span> <span class="nf">replace_invalid_headers</span><span class="p">(</span><span class="n">to_replace</span><span class="o">=</span><span class="n">invalid_uid</span><span class="p">,</span> <span class="n">json_header_filename</span><span class="o">=</span><span class="s2">&quot;headers.json&quot;</span><span class="p">,</span> <span class="n">unwanted_uid_filename</span><span class="o">=</span><span class="s2">&quot;unwanted_uid.txt&quot;</span><span class="p">,</span> <span class="n">uid_map_filename</span><span class="o">=</span><span class="s2">&quot;thread_uid_map.json&quot;</span><span class="p">):</span>
 	<span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">	This function removes the mail headers that have insufficient attributes and fetches those headers again.</span>
@@ -258,6 +259,8 @@
 
 <span class="sd">	:param to_replace: A list of UIDs that need to be replaced. Default value is the list of invalid mails&#39; UIDs.</span>
 <span class="sd">	:param json_header_filename: The json file containing the headers.</span>
+<span class="sd">	:param unwanted_uid_filename: The file containing unwanted uids.</span>
+<span class="sd">	:param uid_map_filename: The JSON file where the Message_ID-UID mapping is stored.</span>
 <span class="sd">	&quot;&quot;&quot;</span>
 	<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">to_replace</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
 		<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Replacing invalid headers...&quot;</span><span class="p">)</span>
@@ -274,7 +277,7 @@
 				<span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">json_obj</span><span class="p">,</span> <span class="n">json_file</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 				<span class="n">json_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
 
-		<span class="n">add_missing_headers</span><span class="p">(</span><span class="n">to_replace</span><span class="p">)</span></div>
+		<span class="n">add_missing_headers</span><span class="p">(</span><span class="n">to_replace</span><span class="p">,</span> <span class="n">unwanted_uid_filename</span><span class="p">,</span> <span class="n">uid_map_filename</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="write_uid_map"><a class="viewcode-back" href="../../input.html#input.check_headers.write_uid_map">[docs]</a><span class="k">def</span> <span class="nf">write_uid_map</span><span class="p">(</span><span class="n">from_index</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">to_index</span><span class="o">=</span><span class="n">last_uid_read</span><span class="p">,</span> <span class="n">uid_map_filename</span><span class="o">=</span><span class="s2">&quot;thread_uid_map.json&quot;</span><span class="p">):</span>

@@ -56,7 +56,7 @@
 <span class="sd">&quot;&quot;&quot;</span>
 
 
-<div class="viewcode-block" id="open_connection"><a class="viewcode-back" href="../../../input.imap.html#input.imap.connection.open_connection">[docs]</a><span class="k">def</span> <span class="nf">open_connection</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="open_connection"><a class="viewcode-back" href="../../../input.imap.html#input.imap.connection.open_connection">[docs]</a><span class="k">def</span> <span class="nf">open_connection</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">config_file</span><span class="o">=</span><span class="s1">&#39;./imap.config&#39;</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Function to establish to mail server and login to user account using IMAP4 protocol.</span>
 <span class="sd">    Returns the connection object used in establishing IMAP connection to mail server.</span>
@@ -64,11 +64,12 @@
 <span class="sd">    verbose mode or not.</span>
 <span class="sd">    </span>
 <span class="sd">    :param verbose: Displays a detailed log if true.</span>
+<span class="sd">    :param config_file: The file to be read by the configparser object.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># Reading from config file</span>
     <span class="n">config</span> <span class="o">=</span> <span class="n">configparser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">()</span>
-    <span class="n">config</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s2">&quot;imap.config&quot;</span><span class="p">)</span>
+    <span class="n">config</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">config_file</span><span class="p">)</span>
 
     <span class="c1"># Creating connection to mail server using IMAP protocol</span>
     <span class="n">hostname</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;server&#39;</span><span class="p">,</span> <span class="s1">&#39;hostname&#39;</span><span class="p">)</span>
