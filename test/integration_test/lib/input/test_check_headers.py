@@ -1,4 +1,4 @@
-#import unittest 
+import unittest 
 from unittest import mock
 import json
 from lib.util.read import lines_per_n
@@ -7,9 +7,9 @@ from lib.input.check_headers import CheckHeaders
 
 class TestCheckHeaders(object):	
 	
-	headers_file='/home/tejal/MLCAT/test/integration_test/data/headers_for_check.json'
-	unwanted_uid_file='/home/tejal/MLCAT/test/integration_test/data/unwanted_uid.txt'
-	uid_map_file='/home/tejal/MLCAT/test/integration_test/data/thread_uid_map.json'
+	headers_file='./test/integration_test/data/headers_for_check.json'
+	unwanted_uid_file='./test/integration_test/data/unwanted_uid.txt'
+	uid_map_file='./test/integration_test/data/thread_uid_map.json'
 
 
 	@mock.patch('lib.input.check_headers.open_connection')
