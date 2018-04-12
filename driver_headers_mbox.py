@@ -22,7 +22,8 @@ for mailbox in mailbox_list:
     print("Processing Mailbox:", mailbox)
     extract_mail_header(mbox_filename=path_ob.mbox_filename, json_filename=path_ob.headers_filename,
                        thread_uid_filename=path_ob.thread_uid_filename, author_uid_filename=path_ob.author_uid_filename)
-    last_uid = check_validity(False, json_header_filename=path_ob.headers_filename)
+    obj=CheckHeaders()
+    last_uid = obj.check_validity(False, json_header_filename=path_ob.headers_filename)
     print("Last valid UID in JSON file:", last_uid)
     
     
