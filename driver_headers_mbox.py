@@ -28,7 +28,7 @@ for mailbox in mailbox_list:
     
     
     
-    # remove_duplicate_headers(json_header_filename=unclean_headers_filename)
+    # obj.remove_duplicate_headers(json_header_filename=unclean_headers_filename)
     # remove_invalid_references(input_json_filename=unclean_headers_filename, output_json_filename=clean_headers_filename, ref_toggle=True)
     # generate_edge_list(nodelist_filename=nodelist_filename, edgelist_filename=edgelist_filename, threads_json_filename=clean_headers_filename)
     print("----------------")
