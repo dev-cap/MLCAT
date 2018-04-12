@@ -1,5 +1,5 @@
 import unittest 
-from unittest import mock
+import mock
 import json
 from lib.util.read import lines_per_n
 from lib.input.check_headers import CheckHeaders
