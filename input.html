@@ -82,9 +82,30 @@
 </div>
 <div class="section" id="module-input.check_headers">
 <span id="input-check-headers-module"></span><h2>input.check_headers module<a class="headerlink" href="#module-input.check_headers" title="Permalink to this headline">¶</a></h2>
-<dl class="function">
-<dt id="input.check_headers.add_missing_headers">
-<code class="descclassname">input.check_headers.</code><code class="descname">add_missing_headers</code><span class="sig-paren">(</span><em>to_add=set()</em>, <em>unwanted_uid_filename='unwanted_uid.txt'</em>, <em>uid_map_filename='thread_uid_map.json'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/input/check_headers.html#add_missing_headers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#input.check_headers.add_missing_headers" title="Permalink to this definition">¶</a></dt>
+<p>This class cleans up the unavailable, unwanted, duplicate, missing, and invalid headers in the JSON file. It ensures that references are correctly recorded in the JSON file such that there are no references to mails that do not exist.</p>
+<dl class="class">
+<dt id="input.check_headers.CheckHeaders">
+<em class="property">class </em><code class="descclassname">input.check_headers.</code><code class="descname">CheckHeaders</code><a class="reference internal" href="_modules/input/check_headers.html#CheckHeaders"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#input.check_headers.CheckHeaders" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>duplicate_uid</strong> – This list stores the UIDs of mails that have duplicate entries in the JSON file.</li>
+<li><strong>missing_uid</strong> – This set stores the UIDs of mails that don’t have an entry in the JSON file - UIDs are consecutive numbers.</li>
+<li><strong>invalid_uid</strong> – This list stores the UIDs of mails that have entries with insufficient entries in the JSON file.</li>
+<li><strong>unwanted_uid</strong> – This set stores the UIDs of mails that are not forwarded from LKML subscription which is stored in a text file.</li>
+<li><strong>unavailable_uid</strong> – This set stores the UIDs for which corresponding mails are not available in the IMAP server.</li>
+<li><strong>last_uid_read</strong> – The last UID that was checked by the function.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="input.check_headers.CheckHeaders.add_missing_headers">
+<code class="descname">add_missing_headers</code><span class="sig-paren">(</span><em>to_add=set()</em>, <em>unwanted_uid_filename='unwanted_uid.txt'</em>, <em>uid_map_filename='thread_uid_map.json'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/input/check_headers.html#CheckHeaders.add_missing_headers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#input.check_headers.CheckHeaders.add_missing_headers" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function adds the mails that have been missed out, considering the fact that UIDs are consecutive.
 If a mail that is missing in the JSON file is not available or has been deleted, this function ignores that UID.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -102,9 +123,9 @@ If a mail that is missing in the JSON file is not available or has been deleted,
 </table>
 </dd></dl>
 
-<dl class="function">
-<dt id="input.check_headers.check_validity">
-<code class="descclassname">input.check_headers.</code><code class="descname">check_validity</code><span class="sig-paren">(</span><em>check_unavailable_uid='False'</em>, <em>json_header_filename='headers.json'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/input/check_headers.html#check_validity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#input.check_headers.check_validity" title="Permalink to this definition">¶</a></dt>
+<dl class="method">
+<dt id="input.check_headers.CheckHeaders.check_validity">
+<code class="descname">check_validity</code><span class="sig-paren">(</span><em>check_unavailable_uid='False'</em>, <em>json_header_filename='headers.json'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/input/check_headers.html#CheckHeaders.check_validity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#input.check_headers.CheckHeaders.check_validity" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function checks for and prints duplicate, missing, and invalid objects in the “headers.json” file.
 This function can be run first to generate a list of duplicate, missing, or invalid objects’ UIDs which
 can then be used to add or remove their entries from the JSON file.</p>
@@ -125,9 +146,14 @@ can then be used to add or remove their entries from the JSON file.</p>
 </table>
 </dd></dl>
 
-<dl class="function">
-<dt id="input.check_headers.get_unavailable_uid">
-<code class="descclassname">input.check_headers.</code><code class="descname">get_unavailable_uid</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/input/check_headers.html#get_unavailable_uid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#input.check_headers.get_unavailable_uid" title="Permalink to this definition">¶</a></dt>
+<dl class="attribute">
+<dt id="input.check_headers.CheckHeaders.duplicate_uid">
+<code class="descname">duplicate_uid</code><em class="property"> = set()</em><a class="headerlink" href="#input.check_headers.CheckHeaders.duplicate_uid" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="input.check_headers.CheckHeaders.get_unavailable_uid">
+<code class="descname">get_unavailable_uid</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/input/check_headers.html#CheckHeaders.get_unavailable_uid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#input.check_headers.CheckHeaders.get_unavailable_uid" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function returns a list of UIDs that are not available in the IMAP server.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -139,9 +165,24 @@ can then be used to add or remove their entries from the JSON file.</p>
 </table>
 </dd></dl>
 
-<dl class="function">
-<dt id="input.check_headers.remove_duplicate_headers">
-<code class="descclassname">input.check_headers.</code><code class="descname">remove_duplicate_headers</code><span class="sig-paren">(</span><em>to_remove=set()</em>, <em>json_header_filename='headers.json'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/input/check_headers.html#remove_duplicate_headers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#input.check_headers.remove_duplicate_headers" title="Permalink to this definition">¶</a></dt>
+<dl class="attribute">
+<dt id="input.check_headers.CheckHeaders.invalid_uid">
+<code class="descname">invalid_uid</code><em class="property"> = set()</em><a class="headerlink" href="#input.check_headers.CheckHeaders.invalid_uid" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="input.check_headers.CheckHeaders.last_uid_read">
+<code class="descname">last_uid_read</code><em class="property"> = 0</em><a class="headerlink" href="#input.check_headers.CheckHeaders.last_uid_read" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="input.check_headers.CheckHeaders.missing_uid">
+<code class="descname">missing_uid</code><em class="property"> = set()</em><a class="headerlink" href="#input.check_headers.CheckHeaders.missing_uid" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="input.check_headers.CheckHeaders.remove_duplicate_headers">
+<code class="descname">remove_duplicate_headers</code><span class="sig-paren">(</span><em>to_remove=set()</em>, <em>json_header_filename='headers.json'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/input/check_headers.html#CheckHeaders.remove_duplicate_headers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#input.check_headers.CheckHeaders.remove_duplicate_headers" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function removes all the duplicate entries of the UIDs specified in the to_remove parameter. By default,
 it removes all the duplicate entries in the JSON file.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -158,9 +199,9 @@ it removes all the duplicate entries in the JSON file.</p>
 </table>
 </dd></dl>
 
-<dl class="function">
-<dt id="input.check_headers.remove_unwanted_headers">
-<code class="descclassname">input.check_headers.</code><code class="descname">remove_unwanted_headers</code><span class="sig-paren">(</span><em>to_remove=set()</em>, <em>json_header_filename='headers.json'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/input/check_headers.html#remove_unwanted_headers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#input.check_headers.remove_unwanted_headers" title="Permalink to this definition">¶</a></dt>
+<dl class="method">
+<dt id="input.check_headers.CheckHeaders.remove_unwanted_headers">
+<code class="descname">remove_unwanted_headers</code><span class="sig-paren">(</span><em>to_remove=set()</em>, <em>json_header_filename='headers.json'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/input/check_headers.html#CheckHeaders.remove_unwanted_headers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#input.check_headers.CheckHeaders.remove_unwanted_headers" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function removes all the UIDs specified in the to_remove parameter. By default, it removes all the unwanted
 entries in the JSON file, i.e. the list of UIDs of mails that are not forwarded from LKML subscription.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -177,9 +218,9 @@ entries in the JSON file, i.e. the list of UIDs of mails that are not forwarded 
 </table>
 </dd></dl>
 
-<dl class="function">
-<dt id="input.check_headers.replace_invalid_headers">
-<code class="descclassname">input.check_headers.</code><code class="descname">replace_invalid_headers</code><span class="sig-paren">(</span><em>to_replace=set()</em>, <em>json_header_filename='headers.json'</em>, <em>unwanted_uid_filename='unwanted_uid.txt'</em>, <em>uid_map_filename='thread_uid_map.json'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/input/check_headers.html#replace_invalid_headers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#input.check_headers.replace_invalid_headers" title="Permalink to this definition">¶</a></dt>
+<dl class="method">
+<dt id="input.check_headers.CheckHeaders.replace_invalid_headers">
+<code class="descname">replace_invalid_headers</code><span class="sig-paren">(</span><em>to_replace=set()</em>, <em>json_header_filename='headers.json'</em>, <em>unwanted_uid_filename='unwanted_uid.txt'</em>, <em>uid_map_filename='thread_uid_map.json'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/input/check_headers.html#CheckHeaders.replace_invalid_headers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#input.check_headers.CheckHeaders.replace_invalid_headers" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function removes the mail headers that have insufficient attributes and fetches those headers again.
 If an attribute is missing in the original mail header or if the mail has been deleted, this function ignores that UID.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -198,9 +239,19 @@ If an attribute is missing in the original mail header or if the mail has been d
 </table>
 </dd></dl>
 
-<dl class="function">
-<dt id="input.check_headers.write_uid_map">
-<code class="descclassname">input.check_headers.</code><code class="descname">write_uid_map</code><span class="sig-paren">(</span><em>from_index=1</em>, <em>to_index=0</em>, <em>uid_map_filename='thread_uid_map.json'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/input/check_headers.html#write_uid_map"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#input.check_headers.write_uid_map" title="Permalink to this definition">¶</a></dt>
+<dl class="attribute">
+<dt id="input.check_headers.CheckHeaders.unavailable_uid">
+<code class="descname">unavailable_uid</code><em class="property"> = set()</em><a class="headerlink" href="#input.check_headers.CheckHeaders.unavailable_uid" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="input.check_headers.CheckHeaders.unwanted_uid">
+<code class="descname">unwanted_uid</code><em class="property"> = set()</em><a class="headerlink" href="#input.check_headers.CheckHeaders.unwanted_uid" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="input.check_headers.CheckHeaders.write_uid_map">
+<code class="descname">write_uid_map</code><span class="sig-paren">(</span><em>from_index=1</em>, <em>to_index=0</em>, <em>uid_map_filename='thread_uid_map.json'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/input/check_headers.html#CheckHeaders.write_uid_map"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#input.check_headers.CheckHeaders.write_uid_map" title="Permalink to this definition">¶</a></dt>
 <dd><p>To ensure that references are correctly recorded in the JSON file such that there are no references to mails that
 do not exist and to ease the processing of headers, a map with the string in the Message-Id field of the header to
 the UID of the mail is required. This function fetches the headers from the IMAP server and adds the required
@@ -218,6 +269,8 @@ pairs of Message_ID and UID to the JSON file.</p>
 </tr>
 </tbody>
 </table>
+</dd></dl>
+
 </dd></dl>
 
 </div>
