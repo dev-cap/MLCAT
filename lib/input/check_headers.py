@@ -1,3 +1,7 @@
+"""
+
+This class cleans up the unavailable, unwanted, duplicate, missing, and invalid headers in the JSON file. It ensures that references are correctly recorded in the JSON file such that there are no references to mails that do not exist.
+"""
 import email
 import imaplib
 import json
@@ -7,7 +11,23 @@ from lib.input.imap.connection import open_connection
 from lib.input.imap.header import get_mail_header
 from lib.util.read import lines_per_n
 
-class CheckHeaders(object):
+class CheckHeaders(object):	
+	"""
+
+	:param duplicate_uid: This list stores the UIDs of mails that have duplicate entries in the JSON file.
+	:param missing_uid: This set stores the UIDs of mails that don't have an entry in the JSON file - UIDs are consecutive numbers.
+	:param invalid_uid: This list stores the UIDs of mails that have entries with insufficient entries in the JSON file.
+	:param unwanted_uid: This set stores the UIDs of mails that are not forwarded from LKML subscription which is stored in a text file.
+	:param unavailable_uid: This set stores the UIDs for which corresponding mails are not available in the IMAP server.
+	:param last_uid_read: The last UID that was checked by the function.
+	"""	
+	duplicate_uid = set()
+	missing_uid = set()
+	invalid_uid = set()
+	unwanted_uid = set()
+	unavailable_uid = set()
+	last_uid_read = 0
+
 
 	def get_unavailable_uid(self):
 		"""
@@ -33,23 +53,6 @@ class CheckHeaders(object):
 		conn.logout()
 
 		return set(range(min(available_uid), max(available_uid)+1)) - set(available_uid)
-
-	# This list stores the UIDs of mails that have duplicate entries in the JSON file.
-	duplicate_uid = set()
-
-	# This set stores the UIDs of mails that don't have an entry in the JSON file - UIDs are consecutive numbers.
-	missing_uid = set()
-
-	# This list stores the UIDs of mails that have entries with insufficient entries in the JSON file.
-	invalid_uid = set()
-
-	# This set stores the UIDs of mails that are not forwarded from LKML subscription which is stored in a text file.
-	unwanted_uid = set()
-
-	# This set stores the UIDs for which corresponding mails are not available in the IMAP server.
-	unavailable_uid = set()
-
-	last_uid_read = 0
 
 
 	def check_validity(self, check_unavailable_uid='False', json_header_filename='headers.json'):
