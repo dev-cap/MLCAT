@@ -5,11 +5,12 @@ from lib.input.data_cleanup import *
 # Uncomment the following line to update "uid_map.json"
 # write_uid_map(1, 57635)
 
-last_uid = check_validity(True)
-remove_duplicate_headers()
-remove_unwanted_headers()
-add_missing_headers()
-replace_invalid_headers()
+checkHeaders=CheckHeaders()
+last_uid = checkHeaders.check_validity(True)
+checkHeaders.remove_duplicate_headers()
+checkHeaders.remove_unwanted_headers()
+checkHeaders.add_missing_headers()
+checkHeaders.replace_invalid_headers()
 
 get_mail_header([last_uid+1], True)
 remove_invalid_references()
