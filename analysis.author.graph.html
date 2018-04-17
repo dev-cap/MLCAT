@@ -154,31 +154,8 @@ through edge weights.</p>
 </dd></dl>
 
 </div>
-<div class="section" id="module-analysis.author.graph.bipartite">
-<span id="analysis-author-graph-bipartite-module"></span><h2>analysis.author.graph.bipartite module<a class="headerlink" href="#module-analysis.author.graph.bipartite" title="Permalink to this headline">¶</a></h2>
-<p>This module is used to generate bipartite graph among all the users and messages in the mailing list such that all
-the users are on one side and all the messages will be on another. A directed edge would be drawn from author to the
-message sent by the author. A directed edge would be drawn from message to all the users who are in To and CC fields.
-A projection of this bipartite graph is then generated.</p>
-<dl class="function">
-<dt id="analysis.author.graph.bipartite.msg_author_bipartite_graph">
-<code class="descclassname">analysis.author.graph.bipartite.</code><code class="descname">msg_author_bipartite_graph</code><span class="sig-paren">(</span><em>threadwise=False</em>, <em>ignore_lat=True</em>, <em>time_limit=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/author/graph/bipartite.html#msg_author_bipartite_graph"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analysis.author.graph.bipartite.msg_author_bipartite_graph" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>threadwise</strong> – If true, a bipartite graph is generated for each thread individually.</li>
-<li><strong>ignore_lat</strong> – If true, then messages that belong to threads that have only a single author are ignored.</li>
-<li><strong>time_limit</strong> – Time limit can be specified here in the form of a timestamp in one of the identifiable formats
-and all messages that have arrived after this timestamp will be ignored.</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
+<div class="section" id="analysis-author-graph-bipartite-module">
+<h2>analysis.author.graph.bipartite module<a class="headerlink" href="#analysis-author-graph-bipartite-module" title="Permalink to this headline">¶</a></h2>
 </div>
 <div class="section" id="module-analysis.author.graph.generate">
 <span id="analysis-author-graph-generate-module"></span><h2>analysis.author.graph.generate module<a class="headerlink" href="#module-analysis.author.graph.generate" title="Permalink to this headline">¶</a></h2>
@@ -241,7 +218,7 @@ the entire mailing list.</p>
 <li><a class="reference internal" href="#">analysis.author.graph package</a><ul>
 <li><a class="reference internal" href="#submodules">Submodules</a></li>
 <li><a class="reference internal" href="#module-analysis.author.graph.interaction">analysis.author.graph.author_interaction module</a></li>
-<li><a class="reference internal" href="#module-analysis.author.graph.bipartite">analysis.author.graph.bipartite module</a></li>
+<li><a class="reference internal" href="#analysis-author-graph-bipartite-module">analysis.author.graph.bipartite module</a></li>
 <li><a class="reference internal" href="#module-analysis.author.graph.generate">analysis.author.graph.generate module</a></li>
 <li><a class="reference internal" href="#module-analysis.author.graph">Module contents</a></li>
 </ul>
