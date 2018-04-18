@@ -15,6 +15,25 @@ def test_generate_crt_dist():
     req_re_times = ([106.01, 272.03000000000003, 438.05000000000007, 604.07, 770.09, 936.1100000000001, 1102.13, 1268.15, 1434.17, 1600.19, 1766.21, 1932.23, 2098.25, 2264.2700000000004, 2430.29, 2596.3100000000004, 2762.33, 2928.3500000000004, 3094.37, 3260.3900000000003, 3426.41, 3592.4300000000003, 3758.45, 3924.4700000000003, 4090.4900000000002, 4256.51, 4422.530000000001, 4588.55, 4754.57, 4920.59, 5086.610000000001, 5252.63, 5418.650000000001, 5584.67, 5750.6900000000005, 5916.710000000001, 6082.7300000000005, 6248.75, 6414.77, 6580.790000000001, 6746.81, 6912.83, 7078.85, 7244.870000000001, 7410.89, 7576.91, 7742.93, 7908.950000000001, 8074.970000000001, 8240.99], [0.375, 0.0, 0.0, 0.0, 0.125, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.125, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.125, 0.0, 0.0, 0.0, 0.0, 0.0, 0.125, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.125])
     generate_crt_dist(csv_filename) == req_re_times
 
+@mock.patch("matplotlib.pyplot.figure")
+@mock.patch("matplotlib.pyplot.plot")
+@mock.patch("matplotlib.pyplot.legend")
+@mock.patch("matplotlib.pyplot.ylabel")
+@mock.patch("matplotlib.pyplot.xlabel")
+@mock.patch("matplotlib.pyplot.savefig")
+def test_generate_crt_curve_fits(mock_figure, mock_plot, mock_legend, mock_ylabel, mock_xlabel, mock_savefig):
+    
+    foldername = './test/integration_test/data/crt_curve_fits/'
+
+    generate_crt_curve_fits(foldername)
+
+    assert mock_figure.assert_called()
+    assert mock_plot.assert_called()
+    assert mock_legend.assert_called()
+    assert mock_ylabel.assert_called()
+    assert mock_xlabel.assert_called()
+    assert mock_savefig.assert_called()
+
 def test_generate_cl_dist():
 
     csv_filename = './test/integration_test/data/conversation_length.csv'
