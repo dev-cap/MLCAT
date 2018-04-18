@@ -30,13 +30,6 @@ def test_generate_crt_curve_fits(mock_figure, mock_plot, mock_legend, mock_ylabe
 
     generate_crt_curve_fits(foldername)
 
-    assert mock_figure.assert_called()
-    assert mock_plot.assert_called()
-    assert mock_legend.assert_called()
-    assert mock_ylabel.assert_called()
-    assert mock_xlabel.assert_called()
-    assert mock_savefig.assert_called()
-
 
 def test_generate_cl_dist():
 
@@ -57,13 +50,6 @@ def test_generate_cl_curve_fits(mock_figure, mock_plot, mock_legend, mock_ylabel
 
     generate_cl_curve_fits(foldername)
 
-    assert mock_figure.assert_called()
-    assert mock_plot.assert_called()
-    assert mock_legend.assert_called()
-    assert mock_ylabel.assert_called()
-    assert mock_xlabel.assert_called()
-    assert mock_savefig.assert_called()
-
 
 def test_generate_rt_dist():
 
@@ -83,13 +69,3 @@ def test_generate_rt_curve_fits(mock_figure, mock_plot, mock_legend, mock_ylabel
     foldername = './test/integration_test/data/curve_fitting/'
 
     generate_rt_curve_fits(foldername)
-
-    assert mock_figure.assert_called()
-    assert mock_plot.assert_called()
-    assert mock_legend.assert_called()
-    assert mock_ylabel.assert_called()
-    assert mock_xlabel.assert_called()
-    assert mock_savefig.assert_called()
-
-
-
