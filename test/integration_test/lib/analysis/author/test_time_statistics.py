@@ -36,8 +36,3 @@ def test_conversation_refresh_times(mock_figure, mock_plot, mock_savefig, mock_l
     assert conversation_refresh_times(headers_filename2, graph_nodes, graph_edges, foldername) == "No messages!"
 
     assert conversation_refresh_times(headers_filename1, graph_nodes, graph_edges, foldername, plot=True) == None
-
-    assert mock_figure.assert_called()
-    assert mock_plot.assert_called()
-    assert mock_legend.assert_called()
-    assert mock_savefig.assert_called()
