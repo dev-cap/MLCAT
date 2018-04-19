@@ -1,5 +1,7 @@
 from lib.analysis.author.time_statistics import *
 from lib.util.file_util import load_from_disk
+import unittest
+import mock
 
 
 def test_inv_func():
@@ -11,8 +13,11 @@ def test_inv_func():
 
     assert inv_func(x, a, b, c) == 7.0
 
-
-def test_conversation_refresh_times():
+@mock.patch("matplotlib.pyplot.figure")
+@mock.patch("matplotlib.pyplot.plot")
+@mock.patch("matplotlib.pyplot.savefig")
+@mock.patch("matplotlib.pyplot.legend")
+def test_conversation_refresh_times(mock_figure, mock_plot, mock_savefig, mock_legend):
 
     headers_filename1 = './test/integration_test/data/headers_ts.json'
     headers_filename2 = './test/integration_test/data/headers.json'
@@ -30,4 +35,4 @@ def test_conversation_refresh_times():
 
     assert conversation_refresh_times(headers_filename2, graph_nodes, graph_edges, foldername) == "No messages!"
 
-    # assert conversation_refresh_times(headers_filename, graph_nodes, graph_edges, foldername, plot=True) == None
+    assert conversation_refresh_times(headers_filename1, graph_nodes, graph_edges, foldername, plot=True) == None
