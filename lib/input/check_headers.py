@@ -125,14 +125,15 @@ class CheckHeaders(object):
 		return self.last_uid_read
 
 
-	def remove_unwanted_headers(self, to_remove=unwanted_uid, in_json_header_filename="headers.json", out_json_header_filename="headers.json"):
+	def remove_unwanted_headers(self, to_remove=unwanted_uid, json_header_filename="headers.json", output_filename="headers.json"):
 		"""
 
 		This function removes all the UIDs specified in the to_remove parameter. By default, it removes all the unwanted
 		entries in the JSON file, i.e. the list of UIDs of mails that are not forwarded from LKML subscription.
 
 		:param to_remove: A list of UIDs that need to be removed. Default value is the list of unwanted mails' UIDs.
-		:param json_header_filename: The header file from which unwanted entries are removed.
+		:param json_header_filename: The header file from which unwanted entries are to be removed.
+		:param output_filename: The updated json file with the unwanted headers removed.
 		"""
 		
 		if len(to_remove) > 0:
@@ -140,26 +141,27 @@ class CheckHeaders(object):
 			# This list contains a list of JSON objects that need to be written to file
 			write_to_file = []
 
-			with open(in_json_header_filename, 'r') as json_file:
+			with open(json_header_filename, 'r') as json_file:
 				for chunk in lines_per_n(json_file, 9):
 					json_obj = json.loads(chunk)
 					if not json_obj['Message-ID'] in self.unwanted_uid:
 						write_to_file.append(json_obj)
 
-			with open(out_json_header_filename, 'w') as json_file:
+			with open(output_filename, 'w') as json_file:
 				for json_obj in write_to_file:
 					json.dump(json_obj, json_file, indent=1)
 					json_file.write("\n")
 
 
-	def remove_duplicate_headers(self,to_remove=duplicate_uid, in_json_header_filename="headers.json", out_json_header_filename="headers.json"):
+	def remove_duplicate_headers(self,to_remove=duplicate_uid, json_header_filename="headers.json", output_filename="headers.json"):
 		"""
 
 		This function removes all the duplicate entries of the UIDs specified in the to_remove parameter. By default,
 		it removes all the duplicate entries in the JSON file.
 
 		:param to_remove: A list of UIDs that need to be removed. Default value is the list of duplicate mails' UIDs.
-		:param json_header_filename: The header file from which duplicate entries are removed.
+		:param json_header_filename: The header file from which duplicate entries are to be removed.
+		:param output_filename: The updated json file with the duplicate headers removed.
 		"""
 		# The "read_uid" set is used to keep track of all the UIDs that have been read from the JSON file.
 		# In case a duplicate exists, it would be read twice and hence would fail the set membership test.
@@ -170,14 +172,14 @@ class CheckHeaders(object):
 			# This list contains a list of JSON objects that need to be written to file
 			write_to_file = []
 
-			with open(in_json_header_filename, 'r') as json_file:
+			with open(json_header_filename, 'r') as json_file:
 				for chunk in lines_per_n(json_file, 9):
 					json_obj = json.loads(chunk)
 					if not json_obj['Message-ID'] in read_uid:
 						write_to_file.append(json_obj)
 					read_uid.add(json_obj['Message-ID'])
 
-			with open(out_json_header_filename, 'w') as json_file:
+			with open(output_filename, 'w') as json_file:
 				for json_obj in write_to_file:
 					json.dump(json_obj, json_file, indent=1)
 					json_file.write("\n")
@@ -205,7 +207,7 @@ class CheckHeaders(object):
 			get_mail_header(to_add, False, uid_map_filename)
 
 
-	def replace_invalid_headers(self,to_replace=invalid_uid, in_json_header_filename="headers.json", out_json_header_filename="headers.json", unwanted_uid_filename="unwanted_uid.txt", uid_map_filename="thread_uid_map.json"):
+	def replace_invalid_headers(self,to_replace=invalid_uid, json_header_filename="headers.json", output_filename="headers.json", unwanted_uid_filename="unwanted_uid.txt", uid_map_filename="thread_uid_map.json"):
 		"""
 
 		This function removes the mail headers that have insufficient attributes and fetches those headers again.
@@ -213,6 +215,7 @@ class CheckHeaders(object):
 
 		:param to_replace: A list of UIDs that need to be replaced. Default value is the list of invalid mails' UIDs.
 		:param json_header_filename: The json file containing the headers.
+		:param output_filename: The updated json file with the invalid headers replaced.
 		:param unwanted_uid_filename: The file containing unwanted uids.
 		:param uid_map_filename: The JSON file where the Message_ID-UID mapping is stored.
 		"""
@@ -220,13 +223,13 @@ class CheckHeaders(object):
 			print("Replacing invalid headers...")
 			# This list contains a list of JSON objects that need to be written to file
 			write_to_file = []
-			with open(in_json_header_filename, 'r') as json_file:
+			with open(json_header_filename, 'r') as json_file:
 				for chunk in lines_per_n(json_file, 9):
 					json_obj = json.loads(chunk)
 					if not json_obj['Message-ID'] in self.invalid_uid:
 						write_to_file.append(json_obj)
 
-			with open(out_json_header_filename, 'w') as json_file:
+			with open(output_filename, 'w') as json_file:
 				for json_obj in write_to_file:
 					json.dump(json_obj, json_file, indent=1)
 					json_file.write("\n")
