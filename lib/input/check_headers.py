@@ -125,7 +125,7 @@ class CheckHeaders(object):
 		return self.last_uid_read
 
 
-	def remove_unwanted_headers(self, to_remove=unwanted_uid, json_header_filename='headers.json'):
+	def remove_unwanted_headers(self, to_remove=unwanted_uid, in_json_header_filename="headers.json", out_json_header_filename="headers.json"):
 		"""
 
 		This function removes all the UIDs specified in the to_remove parameter. By default, it removes all the unwanted
@@ -140,19 +140,19 @@ class CheckHeaders(object):
 			# This list contains a list of JSON objects that need to be written to file
 			write_to_file = []
 
-			with open(json_header_filename, 'r') as json_file:
+			with open(in_json_header_filename, 'r') as json_file:
 				for chunk in lines_per_n(json_file, 9):
 					json_obj = json.loads(chunk)
 					if not json_obj['Message-ID'] in self.unwanted_uid:
 						write_to_file.append(json_obj)
 
-			with open(json_header_filename, 'w') as json_file:
+			with open(out_json_header_filename, 'w') as json_file:
 				for json_obj in write_to_file:
 					json.dump(json_obj, json_file, indent=1)
 					json_file.write("\n")
 
 
-	def remove_duplicate_headers(self,to_remove=duplicate_uid, json_header_filename='headers.json'):
+	def remove_duplicate_headers(self,to_remove=duplicate_uid, in_json_header_filename="headers.json", out_json_header_filename="headers.json"):
 		"""
 
 		This function removes all the duplicate entries of the UIDs specified in the to_remove parameter. By default,
@@ -170,14 +170,14 @@ class CheckHeaders(object):
 			# This list contains a list of JSON objects that need to be written to file
 			write_to_file = []
 
-			with open(json_header_filename, 'r') as json_file:
+			with open(in_json_header_filename, 'r') as json_file:
 				for chunk in lines_per_n(json_file, 9):
 					json_obj = json.loads(chunk)
 					if not json_obj['Message-ID'] in read_uid:
 						write_to_file.append(json_obj)
 					read_uid.add(json_obj['Message-ID'])
 
-			with open(json_header_filename, 'w') as json_file:
+			with open(out_json_header_filename, 'w') as json_file:
 				for json_obj in write_to_file:
 					json.dump(json_obj, json_file, indent=1)
 					json_file.write("\n")
@@ -205,7 +205,7 @@ class CheckHeaders(object):
 			get_mail_header(to_add, False, uid_map_filename)
 
 
-	def replace_invalid_headers(self,to_replace=invalid_uid, json_header_filename="headers.json", unwanted_uid_filename="unwanted_uid.txt", uid_map_filename="thread_uid_map.json"):
+	def replace_invalid_headers(self,to_replace=invalid_uid, in_json_header_filename="headers.json", out_json_header_filename="headers.json", unwanted_uid_filename="unwanted_uid.txt", uid_map_filename="thread_uid_map.json"):
 		"""
 
 		This function removes the mail headers that have insufficient attributes and fetches those headers again.
@@ -220,13 +220,13 @@ class CheckHeaders(object):
 			print("Replacing invalid headers...")
 			# This list contains a list of JSON objects that need to be written to file
 			write_to_file = []
-			with open(json_header_filename, 'r') as json_file:
+			with open(in_json_header_filename, 'r') as json_file:
 				for chunk in lines_per_n(json_file, 9):
 					json_obj = json.loads(chunk)
 					if not json_obj['Message-ID'] in self.invalid_uid:
 						write_to_file.append(json_obj)
 
-			with open(json_header_filename, 'w') as json_file:
+			with open(out_json_header_filename, 'w') as json_file:
 				for json_obj in write_to_file:
 					json.dump(json_obj, json_file, indent=1)
 					json_file.write("\n")
