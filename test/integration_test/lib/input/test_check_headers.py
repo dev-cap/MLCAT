@@ -10,7 +10,7 @@ class TestCheckHeaders(object):
 	in_headers_file='./test/integration_test/data/headers_for_check.json'
 	unwanted_uid_file='./test/integration_test/data/unwanted_uid.txt'
 	uid_map_file='./test/integration_test/data/thread_uid_map.json'
-	out_headers_file='./etc/.tmp/integration_test/lib/input/check_headers/check_headers_output.json'
+	out_headers_file='./.tmp/integration_test/lib/input/check_headers/check_headers_output.json'
 
 
 	@mock.patch('lib.input.check_headers.open_connection')
