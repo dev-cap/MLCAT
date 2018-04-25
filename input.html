@@ -125,7 +125,7 @@ If a mail that is missing in the JSON file is not available or has been deleted,
 
 <dl class="method">
 <dt id="input.check_headers.CheckHeaders.check_validity">
-<code class="descname">check_validity</code><span class="sig-paren">(</span><em>check_unavailable_uid='False'</em>, <em>json_header_filename='headers.json'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/input/check_headers.html#CheckHeaders.check_validity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#input.check_headers.CheckHeaders.check_validity" title="Permalink to this definition">¶</a></dt>
+<code class="descname">check_validity</code><span class="sig-paren">(</span><em>check_unavailable_uid='False'</em>, <em>json_headers='headers.json'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/input/check_headers.html#CheckHeaders.check_validity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#input.check_headers.CheckHeaders.check_validity" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function checks for and prints duplicate, missing, and invalid objects in the “headers.json” file.
 This function can be run first to generate a list of duplicate, missing, or invalid objects’ UIDs which
 can then be used to add or remove their entries from the JSON file.</p>
@@ -135,7 +135,7 @@ can then be used to add or remove their entries from the JSON file.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>check_unavailable_uid</strong> – If true, prints the unavailable and unwanted uids</li>
-<li><strong>json_header_filename</strong> – The header file to be parsed</li>
+<li><strong>json_headers</strong> – The header file to be parsed</li>
 </ul>
 </td>
 </tr>
@@ -182,7 +182,7 @@ can then be used to add or remove their entries from the JSON file.</p>
 
 <dl class="method">
 <dt id="input.check_headers.CheckHeaders.remove_duplicate_headers">
-<code class="descname">remove_duplicate_headers</code><span class="sig-paren">(</span><em>to_remove=set()</em>, <em>json_header_filename='headers.json'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/input/check_headers.html#CheckHeaders.remove_duplicate_headers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#input.check_headers.CheckHeaders.remove_duplicate_headers" title="Permalink to this definition">¶</a></dt>
+<code class="descname">remove_duplicate_headers</code><span class="sig-paren">(</span><em>to_remove=set()</em>, <em>json_headers='headers.json'</em>, <em>output_file='headers.json'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/input/check_headers.html#CheckHeaders.remove_duplicate_headers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#input.check_headers.CheckHeaders.remove_duplicate_headers" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function removes all the duplicate entries of the UIDs specified in the to_remove parameter. By default,
 it removes all the duplicate entries in the JSON file.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -191,7 +191,8 @@ it removes all the duplicate entries in the JSON file.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>to_remove</strong> – A list of UIDs that need to be removed. Default value is the list of duplicate mails’ UIDs.</li>
-<li><strong>json_header_filename</strong> – The header file from which duplicate entries are removed.</li>
+<li><strong>json_headers</strong> – The header file from which duplicate entries are to be removed.</li>
+<li><strong>output_file</strong> – The updated json file with the duplicate headers removed.</li>
 </ul>
 </td>
 </tr>
@@ -201,7 +202,7 @@ it removes all the duplicate entries in the JSON file.</p>
 
 <dl class="method">
 <dt id="input.check_headers.CheckHeaders.remove_unwanted_headers">
-<code class="descname">remove_unwanted_headers</code><span class="sig-paren">(</span><em>to_remove=set()</em>, <em>json_header_filename='headers.json'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/input/check_headers.html#CheckHeaders.remove_unwanted_headers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#input.check_headers.CheckHeaders.remove_unwanted_headers" title="Permalink to this definition">¶</a></dt>
+<code class="descname">remove_unwanted_headers</code><span class="sig-paren">(</span><em>to_remove=set()</em>, <em>json_headers='headers.json'</em>, <em>output_file='headers.json'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/input/check_headers.html#CheckHeaders.remove_unwanted_headers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#input.check_headers.CheckHeaders.remove_unwanted_headers" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function removes all the UIDs specified in the to_remove parameter. By default, it removes all the unwanted
 entries in the JSON file, i.e. the list of UIDs of mails that are not forwarded from LKML subscription.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -210,7 +211,8 @@ entries in the JSON file, i.e. the list of UIDs of mails that are not forwarded 
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>to_remove</strong> – A list of UIDs that need to be removed. Default value is the list of unwanted mails’ UIDs.</li>
-<li><strong>json_header_filename</strong> – The header file from which unwanted entries are removed.</li>
+<li><strong>json_headers</strong> – The header file from which unwanted entries are to be removed.</li>
+<li><strong>output_file</strong> – The updated json file with the unwanted headers removed.</li>
 </ul>
 </td>
 </tr>
@@ -220,7 +222,7 @@ entries in the JSON file, i.e. the list of UIDs of mails that are not forwarded 
 
 <dl class="method">
 <dt id="input.check_headers.CheckHeaders.replace_invalid_headers">
-<code class="descname">replace_invalid_headers</code><span class="sig-paren">(</span><em>to_replace=set()</em>, <em>json_header_filename='headers.json'</em>, <em>unwanted_uid_filename='unwanted_uid.txt'</em>, <em>uid_map_filename='thread_uid_map.json'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/input/check_headers.html#CheckHeaders.replace_invalid_headers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#input.check_headers.CheckHeaders.replace_invalid_headers" title="Permalink to this definition">¶</a></dt>
+<code class="descname">replace_invalid_headers</code><span class="sig-paren">(</span><em>to_replace=set()</em>, <em>json_headers='headers.json'</em>, <em>output_file='headers.json'</em>, <em>unwanted_uid_filename='unwanted_uid.txt'</em>, <em>uid_map_filename='thread_uid_map.json'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/input/check_headers.html#CheckHeaders.replace_invalid_headers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#input.check_headers.CheckHeaders.replace_invalid_headers" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function removes the mail headers that have insufficient attributes and fetches those headers again.
 If an attribute is missing in the original mail header or if the mail has been deleted, this function ignores that UID.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -229,7 +231,8 @@ If an attribute is missing in the original mail header or if the mail has been d
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>to_replace</strong> – A list of UIDs that need to be replaced. Default value is the list of invalid mails’ UIDs.</li>
-<li><strong>json_header_filename</strong> – The json file containing the headers.</li>
+<li><strong>json_headers</strong> – The json file containing the headers.</li>
+<li><strong>output_file</strong> – The updated json file with the invalid headers replaced.</li>
 <li><strong>unwanted_uid_filename</strong> – The file containing unwanted uids.</li>
 <li><strong>uid_map_filename</strong> – The JSON file where the Message_ID-UID mapping is stored.</li>
 </ul>

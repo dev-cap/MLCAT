@@ -103,7 +103,7 @@
 		<span class="k">return</span> <span class="nb">set</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">available_uid</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="n">available_uid</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">available_uid</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="CheckHeaders.check_validity"><a class="viewcode-back" href="../../input.html#input.check_headers.CheckHeaders.check_validity">[docs]</a>	<span class="k">def</span> <span class="nf">check_validity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">check_unavailable_uid</span><span class="o">=</span><span class="s1">&#39;False&#39;</span><span class="p">,</span> <span class="n">json_header_filename</span><span class="o">=</span><span class="s1">&#39;headers.json&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="CheckHeaders.check_validity"><a class="viewcode-back" href="../../input.html#input.check_headers.CheckHeaders.check_validity">[docs]</a>	<span class="k">def</span> <span class="nf">check_validity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">check_unavailable_uid</span><span class="o">=</span><span class="s1">&#39;False&#39;</span><span class="p">,</span> <span class="n">json_headers</span><span class="o">=</span><span class="s1">&#39;headers.json&#39;</span><span class="p">):</span>
 		<span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">		This function checks for and prints duplicate, missing, and invalid objects in the &quot;headers.json&quot; file.</span>
@@ -111,7 +111,7 @@
 <span class="sd">		can then be used to add or remove their entries from the JSON file.</span>
 
 <span class="sd">		:param check_unavailable_uid: If true, prints the unavailable and unwanted uids</span>
-<span class="sd">		:param json_header_filename: The header file to be parsed</span>
+<span class="sd">		:param json_headers: The header file to be parsed</span>
 <span class="sd">		:return: Last UID that was checked by the function.</span>
 <span class="sd">		&quot;&quot;&quot;</span>
 		<span class="n">previous_uid</span> <span class="o">=</span> <span class="mi">0</span>
@@ -127,7 +127,7 @@
 
 		<span class="c1"># Read UIDs of mails that are not forwarded from LKML subscription which is stored in a text file.</span>
 
-		<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">json_header_filename</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">json_file</span><span class="p">:</span>
+		<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">json_headers</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">json_file</span><span class="p">:</span>
 
 			<span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">lines_per_n</span><span class="p">(</span><span class="n">json_file</span><span class="p">,</span> <span class="mi">9</span><span class="p">):</span>
 				<span class="k">try</span><span class="p">:</span>
@@ -173,14 +173,15 @@
 		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_uid_read</span></div>
 
 
-<div class="viewcode-block" id="CheckHeaders.remove_unwanted_headers"><a class="viewcode-back" href="../../input.html#input.check_headers.CheckHeaders.remove_unwanted_headers">[docs]</a>	<span class="k">def</span> <span class="nf">remove_unwanted_headers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">to_remove</span><span class="o">=</span><span class="n">unwanted_uid</span><span class="p">,</span> <span class="n">json_header_filename</span><span class="o">=</span><span class="s1">&#39;headers.json&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="CheckHeaders.remove_unwanted_headers"><a class="viewcode-back" href="../../input.html#input.check_headers.CheckHeaders.remove_unwanted_headers">[docs]</a>	<span class="k">def</span> <span class="nf">remove_unwanted_headers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">to_remove</span><span class="o">=</span><span class="n">unwanted_uid</span><span class="p">,</span> <span class="n">json_headers</span><span class="o">=</span><span class="s2">&quot;headers.json&quot;</span><span class="p">,</span> <span class="n">output_file</span><span class="o">=</span><span class="s2">&quot;headers.json&quot;</span><span class="p">):</span>
 		<span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">		This function removes all the UIDs specified in the to_remove parameter. By default, it removes all the unwanted</span>
 <span class="sd">		entries in the JSON file, i.e. the list of UIDs of mails that are not forwarded from LKML subscription.</span>
 
 <span class="sd">		:param to_remove: A list of UIDs that need to be removed. Default value is the list of unwanted mails&#39; UIDs.</span>
-<span class="sd">		:param json_header_filename: The header file from which unwanted entries are removed.</span>
+<span class="sd">		:param json_headers: The header file from which unwanted entries are to be removed.</span>
+<span class="sd">		:param output_file: The updated json file with the unwanted headers removed.</span>
 <span class="sd">		&quot;&quot;&quot;</span>
 		
 		<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">to_remove</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
@@ -188,26 +189,27 @@
 			<span class="c1"># This list contains a list of JSON objects that need to be written to file</span>
 			<span class="n">write_to_file</span> <span class="o">=</span> <span class="p">[]</span>
 
-			<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">json_header_filename</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">json_file</span><span class="p">:</span>
+			<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">json_headers</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">json_file</span><span class="p">:</span>
 				<span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">lines_per_n</span><span class="p">(</span><span class="n">json_file</span><span class="p">,</span> <span class="mi">9</span><span class="p">):</span>
 					<span class="n">json_obj</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
 					<span class="k">if</span> <span class="ow">not</span> <span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;Message-ID&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">unwanted_uid</span><span class="p">:</span>
 						<span class="n">write_to_file</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">json_obj</span><span class="p">)</span>
 
-			<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">json_header_filename</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">json_file</span><span class="p">:</span>
+			<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">output_file</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">json_file</span><span class="p">:</span>
 				<span class="k">for</span> <span class="n">json_obj</span> <span class="ow">in</span> <span class="n">write_to_file</span><span class="p">:</span>
 					<span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">json_obj</span><span class="p">,</span> <span class="n">json_file</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 					<span class="n">json_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="CheckHeaders.remove_duplicate_headers"><a class="viewcode-back" href="../../input.html#input.check_headers.CheckHeaders.remove_duplicate_headers">[docs]</a>	<span class="k">def</span> <span class="nf">remove_duplicate_headers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">to_remove</span><span class="o">=</span><span class="n">duplicate_uid</span><span class="p">,</span> <span class="n">json_header_filename</span><span class="o">=</span><span class="s1">&#39;headers.json&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="CheckHeaders.remove_duplicate_headers"><a class="viewcode-back" href="../../input.html#input.check_headers.CheckHeaders.remove_duplicate_headers">[docs]</a>	<span class="k">def</span> <span class="nf">remove_duplicate_headers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">to_remove</span><span class="o">=</span><span class="n">duplicate_uid</span><span class="p">,</span> <span class="n">json_headers</span><span class="o">=</span><span class="s2">&quot;headers.json&quot;</span><span class="p">,</span> <span class="n">output_file</span><span class="o">=</span><span class="s2">&quot;headers.json&quot;</span><span class="p">):</span>
 		<span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">		This function removes all the duplicate entries of the UIDs specified in the to_remove parameter. By default,</span>
 <span class="sd">		it removes all the duplicate entries in the JSON file.</span>
 
 <span class="sd">		:param to_remove: A list of UIDs that need to be removed. Default value is the list of duplicate mails&#39; UIDs.</span>
-<span class="sd">		:param json_header_filename: The header file from which duplicate entries are removed.</span>
+<span class="sd">		:param json_headers: The header file from which duplicate entries are to be removed.</span>
+<span class="sd">		:param output_file: The updated json file with the duplicate headers removed.</span>
 <span class="sd">		&quot;&quot;&quot;</span>
 		<span class="c1"># The &quot;read_uid&quot; set is used to keep track of all the UIDs that have been read from the JSON file.</span>
 		<span class="c1"># In case a duplicate exists, it would be read twice and hence would fail the set membership test.</span>
@@ -218,14 +220,14 @@
 			<span class="c1"># This list contains a list of JSON objects that need to be written to file</span>
 			<span class="n">write_to_file</span> <span class="o">=</span> <span class="p">[]</span>
 
-			<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">json_header_filename</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">json_file</span><span class="p">:</span>
+			<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">json_headers</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">json_file</span><span class="p">:</span>
 				<span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">lines_per_n</span><span class="p">(</span><span class="n">json_file</span><span class="p">,</span> <span class="mi">9</span><span class="p">):</span>
 					<span class="n">json_obj</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
 					<span class="k">if</span> <span class="ow">not</span> <span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;Message-ID&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="n">read_uid</span><span class="p">:</span>
 						<span class="n">write_to_file</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">json_obj</span><span class="p">)</span>
 					<span class="n">read_uid</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;Message-ID&#39;</span><span class="p">])</span>
 
-			<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">json_header_filename</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">json_file</span><span class="p">:</span>
+			<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">output_file</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">json_file</span><span class="p">:</span>
 				<span class="k">for</span> <span class="n">json_obj</span> <span class="ow">in</span> <span class="n">write_to_file</span><span class="p">:</span>
 					<span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">json_obj</span><span class="p">,</span> <span class="n">json_file</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 					<span class="n">json_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span></div>
@@ -253,14 +255,15 @@
 			<span class="n">get_mail_header</span><span class="p">(</span><span class="n">to_add</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="n">uid_map_filename</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="CheckHeaders.replace_invalid_headers"><a class="viewcode-back" href="../../input.html#input.check_headers.CheckHeaders.replace_invalid_headers">[docs]</a>	<span class="k">def</span> <span class="nf">replace_invalid_headers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">to_replace</span><span class="o">=</span><span class="n">invalid_uid</span><span class="p">,</span> <span class="n">json_header_filename</span><span class="o">=</span><span class="s2">&quot;headers.json&quot;</span><span class="p">,</span> <span class="n">unwanted_uid_filename</span><span class="o">=</span><span class="s2">&quot;unwanted_uid.txt&quot;</span><span class="p">,</span> <span class="n">uid_map_filename</span><span class="o">=</span><span class="s2">&quot;thread_uid_map.json&quot;</span><span class="p">):</span>
+<div class="viewcode-block" id="CheckHeaders.replace_invalid_headers"><a class="viewcode-back" href="../../input.html#input.check_headers.CheckHeaders.replace_invalid_headers">[docs]</a>	<span class="k">def</span> <span class="nf">replace_invalid_headers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">to_replace</span><span class="o">=</span><span class="n">invalid_uid</span><span class="p">,</span> <span class="n">json_headers</span><span class="o">=</span><span class="s2">&quot;headers.json&quot;</span><span class="p">,</span> <span class="n">output_file</span><span class="o">=</span><span class="s2">&quot;headers.json&quot;</span><span class="p">,</span> <span class="n">unwanted_uid_filename</span><span class="o">=</span><span class="s2">&quot;unwanted_uid.txt&quot;</span><span class="p">,</span> <span class="n">uid_map_filename</span><span class="o">=</span><span class="s2">&quot;thread_uid_map.json&quot;</span><span class="p">):</span>
 		<span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">		This function removes the mail headers that have insufficient attributes and fetches those headers again.</span>
 <span class="sd">		If an attribute is missing in the original mail header or if the mail has been deleted, this function ignores that UID.</span>
 
 <span class="sd">		:param to_replace: A list of UIDs that need to be replaced. Default value is the list of invalid mails&#39; UIDs.</span>
-<span class="sd">		:param json_header_filename: The json file containing the headers.</span>
+<span class="sd">		:param json_headers: The json file containing the headers.</span>
+<span class="sd">		:param output_file: The updated json file with the invalid headers replaced.</span>
 <span class="sd">		:param unwanted_uid_filename: The file containing unwanted uids.</span>
 <span class="sd">		:param uid_map_filename: The JSON file where the Message_ID-UID mapping is stored.</span>
 <span class="sd">		&quot;&quot;&quot;</span>
@@ -268,13 +271,13 @@
 			<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Replacing invalid headers...&quot;</span><span class="p">)</span>
 			<span class="c1"># This list contains a list of JSON objects that need to be written to file</span>
 			<span class="n">write_to_file</span> <span class="o">=</span> <span class="p">[]</span>
-			<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">json_header_filename</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">json_file</span><span class="p">:</span>
+			<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">json_headers</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">json_file</span><span class="p">:</span>
 				<span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">lines_per_n</span><span class="p">(</span><span class="n">json_file</span><span class="p">,</span> <span class="mi">9</span><span class="p">):</span>
 					<span class="n">json_obj</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
 					<span class="k">if</span> <span class="ow">not</span> <span class="n">json_obj</span><span class="p">[</span><span class="s1">&#39;Message-ID&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">invalid_uid</span><span class="p">:</span>
 						<span class="n">write_to_file</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">json_obj</span><span class="p">)</span>
 
-			<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">json_header_filename</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">json_file</span><span class="p">:</span>
+			<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">output_file</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">json_file</span><span class="p">:</span>
 				<span class="k">for</span> <span class="n">json_obj</span> <span class="ow">in</span> <span class="n">write_to_file</span><span class="p">:</span>
 					<span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">json_obj</span><span class="p">,</span> <span class="n">json_file</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 					<span class="n">json_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
