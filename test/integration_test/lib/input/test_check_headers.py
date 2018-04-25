@@ -10,6 +10,7 @@ class TestCheckHeaders(object):
 	headers_file='./test/integration_test/data/headers_for_check.json'
 	unwanted_uid_file='./test/integration_test/data/unwanted_uid.txt'
 	uid_map_file='./test/integration_test/data/thread_uid_map.json'
+	output_file='./.tmp/integration_test/lib/input/check_headers/check_headers_output.json'
 
 
 	@mock.patch('lib.input.check_headers.open_connection')
@@ -32,8 +33,8 @@ class TestCheckHeaders(object):
 
 		checkHeaders=CheckHeaders()
 		checkHeaders.check_validity(False,self.headers_file)
-		checkHeaders.remove_unwanted_headers(checkHeaders.unwanted_uid,self.headers_file)
-		with open(self.headers_file, 'r') as json_file:
+		checkHeaders.remove_unwanted_headers(checkHeaders.unwanted_uid,self.headers_file,self.output_file)
+		with open(self.output_file, 'r') as json_file:
 			for chunk in lines_per_n(json_file, 9):
 				json_obj = json.loads(chunk)
 				assert json_obj['Message-ID'] !=3
@@ -43,9 +44,9 @@ class TestCheckHeaders(object):
 
 		checkHeaders=CheckHeaders()
 		checkHeaders.check_validity(False, self.headers_file)
-		checkHeaders.remove_duplicate_headers(checkHeaders.duplicate_uid, self.headers_file)	
+		checkHeaders.remove_duplicate_headers(checkHeaders.duplicate_uid, self.headers_file,self.output_file)	
 		count_uid=0
-		with open(self.headers_file, 'r') as json_file:
+		with open(self.output_file, 'r') as json_file:
 			for chunk in lines_per_n(json_file, 9):
 				json_obj = json.loads(chunk)
 				if json_obj['Message-ID'] ==2:
@@ -58,7 +59,7 @@ class TestCheckHeaders(object):
 
 		mock_function.return_value.uid.return_value=(1,['5'])
 		checkHeaders=CheckHeaders()		
-		with open(self.headers_file, 'r') as json_file:
+		with open(self.output_file, 'r') as json_file:
 			for chunk in lines_per_n(json_file, 9):
 				json_obj = json.loads(chunk)		
 		checkHeaders.check_validity(False, self.headers_file)
@@ -73,7 +74,7 @@ class TestCheckHeaders(object):
 		mock_function.return_value.uid.return_value=(1,['5'])
 		checkHeaders=CheckHeaders()
 		checkHeaders.check_validity(False, self.headers_file)
-		checkHeaders.replace_invalid_headers(checkHeaders.invalid_uid,self.headers_file,self.unwanted_uid_file,self.uid_map_file)
+		checkHeaders.replace_invalid_headers(checkHeaders.invalid_uid, self.headers_file, self.output_file, self.unwanted_uid_file, self.uid_map_file)
 		if(checkHeaders.invalid_uid):
 			mock_function.assert_any_call()
 
